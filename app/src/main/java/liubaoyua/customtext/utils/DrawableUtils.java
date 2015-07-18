@@ -82,7 +82,7 @@ public abstract class DrawableUtils {
 
 
     public static void saveBitmapToCacheDir(Context context,String fileName,Bitmap bm,Boolean override) {
-        File file = new File(context.getFilesDir(), fileName+".png");
+        File file = new File(context.getCacheDir(), fileName+".png");
         saveBitmapToFile(file,bm,override);
     }
 
