@@ -92,7 +92,7 @@ public class SetText extends AppCompatActivity {
         for(int i = 0; i < count ; i++){
             String oriText = mPrefs.getString(Common.ORI_TEXT_PREFIX + i,"");
             String newText = mPrefs.getString(Common.NEW_TEXT_PREFIX + i,"");
-            CustomText customText = new CustomText(i,oriText,newText);
+            CustomText customText = new CustomText(oriText,newText);
             data.add(customText);
         }
 
@@ -167,7 +167,7 @@ public class SetText extends AppCompatActivity {
         }else if(id == R.id.action_add_item){
             int size = textRecyclerAdapter.getData().size();
                 for (int i = 0; i < 5; i++) {
-                    textRecyclerAdapter.getData().add(new CustomText((size + i), "", ""));
+                    textRecyclerAdapter.getData().add(new CustomText());
                     textRecyclerAdapter.notifyItemRangeInserted(size, size + 4);
                     Snackbar.make(mRecyclerView
                             , getString(R.string.menu_add_item) + " " + getString(R.string.succeed)
@@ -213,7 +213,7 @@ public class SetText extends AppCompatActivity {
         }else if(id == R.id.action_clear_all){
             textRecyclerAdapter.setData(new ArrayList<CustomText>());
             for (int i = 0; i < Common.DEFAULT_NUM ; i++) {
-                textRecyclerAdapter.getData().add(new CustomText(i, "", ""));
+                textRecyclerAdapter.getData().add(new CustomText());
             }
             textRecyclerAdapter.notifyDataSetChanged();
             switchCompat.setChecked(false);

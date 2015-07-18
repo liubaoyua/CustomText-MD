@@ -33,8 +33,8 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
     private ArrayList<CustomText> data = new ArrayList<>();
 
 
-    private CustomText tempCT = new CustomText(-1,"","");
-    private CustomText undo = new CustomText(-1,"","");
+    private CustomText tempCT = new CustomText();
+    private CustomText undo = new CustomText();
     private RecyclerView recyclerView;
 
     public TextRecyclerAdapter(Context mContext, ArrayList<CustomText> data,RecyclerView recyclerView) {
@@ -188,10 +188,10 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
                                 case 0: {//<item>前排加一楼</item>
                                     CustomText now = data.get(viewHolder.getAdapterPosition());
                                     if (viewHolder.getAdapterPosition() == 0) {
-                                        data.add(viewHolder.getAdapterPosition(), new CustomText(now.id - 1, "", ""));
+                                        data.add(viewHolder.getAdapterPosition(), new CustomText());
                                     } else {
                                         CustomText prev = data.get(viewHolder.getAdapterPosition() - 1);
-                                        data.add(viewHolder.getAdapterPosition(), new CustomText((prev.id + now.id) / 2, "", ""));
+                                        data.add(viewHolder.getAdapterPosition(), new CustomText());
                                     }
                                     notifyItemInserted(viewHolder.getAdapterPosition());
                                     Snackbar.make(recyclerView, texts[which] + " " + succeed, Snackbar.LENGTH_LONG)
@@ -261,10 +261,10 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
                                 case 5: {// <item>后排加一楼</item>
                                     CustomText now = data.get(viewHolder.getAdapterPosition());
                                     if (viewHolder.getAdapterPosition() == data.size() - 1) {
-                                        data.add(viewHolder.getAdapterPosition() + 1, new CustomText(now.id + 1, "", ""));
+                                        data.add(viewHolder.getAdapterPosition() + 1, new CustomText());
                                     } else {
                                         CustomText next = data.get(viewHolder.getAdapterPosition() + 1);
-                                        data.add(viewHolder.getAdapterPosition() + 1, new CustomText((next.id + now.id) / 2, "", ""));
+                                        data.add(viewHolder.getAdapterPosition() + 1, new CustomText());
                                     }
                                     notifyItemInserted(viewHolder.getAdapterPosition() + 1);
                                     Snackbar.make(recyclerView, texts[which] + " " + succeed, Snackbar.LENGTH_LONG)

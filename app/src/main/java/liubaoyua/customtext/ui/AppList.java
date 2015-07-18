@@ -326,7 +326,7 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
                 if (name[0].matches("^\\s*$") || name[0].length() == 0) {
                     System.out.println(true);
                     Date d = new Date();
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss",Locale.getDefault());
                     name[0] = sdf.format(d);
                 }
 

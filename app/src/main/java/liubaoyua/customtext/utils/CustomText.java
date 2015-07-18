@@ -2,19 +2,21 @@ package liubaoyua.customtext.utils;
 
 /**
  * Created by liubaoyua on 2015/6/19 0019.
+ * this class is for customtext.
  */
 public class CustomText {
-    public String oriText="";
-    public String newText="";
-    public float id=-1;
+    public String oriText = "";
+    public String newText = "";
+    public boolean isRegex = false;
+    public int textColor = 0 ;
+    public boolean underLine = false;
+
+    public boolean isWorkInEditText = false;
+    public boolean isReplacedToAPic = false;
+    public int picMagnification = 1;
+
 
     public CustomText(){}
-
-    public CustomText(float id, String oriText, String newText){
-        this.id=id;
-        this.oriText=oriText;
-        this.newText=newText;
-    }
 
     public CustomText(String oriText, String newText){
         this.oriText=oriText;
@@ -51,14 +53,12 @@ public class CustomText {
         return "CustomText{" +
                 "oriText='" + oriText + '\'' +
                 ", newText='" + newText + '\'' +
-                ", id=" + id +
-
                 '}';
     }
 
     public boolean isEmpty(){
-        if(this.newText.equals("")||this.newText==null){
-            if(this.oriText.equals("")||this.oriText==null){
+        if(this.newText==null || this.newText.equals("")){
+            if(this.oriText==null || this.oriText.equals("")){
                 return true;
             }
         }

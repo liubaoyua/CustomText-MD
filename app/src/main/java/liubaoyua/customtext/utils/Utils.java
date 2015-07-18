@@ -66,22 +66,27 @@ public abstract class Utils {
      */
     public static String getPinYinHeadChar(String str) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (int j = 0; j < str.length(); j++) {
-            char word = str.charAt(j);
-            // 提取汉字的首字母
-            String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);
-            if (pinyinArray != null) {
-                stringBuilder.append(pinyinArray[0].charAt(0));
-            } else {
-                stringBuilder.append(word);
+        try{
+            for (int j = 0; j < str.length(); j++) {
+                char word = str.charAt(j);
+                // 提取汉字的首字母
+                String[] pinyinArray = PinyinHelper.toHanyuPinyinStringArray(word);
+                if (pinyinArray != null) {
+                    stringBuilder.append(pinyinArray[0].charAt(0));
+                } else {
+                    stringBuilder.append(word);
+                }
             }
-        }
-        if(str.equals(stringBuilder.toString())){
-            String[] headChar = str.split(" ");
-            stringBuilder = new StringBuilder();
-            for(String a:headChar){
-                stringBuilder.append(a.charAt(0));
+            if(str.equals(stringBuilder.toString())){
+                String[] headChar = str.split(" ");
+                stringBuilder = new StringBuilder();
+                for(String a:headChar){
+                    if(a != null && a.length()>0)
+                        stringBuilder.append(a.charAt(0));
+                }
             }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
         return stringBuilder.toString();
     }
