@@ -24,6 +24,10 @@
             android:id="@+id/nav_exit"
             android:icon="@mipmap/ic_exit"
             android:title="@string/menu_exit"/>
+        <item
+            android:id="@+id/nav_crash"
+            android:icon="@mipmap/ic_exit"
+            android:title="崩溃"/>
     </group>
 
     <!--<item android:title="Version">-->

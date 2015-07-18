@@ -265,12 +265,17 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
                             startActivity(new Intent(context, Settings.class));
                         } else if (id == R.id.nav_backup) {
                             doExport();
+
                         } else if (id == R.id.nav_exit) {
 //                            onDestroy();
                             finish();
 //                            System.exit(0);
                         } else if (id == R.id.nav_restore) {
                             doImport();
+                        }
+                        else if (id == R.id.nav_crash){
+//                            测试崩溃
+                            String s = null;System.out.println( s.toCharArray() );
                         }
                         mDrawerLayout.closeDrawers();
                         return true;
