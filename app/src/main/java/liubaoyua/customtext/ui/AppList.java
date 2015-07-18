@@ -704,7 +704,15 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
     protected void onPause() {
         super.onPause();
         if(Common.DEBUG){
-            Log.d(Common.TAG,"activity is finish  " + isFinishing());
+            Log.d(Common.TAG,"activity onPause is finish  " + isFinishing());
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(Common.DEBUG){
+            Log.d(Common.TAG,"activity  onStop is finish  " + isFinishing());
         }
     }
 }
