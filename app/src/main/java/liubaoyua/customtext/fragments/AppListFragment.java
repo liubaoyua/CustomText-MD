@@ -3,6 +3,7 @@ package liubaoyua.customtext.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,7 +16,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import liubaoyua.customtext.interfaces.FragmentCommunicator;
 import liubaoyua.customtext.utils.AppInfo;
@@ -31,32 +35,24 @@ public class AppListFragment extends Fragment {
     private AppRecyclerAdapter appRecyclerAdapter;
     private SwipeRefreshLayout mSwipeRefreshWidget;
     private FragmentCommunicator communicator;
-    private List<AppInfo> appList = new ArrayList<>();
 
     public void setAppList(List<AppInfo> appList) {
-        this.appList = appList;
+        if(appRecyclerAdapter != null){
+            appRecyclerAdapter.getFilter().setAppList(appList);
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
     }
 
-//    public void prepareAdapter(){
-//        if(appRecyclerAdapter == null){
-//            if(Common.DEBUG){
-//                Log.d(Common.TAG,"appRecyclerAdapter is null");
-//            }
-//            appRecyclerAdapter = new AppRecyclerAdapter(getActivity(),appList);
-//        }
-//    }
 
     @Override
     public void onAttach(Activity activity) {
         communicator = (FragmentCommunicator)activity;
         if(appRecyclerAdapter == null){
-            appRecyclerAdapter = new AppRecyclerAdapter(getActivity(),appList);
+            appRecyclerAdapter = new AppRecyclerAdapter(getActivity(), new ArrayList<AppInfo>());
         }
         super.onAttach(activity);
     }
@@ -77,6 +73,9 @@ public class AppListFragment extends Fragment {
                 android.R.color.holo_green_light);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext(), LinearLayout.VERTICAL, false));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        if(appRecyclerAdapter == null){
+            appRecyclerAdapter = new AppRecyclerAdapter(getActivity(), new ArrayList<AppInfo>());
+        }
         mRecyclerView.setAdapter(appRecyclerAdapter);
 
         appRecyclerAdapter.setOnItemClickListener(new AppRecyclerAdapter.OnItemClickListener() {
@@ -97,12 +96,49 @@ public class AppListFragment extends Fragment {
         });
     }
 
-    public SwipeRefreshLayout getSwipeRefreshWidget() {
-        return mSwipeRefreshWidget;
+    public boolean isRefreshing(){
+        if(mSwipeRefreshWidget == null){
+            return false;
+        }else{
+            return mSwipeRefreshWidget.isRefreshing();
+        }
     }
 
-    public AppRecyclerAdapter getAppRecyclerAdapter() {
-        return appRecyclerAdapter;
+    public void setRefreshing(Boolean state){
+        if(mSwipeRefreshWidget !=null)
+          mSwipeRefreshWidget.setRefreshing(state);
+    }
+
+    public void filter(String nameFilter){
+        if(appRecyclerAdapter != null)
+           appRecyclerAdapter.getFilter().filter(nameFilter);
+    }
+
+    public List<AppInfo> getAppList(){
+        if(appRecyclerAdapter != null){
+            return appRecyclerAdapter.getFilter().getAppList();
+        }else{
+            if(Common.DEBUG){
+                Log.e(Common.TAG," appRecyclerAdapter is null");
+            }
+            return null;
+        }
+    }
+
+    public List<AppInfo> getShowingAppList(){
+        if(appRecyclerAdapter != null){
+            return appRecyclerAdapter.getAppList();
+        }else{
+            if(Common.DEBUG){
+                Log.e(Common.TAG," appRecyclerAdapter is null");
+            }
+            return null;
+        }
+    }
+
+    public void notifyDataSetChanged(){
+        if(appRecyclerAdapter != null)
+            appRecyclerAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -112,10 +148,11 @@ public class AppListFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        appList.clear();
-//        mSwipeRefreshWidget = null;
-//        communicator = null;
-//        mRecyclerView = null;
-//        appRecyclerAdapter = null;
+        if(Common.DEBUG){
+            Log.d(Common.TAG,"AppListFragment is onDestroy");
+        }
+        communicator = null;
+        mRecyclerView = null;
+        appRecyclerAdapter = null;
     }
 }

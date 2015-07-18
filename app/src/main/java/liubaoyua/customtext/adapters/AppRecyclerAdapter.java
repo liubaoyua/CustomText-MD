@@ -83,6 +83,8 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
 //                .resize(48, 48)
 //                .centerCrop()
                 .noFade().into(holder);
+
+//        另一种读取图片的方式
 //        holder.imageLoader = new AsyncTask<String, Void, Drawable>() {
 //
 //            @Override
@@ -124,6 +126,8 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
 //            }
 //        }.execute(temp.packageName);
 
+
+//        第三种读取方法
 //        try {
 //            holder.iconView.setImageDrawable(mContext.getPackageManager().
 //                    getApplicationIcon(temp.packageName));

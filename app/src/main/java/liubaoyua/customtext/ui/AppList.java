@@ -144,10 +144,9 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
         editor.commit();
 
         setupViewPager();
-        if(appListFragment.getAppRecyclerAdapter() == null){
-            loadAppsTask = new LoadAppsTask(true);
-            loadAppsTask.execute();
-        }
+        loadAppsTask = new LoadAppsTask(true);
+        loadAppsTask.execute();
+
     }
 
     @Override
@@ -167,10 +166,8 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 nameFilter = query;
-                fragmentList.get(0).getAppRecyclerAdapter()
-                        .getFilter().filter(nameFilter);
-                fragmentList.get(1).getAppRecyclerAdapter()
-                        .getFilter().filter(nameFilter);
+                fragmentList.get(0).filter(nameFilter);
+                fragmentList.get(1).filter(nameFilter);
                 mSearchView.clearFocus();
 //                mSearchView.setIconified(true);
                 return false;
@@ -179,10 +176,8 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
             @Override
             public boolean onQueryTextChange(String newText) {
                 nameFilter = newText;
-                fragmentList.get(0).getAppRecyclerAdapter()
-                        .getFilter().filter(nameFilter);
-                fragmentList.get(1).getAppRecyclerAdapter()
-                        .getFilter().filter(nameFilter);
+                fragmentList.get(0).filter(nameFilter);
+                fragmentList.get(1).filter(nameFilter);
                 return false;
             }
         });
@@ -200,6 +195,7 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
         }
         return super.onKeyUp(keyCode, event);
     }
+
 //    private void initSystemBar() {
 //        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
 //            Window window = getWindow();
@@ -447,8 +443,8 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
     }
 
     class LoadAppsTask extends AsyncTask<Void,String,Void> {
-        private ProgressDialog dialog;
-        private Boolean showDialog;
+        private ProgressDialog dialog = null;
+        private Boolean showDialog = false;
 
         public LoadAppsTask(Boolean showDialog){
             this.showDialog = showDialog;
@@ -527,20 +523,17 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
         @Override
         protected void onPostExecute(Void aa) {
 //            setupViewPager();
-            if(recentListFragment.getAppRecyclerAdapter() != null){
-                if(!Utils.checkList(appList, appListFragment.getAppRecyclerAdapter().getFilter().getAppList())){
-                    appListFragment.getAppRecyclerAdapter().getFilter().setAppList(appList);
-                    fragmentList.get(0).getAppRecyclerAdapter().getFilter().filter(nameFilter);
-
-                    recentListFragment.getAppRecyclerAdapter().getFilter().setAppList(recentList);
-                    fragmentList.get(1).getAppRecyclerAdapter().getFilter().filter(nameFilter);;
+            if(recentListFragment != null){
+                if(!Utils.checkList(appList, appListFragment.getAppList())){
+                    appListFragment.setAppList(appList);
+                    appListFragment.filter(nameFilter);
+                    recentListFragment.setAppList(recentList);
+                    recentListFragment.filter(nameFilter);;
                     new LoadAppsIcon(appList).execute();
                 }
             }
-            if(recentListFragment.getSwipeRefreshWidget() != null){
-                appListFragment.getSwipeRefreshWidget().setRefreshing(false);
-                recentListFragment.getSwipeRefreshWidget().setRefreshing(false);
-            }
+            appListFragment.setRefreshing(false);
+            recentListFragment.setRefreshing(false);
             if(dialog!=null)
                 dialog.dismiss();
         }
@@ -610,13 +603,6 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
         }
     }
 
-    /**
-     * Dispatch incoming result to the correct fragment.
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -631,22 +617,18 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
                     Log.d(Common.TAG,"onActivityResult  "+isEnabled + "  position   " + position);
                 }
                 if(position != -1){
-                    List<AppInfo> list = fragmentList.get(1)
-                            .getAppRecyclerAdapter().getAppList();
-                    AppInfo temp = fragmentList.get(mViewPager.getCurrentItem())
-                            .getAppRecyclerAdapter().getAppList().get(position);
+                    List<AppInfo> list = appListFragment.getAppList();
+                    AppInfo temp = fragmentList.get(mViewPager.getCurrentItem()).getShowingAppList().get(position);
                     if(isEnabled){
                         temp.state = AppInfo.ENABLED;
                         if(!list.contains(temp)){
                             list.add(0,temp);
-                            fragmentList.get(1)
-                                    .getAppRecyclerAdapter().notifyDataSetChanged();
+                            recentListFragment.notifyDataSetChanged();
                         }
                     }else{
                         temp.state = AppInfo.DISABLED;
                         if(list.contains(temp)){
-                            fragmentList.get(1)
-                                    .getAppRecyclerAdapter().notifyDataSetChanged();
+                            recentListFragment.notifyDataSetChanged();
                         }
                     }
                 }
@@ -658,18 +640,19 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        PicassoTools.clearCache();
+        if(Common.DEBUG){
+            Log.d(Common.TAG,"activity onDestroy isFinishing " + isFinishing());
+        }
         PicassoTools.destroy();
-//        loadAppsTask = null;
-//        if(fragmentAdapter != null){
-//            fragmentAdapter = null;
-//        }
-//        fragmentAdapter = null;
-//        appList.clear();
-//        recentList.clear();
-//        appList = null;
-//        recentList = null;
-//        context = null;
+        loadAppsTask = null;
+        if(fragmentAdapter != null){
+            fragmentAdapter = null;
+        }
+        appList.clear();
+        recentList.clear();
+        appList = null;
+        recentList = null;
+        context = null;
     }
 
     private class LoadAppsIcon extends  AsyncTask<Void,Void,Void>{
@@ -697,14 +680,11 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
         }
     }
 
-    /**
-     * Dispatch onPause() to fragments.
-     */
     @Override
     protected void onPause() {
         super.onPause();
         if(Common.DEBUG){
-            Log.d(Common.TAG,"activity onPause is finish  " + isFinishing());
+            Log.d(Common.TAG,"activity onPause isFinishing  " + isFinishing());
         }
     }
 
@@ -712,7 +692,7 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
     protected void onStop() {
         super.onStop();
         if(Common.DEBUG){
-            Log.d(Common.TAG,"activity  onStop is finish  " + isFinishing());
+            Log.d(Common.TAG,"activity  onStop isFinishing  " + isFinishing());
         }
     }
 }

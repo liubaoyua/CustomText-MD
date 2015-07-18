@@ -8,7 +8,6 @@
     <!--android:name=".AppDebug"-->
     <application
         android:allowBackup="true"
-
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name" >
         <meta-data
@@ -31,7 +30,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <!--<activity-->
@@ -40,7 +38,11 @@
             <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
             <!--android:label="@string/app_name"-->
             <!--android:theme="@style/Theme.Blue" >-->
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         <!--</activity>-->
 
         <activity

@@ -51,8 +51,7 @@ public class AppListFilter extends Filter {
                     items.add(appInfo);
                 }else if(appInfo.appName.contains(constraint)){
                     items.add(appInfo);
-                }else
-                if(Locale.getDefault().equals(Locale.CHINA)||Locale.getDefault().equals(Locale.TAIWAN)){
+                }else if(Locale.getDefault().equals(Locale.CHINA)||Locale.getDefault().equals(Locale.TAIWAN)){
                     if(appInfo.appNamePinyin.contains(constraint)){
                         items.add(appInfo);
                     }else if(appInfo.appNamePinyinHeadChar.contains(constraint)){

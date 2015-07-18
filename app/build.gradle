@@ -8,7 +8,7 @@ android {
         applicationId "liubaoyua.customtext"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 14
+        versionCode 15
         versionName "2.0 MD"
 //       resConfigs "en","zh-"
         resConfigs "nodpi", "hdpi","xxhdpi"
@@ -31,4 +31,6 @@ dependencies {
     compile 'com.android.support:cardview-v7:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
+//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3'
+//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3'
 }

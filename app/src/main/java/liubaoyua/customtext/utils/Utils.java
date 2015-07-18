@@ -177,6 +177,9 @@ public abstract class Utils {
      * @return result
      */
     public static boolean checkList(List<AppInfo> loaderAppList, List<AppInfo> appList){
+        if(loaderAppList == null || appList == null){
+            return false;
+        }
         if(loaderAppList.size() == appList.size()){
             for(int i=0; i<appList.size();i++){
                 if (!appList.get(i).equals(loaderAppList.get(i))){
