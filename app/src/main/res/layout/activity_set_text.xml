@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/main_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/action_button_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        android:src="@drawable/ic_done"/>
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+
+
+    <!--<com.getbase.floatingactionbutton.FloatingActionsMenu-->
+    <!--xmlns:fab="http://schemas.android.com/apk/res-auto"-->
+    <!--android:id="@+id/multiple_actions"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--fab:fab_addButtonPlusIconColor="@color/half_black"-->
+    <!--fab:fab_addButtonColorNormal="@android:color/holo_blue_light"-->
+    <!--fab:fab_addButtonColorPressed="@android:color/holo_blue_dark"-->
+    <!--fab:fab_labelStyle="@style/menu_labels_style"-->
+    <!--android:layout_marginBottom="16dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_marginEnd="16dp">-->
+
+    <!--fab:fab_addButtonPlusIconColor="@color/half_black"-->
+
+    <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+    <!--android:id="@+id/action_button_save"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--fab:fab_icon="@drawable/ic_done"-->
+    <!--fab:fab_addButtonColorNormal="@android:color/holo_blue_light"-->
+    <!--fab:fab_addButtonColorPressed="@android:color/holo_blue_dark"-->
+    <!--fab:fab_title="@string/float_save_all"-->
+    <!--/>-->
+
+    <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+    <!--android:id="@+id/action_button_clear"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--fab:fab_addButtonColorNormal="@android:color/holo_blue_light"-->
+    <!--fab:fab_addButtonColorPressed="@android:color/holo_blue_dark"-->
+    <!--fab:fab_title="@string/float_clear_all"/>-->
+
+    <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+    <!--android:id="@+id/action_button_add"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--fab:fab_addButtonColorNormal="@android:color/holo_blue_light"-->
+    <!--fab:fab_addButtonColorPressed="@android:color/holo_blue_dark"-->
+    <!--fab:fab_title="@string/float_add_more"/>-->
+
+    <!--</com.getbase.floatingactionbutton.FloatingActionsMenu>-->

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:checked="true"
+            android:id="@+id/nav_home"
+            android:icon="@mipmap/ic_home"
+            android:title="@string/menu_home"/>
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@mipmap/ic_settings"
+            android:title="@string/menu_settings"/>
+        <item
+            android:id="@+id/nav_backup"
+            android:icon="@mipmap/ic_backup"
+            android:title="@string/menu_backup"/>
+        <item
+            android:id="@+id/nav_restore"
+            android:icon="@mipmap/ic_restore"
+            android:title="@string/menu_restore"/>
+        <item
+            android:id="@+id/nav_exit"
+            android:icon="@mipmap/ic_exit"
+            android:title="@string/menu_exit"/>
+    </group>
+
+    <!--<item android:title="Version">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:icon="@drawable/ic_dashboard"-->
+                <!--android:title="Android"/>-->
+            <!--<item-->
+                <!--android:icon="@drawable/ic_dashboard"-->
+                <!--android:title="iOS"/>-->
+        <!--</menu>-->
+    <!--</item>-->
+
+</menu>

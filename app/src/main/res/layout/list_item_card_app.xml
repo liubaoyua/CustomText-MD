@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
+        android:layout_gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/image_icon"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@mipmap/ic_launcher"/>
+        <RelativeLayout
+            android:layout_toRightOf="@id/image_icon"
+            android:layout_toEndOf="@id/image_icon"
+            android:layout_width="match_parent"
+            android:padding="8dp"
+            android:layout_height="56dp">
+
+            <TextView
+                android:id="@+id/app_name"
+                android:layout_width="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_height="wrap_content"
+                android:text="文本自定义"
+                android:singleLine="true"
+                />
+
+            <TextView
+                android:singleLine="true"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/package_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="liubaoyua.custontext"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

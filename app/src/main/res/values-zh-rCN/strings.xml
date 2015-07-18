@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--code resource -->
+    <string name="app_name">文本自定义</string>
+    <string name="open">打开</string>
+    <string name="close">关闭</string>
+    <string name="all_apps">所有应用</string>
+    <string name="recent_apps">最近应用</string>
+    <string name="error_found">发现错误，即将退出。错误信息： </string>
+    <string name="succeed">成功</string>
+    <string name="undo">撤销</string>
+    <string name="clear">清空</string>
+    <string name="search_hint">应用名(或首字母)、包名等等</string>
+    <string name="clipboard_is_empty">剪切板为空</string>
+    <string name="switch_is_not_activated">是否启用开关？</string>
+    <string name="dialog_about_title">想说什么来着~</string>
+    <string name="dialog_about">更新日志：
+        \n   完全重写代码，界面什么的全改了
+        \n   支持替换为 html (感谢tommy990607提供代码)
+        \n   添加更多的设置选项。
+        \n   一些新功能将在之后的版本更新。
+        \n
+        \n   另：
+        \n   本应用需要安装 Xposed 框架才能使用。代码已在 Github 开源。
+        \n
+        \n   免责声明：
+        \n   作者已经尽量测试，但仍然可能出现未知的问题，请使用者自行承担风险，作者不对你的使用负责，也不承担任何损失。如有不爽，家无水表，不收快递，请勿跨省，谢谢合作。
+        \n
+        \n   作者：liubaoyua
+        \n   当前版本：
+    </string>
+
+    <string name="dialog_title">来包辣条？</string>
+    <string name="dialog_data_not_saved">修改尚未保存</string>
+    <string name="dialog_save_now">是否现在保存？</string>
+    <string name="dialog_not_to_save">不保存</string>
+    <string name="dialog_save">保存</string>
+    <string name="dialog_input_backup_name">输入备份名</string>
+    <string name="dialog_select_restore_item">选择要还原的备份</string>
+    <string name="dialog_loading">正在读取</string>
+    <string-array name="dialog_item">
+        <item>前排加一楼</item>
+        <item>复制本楼</item>
+        <item>删除本楼</item>
+        <item>剪切本楼</item>
+        <item>粘贴本楼</item>
+        <item>后排加一楼</item>
+    </string-array>
+
+    <string name="imp_exp_file_does_not_exist">文件夹不存在: %s</string>
+    <string name="imp_exp_confirm">是否删除原来的设置并导入选择的备份?</string>
+    <string name="imp_exp_exported">设置文件已经备份到文件夹: %s</string>
+    <string name="imp_exp_export_error">备份失败： %s</string>
+    <string name="imp_exp_import_error">还原失败： %s</string>
+    <string name="imp_exp_imported">还原成功，重启应用吧~</string>
+    <string name="imp_exp_no_backup_found">没有找到备份</string>
+    <string name="imp_exp_backup_hint">随意输入</string>
+
+
+    <!--menu resource-->
+    <string name="menu_search">搜索</string>
+
+    <string name="menu_home">主页</string>
+    <string name="menu_info">关于</string>
+    <string name="menu_restore">还原</string>
+    <string name="menu_backup">备份</string>
+    <string name="menu_settings">设置</string>
+    <string name="menu_exit">退出</string>
+    <string name="menu_switch">开关</string>
+
+    <string name="menu_add_item">增加十楼</string>
+    <string name="menu_clear_empty">清除空行</string>
+    <string name="menu_relaunch_app">重启应用</string>
+    <string name="menu_app_info">应用信息</string>
+    <string name="menu_market_link">市场链接</string>
+    <string name="menu_clear_all">清除所有</string>
+
+
+    <!--layout resource-->
+    <string name="button_operate">操作</string>
+    <string name="button_clear">清空</string>
+    <string name="ori_text_hint">原文本</string>
+    <string name="new_text_hint">新文本</string>
+    <string name="describe">介是一个可以自定义替换文字的模块 by liubaoyua from Xposed框架吧</string>
+    <string name="title_activity_settings">设置</string>
+    <string name="button_delete">删除</string>
+
+
+    <!--setting resource-->
+    <string name="setting_global_setting">全局设置</string>
+    <string name="setting_module_switch">模块开关</string>
+    <string name="setting_module_enabled">模块已启用</string>
+    <string name="setting_module_disabled">模块已禁用</string>
+    <string name="setting_further_replace_enable">深度替换</string>
+    <string name="setting_further_replace_summary">将替换更多类型的字符（如果导致图片不正确，请取消这个选项）</string>
+    <string name="setting_custom_message">自定义信息</string>
+    <string name="setting_default_message">模块可用</string>
+    <string name="setting_custom_message_summary">修改模块可用时在主界面上显示的信息</string>
+    <string name="setting_check_update">手动检查更新</string>
+
+    <string name="setting_about_module">关于模块</string>
+    <string name="setting_module_name">文本自定义 2.0 MD</string>
+    <string name="setting_author_summary">作者: liubaoyua. 我只能说，作者是个死宅(笑),写个代码都能拖那么久，微博点这里。</string>
+    <string name="setting_module_function">模块功能</string>
+    <string name="setting_module_function_summary">本模块可以帮助您修改应用中显示的文本，比如：应用名字、运营商标签 等手机上显示的文字。使用前确保安装了 Xposed 框架。更多使用方法请戳这里。</string>
+    <string name="setting_attention">使用注意</string>
+    <string name="setting_attention_summary">本应用是无聊之作，作者不对你的使用负责，也不承担任何损失和风险。如有不爽，家无水表，不收快递，请勿跨省，谢谢合作。</string>
+
+    <string name="setting_like">喜欢本应用?</string>
+    <string name="setting_like_summary">如果觉得本应用不错的话，欢迎到应用商店给个好评哈</string>
+    <string name="setting_feedback">建议反馈</string>
+    <string name="setting_feedback_summary"> 邮箱:liubaoyua@gmail.com
+             (由于某些不能说的原因，很可能会延迟回复)
+        \n\n百度贴吧:欢迎在xposed框架吧讨论。
+             或者请艾特我 @liubaoyua
+        \n\n酷市场评论区:本人常驻酷安，欢迎在评论区
+             评论、反馈、或调戏 @liubaoyua</string>
+    <string name="setting_contributor">感谢帮助</string>
+    <string name="setting_contributor_summary">
+        \n tommy990607/提供 Html 代码支持
+        \n
+        \n Nicolas Woelker/Deutsch-Übersetzung
+        \n dvaleron/русский перевод
+        \n Ravhi Rizaldi/Bahasa Indonesia
+        \n
+        \n mitchtech/XposedGroot
+        \n GermainZ/Hodor
+        \n rovo89/xposed &amp; Appsettings
+        \n drakeet/material-design-settings
+    </string>
+</resources>

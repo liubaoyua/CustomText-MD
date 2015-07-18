@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
+
+    <!--android:paddingBottom="8dp"-->
+    <!--android:paddingTop="8dp"-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+
+            <Button
+                android:id="@+id/button_serial"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="8dp"
+                android:textAllCaps="false"
+                android:background="@drawable/button_bg"
+                android:gravity="center"
+                android:text="@string/button_operate"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+            <!--android:hint="@string/ori_text_hint"-->
+
+            <!--app:met_baseColor="@color/accent"-->
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:hint="@string/ori_text_hint"
+                app:met_primaryColor ="@color/accent"
+                app:met_floatingLabelText = "@string/ori_text_hint"
+                app:met_floatingLabel="highlight"
+                android:layout_toRightOf="@id/button_serial"
+                android:layout_toEndOf="@id/button_serial"
+                android:id="@+id/editText_original_text"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:imeOptions="actionDone"
+                android:layout_height="wrap_content"/>
+
+            <!--<android.support.design.widget.TextInputLayout-->
+
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_toEndOf="@id/button_serial"-->
+                <!--android:layout_toRightOf="@id/button_serial">-->
+
+                <!--<EditText-->
+                    <!--android:id="@+id/editText_original_text"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:hint="@string/ori_text_hint"-->
+                    <!--android:imeOptions="actionDone" />-->
+
+            <!--</android.support.design.widget.TextInputLayout>-->
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+
+            <!--android:paddingBottom="8dp"-->
+            <Button
+                android:id="@+id/button_clear"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="8dp"
+                android:textAllCaps="false"
+                android:background="@drawable/button_bg"
+                android:gravity="center"
+                android:text="@string/button_clear"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+            android:hint="@string/new_text_hint"
+            app:met_primaryColor ="@color/accent"
+            app:met_floatingLabelText = "@string/new_text_hint"
+            app:met_floatingLabel="highlight"
+            android:id="@+id/editText_new_text"
+            android:layout_toRightOf="@id/button_clear"
+            android:layout_toEndOf="@id/button_clear"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:imeOptions="actionDone"
+            android:layout_height="wrap_content"/>
+
+            <!--<android.support.design.widget.TextInputLayout-->
+
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentEnd="true"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_toEndOf="@id/button_clear"-->
+                <!--android:layout_toRightOf="@id/button_clear">-->
+
+                <!--<EditText-->
+                    <!--android:id="@+id/editText_new_text"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:hint="@string/new_text_hint"-->
+                    <!--android:imeOptions="actionDone" />-->
+
+            <!--</android.support.design.widget.TextInputLayout>-->
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
+

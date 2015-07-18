@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--code resource -->
+    <string name="app_name">Custom Text</string>
+    <string name="open">Buka</string>
+    <string name="close">Tutup</string>
+    <string name="all_apps">Semua Aplikasi</string>
+    <string name="recent_apps">Aplikasi Terkini</string>
+    <string name="error_found">Kesalahan ditemukan. Mengeluarkan. Pesan Kesalahan: </string>
+    <string name="succeed">Sukses</string>
+    <string name="undo">Kembali</string>
+    <string name="clear">Kosongkan</string>
+    <string name="search_hint">Nama aplikasi(Head Char),Nama paket,dll</string>
+    <string name="clipboard_is_empty">Papan klip Kosong</string>
+    <string name="switch_is_not_activated">Aktifkan switch？</string>
+    <string name="dialog_about_title">Katakanlah Sesuatu~</string>
+    <string name="dialog_about">LOG PEMBARUAN:
+        \n   Menulis Ulang kode sepenuhnya.
+        \n   Html didukung.(terima kasih tommy990607)
+        \n   Menambah lebih banyak pilihan dalam pengaturan.
+        \n   Fitur baru akan ditambahkan pada versi selanjutnya.
+        \n
+        \n   CATATAN:
+        \n   Xposed framework dibutuhkan. Kode sumber telah diunggah ke Github.
+        \n
+        \n   SANGGAHAN:
+        \n   Hal ini dibuat hanya untuk kesenangan. Saya telah mengujinya untuk berkali-kali, namun, beberapa masalah yang tidak diketahui dapat terjadi. Jadi, gunakan dengan risiko Anda sendiri. Saya tidak bertanggung jawab untuk apa yang Anda lakukan dengan itu.
+        \n
+        \n   PEMILIK:liubaoyua
+        \n   VERSI SAAT INI:
+    </string>
+
+    <string name="dialog_title">Apa yang harus dilakukan?</string>
+    <string name="dialog_data_not_saved">Modifikasi belum disimpan</string>
+    <string name="dialog_save_now">Simpan sekarang?</string>
+    <string name="dialog_not_to_save">Tidak disimpan</string>
+    <string name="dialog_save">Simpan</string>
+    <string name="dialog_input_backup_name">Masukan nama pencadangan</string>
+    <string name="dialog_select_restore_item">Pilih Sebuah Pencadangan</string>
+    <string name="dialog_loading">Menunggu</string>
+    <string-array name="dialog_item">
+        <item>Menambah ke atas</item>
+        <item>Salin</item>
+        <item>Hapus</item>
+        <item>Pindah</item>
+        <item>Tempel</item>
+        <item>Menambah ke bawah</item>
+    </string-array>
+
+    <string name="imp_exp_file_does_not_exist">Folder tidak ditemukan: %s</string>
+    <string name="imp_exp_confirm">Impor cadangan dan timpa semua pengaturan saat ini?</string>
+    <string name="imp_exp_exported">Pengaturan diekspor ke folder: %s</string>
+    <string name="imp_exp_export_error">Pencadangan gagal: %s</string>
+    <string name="imp_exp_import_error">Impor gagal: %s</string>
+    <string name="imp_exp_imported">Impor sukses; jalankan ulang untuk membuat efek.</string>
+
+
+    <!--menu resource-->
+    <string name="menu_search">Cari</string>
+
+    <string name="menu_home">BERANDA</string>
+    <string name="menu_info">TENTANG</string>
+    <string name="menu_restore">KEMBALIKAN</string>
+    <string name="menu_backup">CADANGKAN</string>
+    <string name="menu_settings">PENGATURAN</string>
+    <string name="menu_exit">KELUAR</string>
+    <string name="menu_switch">PINDAH</string>
+
+    <string name="menu_add_item">Tambahkan lebih banyak item</string>
+    <string name="menu_clear_empty">Bersihkan kosong </string>
+    <string name="menu_relaunch_app">Jalankan ulang Aplikasi</string>
+    <string name="menu_app_info">Info Aplikasi</string>
+    <string name="menu_market_link">Tautan Market</string>
+    <string name="menu_clear_all">Kosongkan Semua</string>
+
+
+    <!--layout resource-->
+    <string name="button_operate">Aksi</string>
+    <string name="button_clear">Kosongkan</string>
+    <string name="ori_text_hint">Teks Asli</string>
+    <string name="new_text_hint">Teks Baru</string>
+    <string name="describe">Sebuah modul yang membantu Anda mengganti teks dengan teks yang Anda inginkan. Dikembangkan oleh liubaoyua.</string>
+    <string name="title_activity_settings">Pengaturan</string>
+    <string name="button_delete">Hapus</string>
+
+
+    <!--setting resource-->
+    <string name="setting_global_setting">Pengaturan Global</string>
+    <string name="setting_module_switch">Pindah Modul</string>
+    <string name="setting_further_replace_enable">Perpanjangan Pengganti</string>
+    <string name="setting_further_replace_summary">Ganti lebih banyak jenis teks(jika suatu widget tidak tampil dengan benar, Anda dapat hapus tanda centang pilihan ini)</string>
+    <string name="setting_custom_message">Pesan ubahsuaian</string>
+    <string name="setting_default_message">Ini Bekerja :)</string>
+    <string name="setting_custom_message_summary">Ubah pesan yang menampilkan "Ini Bekerja:)"</string>
+    <string name="setting_check_update">Periksa Pembaruan secara manual</string>
+
+    <string name="setting_about_module">Tentang modul</string>
+    <string name="setting_module_name">Custom Text 2.0 MD</string>
+    <string name="setting_author_summary">Pemilik: liubaoyua. Klik untuk mengunjungi blog mikro saya</string>
+    <string name="setting_module_function">Fungsi modul</string>
+    <string name="setting_module_function_summary">Ini membantu Anda mengganti teks seperti: ID, Nama App, Label Carrier, dll. Xposed dibutuhkan.</string>
+    <string name="setting_attention">Perhatian</string>
+    <string name="setting_attention_summary">Hal ini dibuat hanya untuk bersenang-senang. Menggunakannya dengan resiko Anda sendiri. Saya tidak bertanggung jawab untuk apa yang Anda lakukan dengan itu.</string>
+
+    <string name="setting_like">Menyukai Aplikasi ini?</string>
+    <string name="setting_like_summary">Jika anda menyukai Aplikasi ini, Tolong beri nilai di app market.</string>
+    <string name="setting_feedback">Masukan</string>
+    <string name="setting_feedback_summary"> Email:liubaoyua@gmail.com
+        \n\nCoolApk Market: Masukan dan @liubaoyua disini saya akan melihatnya </string>
+    <string name="setting_contributor">Terima kasih banyak</string>
+    <string name="setting_contributor_summary">
+        \n tommy990607/kode sumber
+        \n
+        \n Nicolas Woelker/Deutsch-Übersetzung
+        \n dvaleron/русский перевод
+        \n Ravhi Rizaldi/Bahasa Indonesia
+        \n
+        \n mitchtech/XposedGroot
+        \n GermainZ/Hodor
+        \n rovo89/xposed &amp; Appsettings
+        \n drakeet/material-design-settings
+    </string>
+    <string name="imp_exp_backup_hint">Masukan sesuatu</string>
+    <string name="imp_exp_no_backup_found">Tidak ada cadangan ditemukan</string>
+    <string name="setting_module_disabled">Modul dinonaktifkan</string>
+    <string name="setting_module_enabled">Module diaktifkan</string>
+</resources>

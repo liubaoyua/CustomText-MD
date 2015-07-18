@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="all_apps">Все приложения</string>
+    <string name="app_name">Custom Text</string>
+    <string name="button_clear">Очистить</string>
+    <string name="button_delete">Удалить</string>
+    <string name="button_operate">Действие</string>
+    <string name="clear">Очистить</string>
+    <string name="clipboard_is_empty">Буфер обмена пуст.</string>
+    <string name="close">Закрыть</string>
+    <string name="describe">Модуль предоставляет возможность изменять тексты на любые, по Вашему желанию. Разработано liubaoyua.</string>
+    <string name="dialog_about">"ЧТО НОВОГО: 
+ \n  Полностью переписан код.
+ \n  Поддержка Html.(спасибо tommy990607)
+  \n  Добавлены дополнительные параметры в настройки.
+  \n  Новые функции в следующей версии.
+  \n
+ \n   ПРИМЕЧАНИЕ:
+  \n  Требуется Xposed framework. Исходники загружены из Github.
+ 
+  \n  ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:
+  \n Модуль разработан просто для удовольствия. Я испытывал его много раз, тем не менее, могут возникнуть некоторые неизвестные проблемы. Поэтому, используйте его на свой страх и риск. Я не несу ответственности за то, что Вы с ним делаете.
+
+  \n АВТОР:liubaoyua
+  \n ТЕКУЩАЯ ВЕРСИЯ:"</string>
+    <string name="dialog_about_title">Информация~</string>
+    <string name="dialog_data_not_saved">Изменения ещё не сохранены</string>
+    <string name="dialog_input_backup_name">Введите название бэкапа</string>
+    <string name="dialog_loading">Загрузка</string>
+    <string name="dialog_not_to_save">Не сохранять</string>
+    <string name="dialog_save">Сохранить</string>
+    <string name="dialog_save_now">Сохранить сейчас?</string>
+    <string name="dialog_select_restore_item">Выберите бэкап</string>
+    <string name="dialog_title">Что сделать?</string>
+    <string name="error_found">Обнаружена ошибка. Выход. Сообщение об ошибке:</string>
+    <string name="imp_exp_backup_hint">Введите название</string>
+    <string name="imp_exp_confirm">Хотите импортировать бэкап и переписать все текущие настройки?</string>
+    <string name="imp_exp_export_error">Ошибка резервного копирования: %s</string>
+    <string name="imp_exp_exported">Настройки экспортированы в папку: %s</string>
+    <string name="imp_exp_file_does_not_exist">Папка не существует: %s</string>
+    <string name="imp_exp_import_error">Ошибка импорта: %s</string>
+    <string name="imp_exp_imported">Импорт успешно выполнен; перезапустие приложение, чтобы применить настройки.</string>
+    <string name="imp_exp_no_backup_found">Резервные копии не найдены</string>
+    <string name="menu_add_item">Добавить ещё элемент</string>
+    <string name="menu_app_info">Сведения о приложении</string>
+    <string name="menu_backup">БЭКАП</string>
+    <string name="menu_clear_all">Очистить все</string>
+    <string name="menu_clear_empty">Очистить пустые</string>
+    <string name="menu_exit">ВЫХОД</string>
+    <string name="menu_home">ГЛАВНАЯ</string>
+    <string name="menu_info">О ПРИЛОЖЕНИИ</string>
+    <string name="menu_market_link">Открыть в маркете</string>
+    <string name="menu_relaunch_app">Перезапустить приложение</string>
+    <string name="menu_restore">ВОССТАНОВЛЕНИЕ</string>
+    <string name="menu_search">Поиск</string>
+    <string name="menu_settings">НАСТРОЙКИ</string>
+    <string name="menu_switch">ПЕРЕКЛЮЧАТЕЛЬ</string>
+    <string name="new_text_hint">Новый текст</string>
+    <string name="open">Да</string>
+    <string name="ori_text_hint">Исходный текст</string>
+    <string name="recent_apps">Последние</string>
+    <string name="search_hint">Имя пакета или приложения</string>
+    <string name="setting_about_module">О модуле</string>
+    <string name="setting_attention">Внимание!</string>
+    <string name="setting_attention_summary">Модуль разработан просто для удовольствия. Используйте его на свой страх и риск. Я не несу ответственности за то, что Вы с ним делаете.</string>
+    <string name="setting_author_summary">Автор: liubaoyua. Нажмите, чтобы посетить мой микро-блог</string>
+    <string name="setting_check_update">Проверка обновлений</string>
+    <string name="setting_contributor">Благодарности</string>
+    <string name="setting_contributor_summary">
+        \n tommy990607/kode sumber
+        \n
+        \n Nicolas Woelker/Deutsch-Übersetzung
+        \n dvaleron/русский перевод
+        \n Ravhi Rizaldi/Bahasa Indonesia
+        \n
+        \n mitchtech/XposedGroot
+        \n GermainZ/Hodor
+        \n rovo89/xposed &amp; Appsettings
+        \n drakeet/material-design-settings
+    </string>
+    <string name="setting_custom_message">Пользовательское сообщение</string>
+    <string name="setting_custom_message_summary">Измените сообщение, чтобы посмотреть, как это работает:)</string>
+    <string name="setting_default_message">Это работает :)</string>
+    <string name="setting_feedback">Связаться со мной</string>
+    <string name="setting_feedback_summary">"Email:liubaoyua@gmail.com 
+
+CoolApk Market: пишите на этот адрес: @liubaoyua и я увижу"</string>
+    <string name="setting_further_replace_enable">Расширенная замена</string>
+    <string name="setting_further_replace_summary">Позволяет заменять больше типов текста (если в виджетах, что-то отображается неверно, отключите этот параметр)</string>
+    <string name="setting_global_setting">Общие настройки</string>
+    <string name="setting_like">Понравилось приложение?</string>
+    <string name="setting_like_summary">Если Вам нравится это приложение, пожалуйста, оцените его в Google Play.</string>
+    <string name="setting_module_disabled">Модуль отключён</string>
+    <string name="setting_module_enabled">Модуль включён</string>
+    <string name="setting_module_function">Функционал модуля</string>
+    <string name="setting_module_function_summary">Этот подуль поможет Вам заменять тексты в: IDs, названиях приложений, подписи оператора и т.д. Требуется Xposed.</string>
+    <string name="setting_module_name">Custom Text 2.0 MD</string>
+    <string name="setting_module_switch">Включение модуля</string>
+    <string name="succeed">успешно</string>
+    <string name="switch_is_not_activated">Включить?</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="undo">Отмена</string>
+
+	
+	    <string-array name="dialog_item">
+        <item>Добавить выше</item>
+        <item>Копировать</item>
+        <item>Удалить</item>
+        <item>Вырезать</item>
+        <item>Вставить</item>
+        <item>Добавить ниже</item>
+    </string-array>
+</resources>

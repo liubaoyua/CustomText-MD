@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--code resource -->
+    <string name="app_name">Custom Text</string>
+    <string name="open">Öffnen</string>
+    <string name="close">Schließen</string>
+    <string name="all_apps">Alle Apps</string>
+    <string name="recent_apps">Kürzlich bearbeitet</string>
+    <string name="error_found">Fehler gefunden. Beende. Fehlernachricht: </string>
+    <string name="succeed">Erfolgreich</string>
+    <string name="undo">Rückgängig</string>
+    <string name="clear">Leeren</string>
+    <string name="search_hint">Appname, Packagename, etc</string>
+    <string name="clipboard_is_empty">Zwischenablage ist leer</string>
+    <string name="switch_is_not_activated">Schalter aktivieren？</string>
+    <string name="dialog_about_title">Something To Say~</string>
+    <string name="dialog_about">CHANGELOG:
+        \n   Code komplett neu geschrieben.
+        \n   HTML wird unterstützt. (Dank an tommy990607)
+        \n   Mehr Optionen in den Einstellungen.
+        \n   Neue Features werden in den nächsten Versionen hinzugefügt.
+        \n
+        \n   BEMERKUNG:
+        \n   Xposed Framework benötigt. Quellcode auf Github hochgeladen.
+        \n
+        \n   DISCLAIMER:
+        \n   Diese App ist nur zum Spaß. Ich habe sie einige Male getestet, es könnten dennoch unbekannte Probleme auftreten. Benutzung erfolgt daher auf eigene Gefahr. Ich bin nicht verantwortlich für das, was du damit tust.
+        \n
+        \n   AUTOR: liubaoyua
+        \n   DERZEITIGE VERSION:
+    </string>
+
+    <string name="dialog_title">Was tun?</string>
+    <string name="dialog_data_not_saved">Änderungen nicht gespeichert</string>
+    <string name="dialog_save_now">Jetzt speichern?</string>
+    <string name="dialog_not_to_save">Nicht speichern</string>
+    <string name="dialog_save">Speichern</string>
+    <string name="dialog_input_backup_name">Backupname eingeben</string>
+    <string name="dialog_select_restore_item">Backup wählen</string>
+    <string name="dialog_loading">Lädt...</string>
+    <string-array name="dialog_item">
+        <item>Oberhalb hinzufügen</item>
+        <item>Kopieren</item>
+        <item>Löschen</item>
+        <item>Ausschneiden</item>
+        <item>Einfügen</item>
+        <item>Unterhalb hinzufügen</item>
+    </string-array>
+
+    <string name="imp_exp_file_does_not_exist">Ordner existiert nicht: %s</string>
+    <string name="imp_exp_confirm">Backup importieren und alle derzeitigen Einstellungen überschreiben?</string>
+    <string name="imp_exp_exported">Einstellungen gespeichert in Ordner: %s</string>
+    <string name="imp_exp_export_error">Backup fehlgeschlagen: %s</string>
+    <string name="imp_exp_import_error">Importieren fehlgeschlagen: %s</string>
+    <string name="imp_exp_imported">Importieren erfolgreich; App zum Übernehmen neustarten.</string>
+
+
+    <!--menu resource-->
+    <string name="menu_search">Suchen</string>
+
+    <string name="menu_home">HOME</string>
+    <string name="menu_info">ÜBER</string>
+    <string name="menu_restore">WIEDERHERSTELLEN</string>
+    <string name="menu_backup">BACKUP</string>
+    <string name="menu_settings">EINSTELLUNGEN</string>
+    <string name="menu_exit">BEENDEN</string>
+    <string name="menu_switch">SCHALTER</string>
+
+    <string name="menu_add_item">Felder hinzufügen</string>
+    <string name="menu_clear_empty">Leere Felder löschen</string>
+    <string name="menu_relaunch_app">App starten</string>
+    <string name="menu_app_info">App-Info</string>
+    <string name="menu_market_link">Market-Link</string>
+    <string name="menu_clear_all">Alle Felder leeren</string>
+
+
+    <!--layout resource-->
+    <string name="button_operate">Aktion</string>
+    <string name="button_clear">Leeren</string>
+    <string name="ori_text_hint">Ursprünglicher Text</string>
+    <string name="new_text_hint">Neuer Text</string>
+    <string name="describe">Ein Module, das dir hilft, Text mit beliebigem anderen Text zu ersetzen. Programmiert von liubaoyua.</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="button_delete">Löschen</string>
+
+
+    <!--setting resource-->
+    <string name="setting_global_setting">Allgemeine Einstellungen</string>
+    <string name="setting_module_switch">Modul-Schalter</string>
+    <string name="setting_further_replace_enable">Erweitertes Ersetzen</string>
+    <string name="setting_further_replace_summary">Ersetzt mehr Texttypen (falls etwas falsch angezeigt wird, kannst du diese Option deaktivieren)</string>
+    <string name="setting_custom_message">Eigene Nachricht</string>
+    <string name="setting_default_message">Es funktioniert :)</string>
+    <string name="setting_custom_message_summary">Ändere die Nachricht, die zeigt, dass "Es funktioniert :)"</string>
+    <string name="setting_check_update">Manuell auf Updates überprüfen</string>
+
+    <string name="setting_about_module">Über das Modul</string>
+    <string name="setting_module_name">Custom Text 2.0 MD</string>
+    <string name="setting_author_summary">Autor: liubaoyua. Klicken, um meinen micro blog zu besuchen</string>
+    <string name="setting_module_function">Funktion des Moduls</string>
+    <string name="setting_module_function_summary">Es hilft dir, Texte zu ersetzen wie: IDs, Appnamen, Mobilfunkbetreibername, etc. Xposed benötigt.</string>
+    <string name="setting_attention">Achtung</string>
+    <string name="setting_attention_summary">Diese App ist nur zum Spaß. Benutzung erfolgt auf eigene Gefahr. Ich bin nicht verantwortlich für das, was du damit tust.</string>
+
+    <string name="setting_like">Gefällt dir diese App?</string>
+    <string name="setting_like_summary">Falls dir diese App gefällt, bewerte sie doch im AppMarket.</string>
+    <string name="setting_feedback">Feedback</string>
+    <string name="setting_feedback_summary"> E-Mail: liubaoyua@gmail.com
+        \n\nCoolApk Market: Hinterlasst dort ein Feedback mit @liubaoyua und ich werde es sehen</string>
+    <string name="setting_contributor">Danke</string>
+    <string name="setting_contributor_summary">
+        \n tommy990607/Quellcode
+        \n
+        \n Nicolas Woelker/Deutsche Übersetzung
+        \n dvaleron/русский перевод
+        \n Ravhi Rizaldi/Bahasa Indonesia
+        \n
+        \n mitchtech/XposedGroot
+        \n GermainZ/Hodor
+        \n rovo89/xposed &amp; Appsettings
+        \n drakeet/material-design-settings
+    </string>
+    <string name="imp_exp_backup_hint">Gib etwas ein</string>
+    <string name="imp_exp_no_backup_found">Keine Backups gefunden</string>
+    <string name="setting_module_disabled">Modul ist deaktiviert</string>
+    <string name="setting_module_enabled">Modul ist aktiviert</string>
+</resources>

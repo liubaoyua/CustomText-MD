@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--code resource -->
+    <string name="app_name">Custom Text</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="all_apps">All apps</string>
+    <string name="recent_apps">Recent apps</string>
+    <string name="error_found">Error found. Exiting. Error message: </string>
+    <string name="succeed">Success</string>
+    <string name="undo">Undo</string>
+    <string name="clear">Clear</string>
+    <string name="search_hint">App Name(Head Char),package Name,etc</string>
+    <string name="clipboard_is_empty">ClickBoard is empty</string>
+    <string name="switch_is_not_activated">Enable the switch？</string>
+    <string name="dialog_about_title">Something To Say~</string>
+    <string name="dialog_about">UPDATE LOG:
+        \n   Completely rewrite the code.
+        \n   Html supported.(thanks tommy990607)
+        \n   Add more options in setting.
+        \n   New features will be add in next version.
+        \n
+        \n   NOTE:
+        \n   Xposed framework is required. The source code have been upload to Github.
+        \n
+        \n   DISCLAIMER:
+        \n   It is made just for fun. I have tested it for many times, however, some unknown problem may occur. So, use it at your own risk. I am not responsible for what you do with it.
+        \n
+        \n   AUTHOR:liubaoyua
+        \n   CURRENT VERSION:
+    </string>
+
+    <string name="dialog_title">What to do?</string>
+    <string name="dialog_data_not_saved">Modify hasn\'t been saved</string>
+    <string name="dialog_save_now">Save now?</string>
+    <string name="dialog_not_to_save">Not Save</string>
+    <string name="dialog_save">Save</string>
+    <string name="dialog_input_backup_name">Input Backup Name</string>
+    <string name="dialog_select_restore_item">Select A Backup</string>
+    <string name="dialog_loading">Loading</string>
+    <string-array name="dialog_item">
+        <item>Add upstairs</item>
+        <item>Copy</item>
+        <item>Delete</item>
+        <item>Cut</item>
+        <item>Paste</item>
+        <item>Add downstairs</item>
+    </string-array>
+
+    <string name="imp_exp_file_does_not_exist">Folder does not exist: %s</string>
+    <string name="imp_exp_confirm">Import backup and overwrite all current settings?</string>
+    <string name="imp_exp_exported">Settings exported to folder: %s</string>
+    <string name="imp_exp_export_error">Backup failed: %s</string>
+    <string name="imp_exp_import_error">Import failed: %s</string>
+    <string name="imp_exp_imported">Import successful; relaunch to make effect.</string>
+
+
+    <!--menu resource-->
+    <string name="menu_search">Search</string>
+
+    <string name="menu_home">HOME</string>
+    <string name="menu_info">ABOUT</string>
+    <string name="menu_restore">RESTORE</string>
+    <string name="menu_backup">BACKUP</string>
+    <string name="menu_settings">SETTING</string>
+    <string name="menu_exit">EXIT</string>
+    <string name="menu_switch">SWITCH</string>
+
+    <string name="menu_add_item">Add More Item</string>
+    <string name="menu_clear_empty">Clear Empty </string>
+    <string name="menu_relaunch_app">Relaunch App</string>
+    <string name="menu_app_info">App Info</string>
+    <string name="menu_market_link">Market Link</string>
+    <string name="menu_clear_all">Clear All</string>
+
+
+    <!--layout resource-->
+    <string name="button_operate">Action</string>
+    <string name="button_clear">Clear</string>
+    <string name="ori_text_hint">Original Text</string>
+    <string name="new_text_hint">New Text</string>
+    <string name="describe">A module which helps you replace text with any text you want. Developed by liubaoyua.</string>
+    <string name="title_activity_settings">Setting</string>
+    <string name="button_delete">Delete</string>
+
+
+    <!--setting resource-->
+    <string name="setting_global_setting">Global Settings</string>
+    <string name="setting_module_switch">Module Switch</string>
+    <string name="setting_further_replace_enable">Extended Replacement</string>
+    <string name="setting_further_replace_summary">Replace more type of text(if something widget is incorrectly showed, you can uncheck this option)</string>
+    <string name="setting_custom_message">Custom Message</string>
+    <string name="setting_default_message">It works :)</string>
+    <string name="setting_custom_message_summary">Change the message that show "It works:)"</string>
+    <string name="setting_check_update">Check Update Manually</string>
+
+    <string name="setting_about_module">About Module</string>
+    <string name="setting_module_name">Custom Text 2.0 MD</string>
+    <string name="setting_author_summary">Author: liubaoyua. Click to visit my micro blog</string>
+    <string name="setting_module_function">Module Function</string>
+    <string name="setting_module_function_summary">It helps you replace texts such as: IDs, App names, carrier label, etc. Xposed is required.</string>
+    <string name="setting_attention">Attention</string>
+    <string name="setting_attention_summary">It is made just for fun. Use it at your own risk. I am not responsible for what you do with it.</string>
+
+    <string name="setting_like">Like this app?</string>
+    <string name="setting_like_summary">If you like this app, please rate it in app market.</string>
+    <string name="setting_feedback">Feedback</string>
+    <string name="setting_feedback_summary"> Email:liubaoyua@gmail.com
+        \n\nCoolApk Market: feedback and @liubaoyua here and i will see </string>
+    <string name="setting_contributor">Thanks</string>
+    <string name="setting_contributor_summary">
+        \n tommy990607/source code
+        \n
+        \n Nicolas Woelker/Deutsch-Übersetzung
+        \n dvaleron/русский перевод
+        \n
+        \n mitchtech/XposedGroot
+        \n GermainZ/Hodor
+        \n rovo89/xposed &amp; Appsettings
+        \n drakeet/material-design-settings
+    </string>
+    <string name="imp_exp_backup_hint">Input Something</string>
+    <string name="imp_exp_no_backup_found">No backups found</string>
+    <string name="setting_module_disabled">Module is disabled</string>
+    <string name="setting_module_enabled">Module is enabled</string>
+</resources>
