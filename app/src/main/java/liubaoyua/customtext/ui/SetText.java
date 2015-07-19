@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
@@ -59,25 +58,29 @@ public class SetText extends AppCompatActivity {
         Intent intent = getIntent();
         packageName = intent.getStringExtra(Common.PACKAGE_NAME_ARG);
         position = intent.getIntExtra(Common.POSITION_ARG,-1);
-        PackageManager pm = getPackageManager();
-        PackageInfo packageInfo = null;
 
         if(Common.FAST_DEBUG){
-            packageName = Common.SYSTEM_UI;
+            packageName = Common.SYSTEM_UI_PACKAGE_NAME;
         }
-        try{
-            packageInfo = pm.
-                    getPackageInfo(packageName,PackageManager.GET_UNINSTALLED_PACKAGES);
-        }catch (PackageManager.NameNotFoundException e){
-            Toast.makeText(this.getApplicationContext(), getString(R.string.error_found)
-                    + e.getMessage(),Toast.LENGTH_LONG).show();
-            this.finish();
+
+        if(packageName.equals(Common.GLOBAL_SETTING_PACKAGE_NAME)){
+            appName = getString(R.string.global_replacement);
+        }else if(packageName.equals(Common.SHARING_SETTING_PACKAGE_NAME)) {
+            appName = getString(R.string.sharing_replacement);
+        }else{
+            PackageInfo packageInfo = Utils.getPackageInfoByPackageName(this,packageName);
+            if(packageInfo == null){
+                Toast.makeText(this.getApplicationContext(), getString(R.string.error_found)
+                        + packageName ,Toast.LENGTH_SHORT).show();
+                this.finish();
+            }else {
+                appName = packageInfo.applicationInfo.loadLabel(getPackageManager());
+            }
         }
-        if (packageInfo != null){
-            appName = packageInfo.applicationInfo.loadLabel(pm);
-        }
+
+
         if (Common.DEBUG){
-            Log.d(Common.TAG, Common.PACKAGE_NAME_ARG + packageName);
+            Log.d(Common.TAG, "is in SetText page for " + packageName);
         }
 
 
@@ -123,12 +126,21 @@ public class SetText extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_set_text, menu);
+
         // systemui 要特殊处理
-        if(!packageName.equals(Common.SYSTEM_UI) ){
+        if(!packageName.equals(Common.SYSTEM_UI_PACKAGE_NAME) ){
             if(getPackageManager().getLaunchIntentForPackage(packageName) == null){
                 MenuItem relaunchMenuItem = menu.findItem(R.id.action_relaunch_app);
                 relaunchMenuItem.setEnabled(false);
             }
+        }
+
+        // 全局替换 和 共享替换有特殊处理
+        if(packageName.equals(Common.GLOBAL_SETTING_PACKAGE_NAME)
+                || packageName.equals(Common.SHARING_SETTING_PACKAGE_NAME)){
+            menu.findItem(R.id.action_market_link).setEnabled(false);
+            menu.findItem(R.id.action_app_info).setEnabled(false);
+            menu.findItem(R.id.action_relaunch_app).setEnabled(false);
         }
 
         MenuItem switchMenuItem = menu.findItem(R.id.action_switch).setVisible(true);
@@ -197,7 +209,7 @@ public class SetText extends AppCompatActivity {
 
         }else if(id == R.id.action_relaunch_app){
             killPackage(packageName);
-            if(!packageName.equals(Common.SYSTEM_UI)){
+            if(!packageName.equals(Common.SYSTEM_UI_PACKAGE_NAME)){
                 Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage(packageName);
                 startActivity(LaunchIntent);
             }

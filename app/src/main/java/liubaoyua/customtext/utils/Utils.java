@@ -1,6 +1,8 @@
 package liubaoyua.customtext.utils;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.ScrollView;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.robv.android.xposed.XSharedPreferences;
 import liubaoyua.customtext.R;
 
 /**
@@ -114,7 +117,6 @@ public abstract class Utils {
     public static boolean isIdenticalTextList(ArrayList<CustomText> a, ArrayList<CustomText> b){
         if(a.size() == b.size()){
             for(int i =0; i< a.size(); i++){
-                Log.d(Common.TAG,a.get(i).newText + b.get(i).newText);
                 if(!(a.get(i).equals(b.get(i)))){
                     return false;
                 }
@@ -213,4 +215,39 @@ public abstract class Utils {
         dlgBuilder.setView(scrollView);
         dlgBuilder.show();
     }
+
+    public static PackageInfo getPackageInfoByPackageName(Context context, String packageName){
+        PackageInfo packageInfo = null;
+        try{
+            packageInfo = context.getPackageManager().getPackageInfo(packageName, PackageManager.GET_UNINSTALLED_PACKAGES);
+        }catch (PackageManager.NameNotFoundException e){
+            e.printStackTrace();
+        }
+        return packageInfo;
+    }
+
+    public static String replaceAllFromList(List<CustomText> texts, String abc){
+        for (int i = 0; i < texts.size(); i++) {
+            CustomText customText = texts.get(i);
+            abc = abc.replaceAll(customText.oriText, customText.newText);
+        }
+        return abc;
+    }
+
+    public static ArrayList<CustomText> loadListFromPrefs(XSharedPreferences prefs, Boolean enabled){
+        if (!enabled){
+            return new ArrayList<>();
+        }
+        ArrayList<CustomText> list = new ArrayList<>();
+        final int num = (prefs.getInt(Common.MAX_PAGE_OLD, 0) + 1) * Common.DEFAULT_NUM;
+        for (int i = 0; i < num; i++) {
+            String oriString = prefs.getString(Common.ORI_TEXT_PREFIX + i, "");
+            String newString = prefs.getString(Common.NEW_TEXT_PREFIX + i, "");
+            CustomText customText = new CustomText(oriString, newString);
+            list.add(customText);
+        }
+        Utils.trimTextList(list);
+        return list;
+    }
 }
+

@@ -13,6 +13,8 @@
     <string name="search_hint">应用名(或首字母)、包名等等</string>
     <string name="clipboard_is_empty">剪切板为空</string>
     <string name="switch_is_not_activated">是否启用开关？</string>
+    <string name="global_replacement">全局替换</string>
+    <string name="sharing_replacement">共享替换</string>
     <string name="dialog_about_title">想说什么来着~</string>
     <string name="dialog_about">更新日志：
         \n   完全重写代码，界面什么的全改了

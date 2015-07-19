@@ -125,4 +125,6 @@
         \n rovo89/xposed &amp; Appsettings
         \n drakeet/material-design-settings
     </string>
+    <string name="global_replacement">全局替換</string>
+    <string name="sharing_replacement">共享替換</string>
 </resources>

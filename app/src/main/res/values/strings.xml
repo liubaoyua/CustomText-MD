@@ -124,4 +124,6 @@
     <string name="imp_exp_no_backup_found">No backups found</string>
     <string name="setting_module_disabled">Module is disabled</string>
     <string name="setting_module_enabled">Module is enabled</string>
+    <string name="sharing_replacement">Sharing replacement</string>
+    <string name="global_replacement">Global Replacement</string>
 </resources>

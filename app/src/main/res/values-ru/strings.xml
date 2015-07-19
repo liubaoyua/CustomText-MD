@@ -111,4 +111,6 @@ CoolApk Market: пишите на этот адрес: @liubaoyua и я увиж
         <item>Вставить</item>
         <item>Добавить ниже</item>
     </string-array>
+    <string name="global_replacement">Глобальный замена</string>
+    <string name="sharing_replacement">Совместное замена</string>
 </resources>

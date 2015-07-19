@@ -10,6 +10,7 @@ public class CustomText {
     public boolean isRegex = false;
     public int textColor = 0 ;
     public boolean underLine = false;
+    public boolean isAvailable = true;
 
     public boolean isWorkInEditText = false;
     public boolean isReplacedToAPic = false;

@@ -23,7 +23,7 @@ import liubaoyua.customtext.utils.Utils;
 public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     private XSharedPreferences prefs;
-    private Html.ImageGetter imageGetter =new Html.ImageGetter(){
+    private Html.ImageGetter imageGetter = new Html.ImageGetter(){
         public Drawable getDrawable(String source){
             Drawable d=Drawable.createFromPath(source);
             d.setBounds(0,0,d.getIntrinsicWidth(),d.getIntrinsicHeight());
@@ -42,41 +42,44 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
 
 
         prefs.reload();
-        if (!prefs.getBoolean(Common.MODULE_SWITCH, true)) {
+        if (!prefs.getBoolean(Common.SETTING_MODULE_SWITCH, true)) {
             return;
         }
 
-
-        XSharedPreferences mPrefs;
-        mPrefs = new XSharedPreferences(Common.PACKAGE_NAME, lpparam.packageName);
+        XSharedPreferences mPrefs = new XSharedPreferences(Common.PACKAGE_NAME, lpparam.packageName);
         mPrefs.makeWorldReadable();
+        XSharedPreferences sPrefs = new XSharedPreferences(Common.PACKAGE_NAME, Common.SHARING_SETTING_PACKAGE_NAME);
+        sPrefs.makeWorldReadable();
 
-
-        final String thisAppName = prefs.getString(Common.PACKAGE_NAME_ARG, Common.DEFAULT_APP_NAME);
-
-        final String hackSucceedMessage;
-        String temp = prefs.getString(Common.HACK_SUCCEED_MESSAGE, Common.DEFAULT_MESSAGE);
-        if ( temp==null || temp.equals("")){
-            hackSucceedMessage = prefs.getString(Common.MESSAGE, Common.DEFAULT_MESSAGE);
-        }else{
-            hackSucceedMessage = temp;
-        }
         final boolean isInDebugMode = prefs.getBoolean(Common.SETTING_XPOSED_DEBUG_MODE,Common.XPOSED_DEBUG);
-        final boolean isHackFurtherEnabled = prefs.getBoolean(Common.HACK_FURTHER, true);
+        final boolean isHackFurtherEnabled = prefs.getBoolean(Common.SETTING_HACK_FURTHER, true);
         final boolean isGlobalHackEnabled = prefs.getBoolean(Common.PREFS, false);
         final boolean isCurrentHackEnabled = prefs.getBoolean(lpparam.packageName, false);
         final boolean isInThisApp = lpparam.packageName.equals(Common.PACKAGE_NAME);
+        final boolean isSharedHackEnabled = prefs.getBoolean(Common.SHARING_SETTING_PACKAGE_NAME,false);
+
         if (isInDebugMode) {
             XposedBridge.log(Common.PACKAGE_NAME + " : now you are in " + lpparam.packageName);
         }
 
         XC_MethodHook textMethodHook;
         if (isInThisApp) {
+            final String hackSucceedMessage;
+            final String thisAppName = prefs.getString(Common.PACKAGE_NAME_ARG, Common.DEFAULT_APP_NAME);
+            String temp = prefs.getString(Common.SETTING_HACK_SUCCEED_MESSAGE, Common.DEFAULT_MESSAGE);
+
+            if ( temp == null || temp.equals("")){
+                hackSucceedMessage = prefs.getString(Common.MESSAGE, Common.DEFAULT_MESSAGE);
+            }else{
+                hackSucceedMessage = temp;
+            }
+
             if (thisAppName == null || hackSucceedMessage == null) {
                 if (Common.XPOSED_DEBUG)
                     XposedBridge.log("thisAppName or hackSucceedMessage == NULL");
                 return;
             }
+
             textMethodHook = new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam methodHookParam) throws Throwable {
@@ -88,38 +91,17 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                 }
             };
         } else {
-            if (!isGlobalHackEnabled && !isCurrentHackEnabled)
+            if (!(isGlobalHackEnabled || !isCurrentHackEnabled || isSharedHackEnabled))
                 return;
 
-            final ArrayList<CustomText> globalTexts = new ArrayList<>();
-            if (isGlobalHackEnabled) {
-                final int globalNum = (prefs.getInt(Common.MAX_PAGE_OLD, 0) + 1) * Common.DEFAULT_NUM;
-                for (int i = 0; i < globalNum; i++) {
-                    String oriString = prefs.getString(Common.ORI_TEXT_PREFIX + i, "");
-                    String newString = prefs.getString(Common.NEW_TEXT_PREFIX + i, "");
-                    CustomText customText = new CustomText(oriString, newString);
-                    globalTexts.add(customText);
-                }
-            }
-            Utils.trimTextList(globalTexts);
+            final ArrayList<CustomText> currentTexts = Utils.loadListFromPrefs(mPrefs,isCurrentHackEnabled);
+            final ArrayList<CustomText> sharedTexts = Utils.loadListFromPrefs(sPrefs,isSharedHackEnabled);
+            final ArrayList<CustomText> globalTexts = Utils.loadListFromPrefs(prefs,isGlobalHackEnabled);
+
             if (isInDebugMode) {
+                XposedBridge.log(Common.PACKAGE_NAME + currentTexts.toString());
+                XposedBridge.log(Common.PACKAGE_NAME + sharedTexts.toString());
                 XposedBridge.log(Common.PACKAGE_NAME + globalTexts.toString());
-            }
-
-
-            final ArrayList<CustomText> texts = new ArrayList<>();
-            if (isCurrentHackEnabled) {
-                final int num = (mPrefs.getInt(Common.MAX_PAGE_OLD, 0) + 1) * Common.DEFAULT_NUM;
-                for (int i = 0; i < num; i++) {
-                    String oriString = mPrefs.getString(Common.ORI_TEXT_PREFIX + i, "");
-                    String newString = mPrefs.getString(Common.NEW_TEXT_PREFIX + i, "");
-                    CustomText customText = new CustomText(oriString, newString);
-                    texts.add(customText);
-                }
-            }
-            Utils.trimTextList(texts);
-            if (isInDebugMode) {
-                XposedBridge.log(Common.PACKAGE_NAME + texts.toString());
             }
 
 
@@ -130,18 +112,14 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                         CharSequence actualText = (CharSequence) methodHookParam.args[0];
                         if (actualText != null) {
                             String abc = actualText.toString();
-                            if (isGlobalHackEnabled) {
-                                for (int i = 0; i < globalTexts.size(); i++) {
-                                    CustomText customText = globalTexts.get(i);
-                                    abc = abc.replaceAll(customText.oriText, customText.newText);
-                                }
-                            }
-
                             if (isCurrentHackEnabled) {
-                                for (int i = 0; i < texts.size(); i++) {
-                                    CustomText customText = texts.get(i);
-                                    abc = abc.replaceAll(customText.oriText, customText.newText);
-                                }
+                                abc = Utils.replaceAllFromList(currentTexts,abc);
+                            }
+                            if(isSharedHackEnabled){
+                                abc = Utils.replaceAllFromList(sharedTexts,abc);
+                            }
+                            if (isGlobalHackEnabled) {
+                                abc = Utils.replaceAllFromList(globalTexts,abc);
                             }
                             setTextFromHtml(abc,methodHookParam,0);
                         }
@@ -153,20 +131,16 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                     protected void beforeHookedMethod(MethodHookParam methodHookParam) throws Throwable {
                         if (methodHookParam.args[0] instanceof String) {
                             String abc = (String) methodHookParam.args[0];
-                            if (isGlobalHackEnabled) {
-                                for (int i = 0; i < globalTexts.size(); i++) {
-                                    CustomText customText = globalTexts.get(i);
-                                    abc = abc.replaceAll(customText.oriText, customText.newText);
-                                }
-                            }
-
                             if (isCurrentHackEnabled) {
-                                for (int i = 0; i < texts.size(); i++) {
-                                    CustomText customText = texts.get(i);
-                                    abc = abc.replaceAll(customText.oriText, customText.newText);
-                                }
-                                setTextFromHtml(abc,methodHookParam,0);
+                                abc = Utils.replaceAllFromList(currentTexts,abc);
                             }
+                            if(isSharedHackEnabled){
+                                abc = Utils.replaceAllFromList(sharedTexts,abc);
+                            }
+                            if (isGlobalHackEnabled) {
+                                abc = Utils.replaceAllFromList(globalTexts,abc);
+                            }
+                            setTextFromHtml(abc,methodHookParam,0);
                         }
                     }
                 };

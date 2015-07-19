@@ -37,6 +37,7 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
     private AppListFilter filter;
     private OnItemClickListener listener;
     private Drawable icon;
+    private Drawable errorIcon;
 
 
     public AppListFilter getFilter() {
@@ -52,6 +53,7 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
         this.appList = appList;
         filter = new AppListFilter(this,appList);
         icon = mContext.getResources().getDrawable(R.mipmap.ic_default);
+        errorIcon = mContext.getResources().getDrawable(R.mipmap.ic_launcher);
     }
 
     @Override
@@ -202,7 +204,7 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
-
+            iconView.setImageDrawable(errorIcon);
         }
 
         @Override

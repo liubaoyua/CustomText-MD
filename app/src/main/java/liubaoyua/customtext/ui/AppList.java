@@ -38,7 +38,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -476,8 +475,8 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
         protected Void doInBackground(Void... params) {
             appList  = Collections.synchronizedList(new ArrayList<AppInfo>());
             recentList = Collections.synchronizedList(new ArrayList<AppInfo>());;
+            PackageManager pm =getPackageManager();
             if(appList.size()==0){
-                PackageManager pm =getPackageManager();
                 List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
                 if(dialog != null)
                     dialog.setMax(packages.size());
@@ -488,8 +487,9 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
                     ApplicationInfo appInfo = pkgInfo.applicationInfo;
                     if (appInfo == null)
                         continue;
-                    if (appInfo.packageName.equals(Common.PACKAGE_NAME))
+                    if (appInfo.packageName.equals(Common.PACKAGE_NAME)){
                         continue;
+                    }
                     if(dialog != null)
                         publishProgress(getString(R.string.dialog_loading) + "\n" + appInfo.loadLabel(pm).toString());
                     AppInfo appInfoItem = new AppInfo(pkgInfo, appInfo.loadLabel(pm).toString());
@@ -509,18 +509,44 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
                             break;
                     }
                 }
-                Collections.sort(appList, new Comparator<AppInfo>() {
-                    @Override
-                    public int compare(AppInfo lhs, AppInfo rhs) {
-                        return Collator.getInstance(Locale.getDefault()).compare(lhs.appName, rhs.appName);
-                    }
-                });
                 Collections.sort(recentList, new Comparator<AppInfo>() {
                     @Override
                     public int compare(AppInfo lhs, AppInfo rhs) {
                         return Collator.getInstance(Locale.getDefault()).compare(lhs.appName, rhs.appName);
                     }
                 });
+
+                PackageInfo globalPackageInfo = Utils.getPackageInfoByPackageName(context,Common.PACKAGE_NAME);
+                PackageInfo sharedPackageInfo = Utils.getPackageInfoByPackageName(context,Common.PACKAGE_NAME);
+                AppInfo globalAppInfo = null;
+                AppInfo sharedAppInfo = null;
+                if(globalPackageInfo != null){
+                    globalAppInfo = new AppInfo(globalPackageInfo,getString(R.string.global_replacement),Common.GLOBAL_SETTING_PACKAGE_NAME);
+                    if(prefs.getBoolean(globalAppInfo.packageName, false)){
+                        globalAppInfo.state = AppInfo.ENABLED;
+                    }else{
+                        globalAppInfo.state = AppInfo.DISABLED;
+                    }
+                    recentList.add(0,globalAppInfo);
+                    appList.add(globalAppInfo);
+                }
+                if(sharedPackageInfo != null){
+                    sharedAppInfo = new AppInfo(sharedPackageInfo,getString(R.string.sharing_replacement),Common.SHARING_SETTING_PACKAGE_NAME);
+                    if(prefs.getBoolean(sharedAppInfo.packageName, false)){
+                        sharedAppInfo.state = AppInfo.ENABLED;
+                    }else{
+                        sharedAppInfo.state = AppInfo.DISABLED;
+                    }
+                    recentList.add(1,sharedAppInfo);
+                    appList.add(sharedAppInfo);
+                }
+                Collections.sort(appList, new Comparator<AppInfo>() {
+                    @Override
+                    public int compare(AppInfo lhs, AppInfo rhs) {
+                        return Collator.getInstance(Locale.getDefault()).compare(lhs.appName, rhs.appName);
+                    }
+                });
+
             }
             return null;
         }
@@ -622,20 +648,21 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
                     Log.d(Common.TAG,"onActivityResult  "+isEnabled + "  position   " + position);
                 }
                 if(position != -1){
-                    List<AppInfo> list = appListFragment.getAppList();
-                    AppInfo temp = fragmentList.get(mViewPager.getCurrentItem()).getShowingAppList().get(position);
+                    List<AppInfo> list = recentListFragment.getAppList();
+                    List<AppInfo> showingList = fragmentList.get(mViewPager.getCurrentItem()).getShowingAppList();
+                    if(showingList == null)
+                        return;
+                    AppInfo temp = showingList.get(position);
                     if(isEnabled){
                         temp.state = AppInfo.ENABLED;
                         if(!list.contains(temp)){
-                            list.add(0,temp);
-                            recentListFragment.notifyDataSetChanged();
+                            list.add(0, temp);
                         }
                     }else{
                         temp.state = AppInfo.DISABLED;
-                        if(list.contains(temp)){
-                            recentListFragment.notifyDataSetChanged();
-                        }
                     }
+                    appListFragment.notifyDataSetChanged();
+                    recentListFragment.notifyDataSetChanged();
                 }
             }
         }

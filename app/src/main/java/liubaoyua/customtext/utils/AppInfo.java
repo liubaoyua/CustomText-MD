@@ -57,4 +57,15 @@ public class AppInfo {
         this.appNamePinyin = Utils.getPinYin(appName.toLowerCase());
         this.appNamePinyinHeadChar = Utils.getPinYinHeadChar(appName.toLowerCase());
     }
+
+    public AppInfo(PackageInfo packageInfo, String appName, String packageName){
+        this.appName = appName;
+        this.packageName = packageName;
+        this.versionName = packageInfo.versionName;
+        this.versionCode = packageInfo.versionCode;
+        this.firstInstallTime = packageInfo.firstInstallTime;
+        this.lastUpdateTime = packageInfo.lastUpdateTime;
+        this.appNamePinyin = Utils.getPinYin(appName.toLowerCase());
+        this.appNamePinyinHeadChar = Utils.getPinYinHeadChar(appName.toLowerCase());
+    }
 }

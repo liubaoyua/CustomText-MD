@@ -124,4 +124,6 @@
     <string name="imp_exp_no_backup_found">Tidak ada cadangan ditemukan</string>
     <string name="setting_module_disabled">Modul dinonaktifkan</string>
     <string name="setting_module_enabled">Module diaktifkan</string>
+    <string name="global_replacement">Penggantian Global</string>
+    <string name="sharing_replacement">Pengganti Berbagi</string>
 </resources>
