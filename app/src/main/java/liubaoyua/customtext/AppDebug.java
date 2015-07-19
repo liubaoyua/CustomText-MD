@@ -36,7 +36,9 @@ public class AppDebug extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Thread.setDefaultUncaughtExceptionHandler(handler);
+        if(!Common.DEBUG){
+           Thread.setDefaultUncaughtExceptionHandler(handler);
+        }
     }
 
     Thread.UncaughtExceptionHandler handler = new Thread.UncaughtExceptionHandler() {

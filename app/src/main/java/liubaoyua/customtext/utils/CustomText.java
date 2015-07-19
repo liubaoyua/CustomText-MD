@@ -16,6 +16,8 @@ public class CustomText {
     public boolean isReplacedToAPic = false;
     public int picMagnification = 1;
 
+    public boolean isCheck = false;
+
 
     public CustomText(){}
 

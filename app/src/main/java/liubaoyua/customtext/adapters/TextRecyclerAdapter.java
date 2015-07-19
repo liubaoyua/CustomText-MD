@@ -15,7 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -31,8 +34,8 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
 
     private Context mContext;
     private ArrayList<CustomText> data = new ArrayList<>();
-
-
+    public boolean multiSelectMode = false;
+    private boolean selectAll = false;
     private CustomText tempCT = new CustomText();
     private CustomText undo = new CustomText();
     private RecyclerView recyclerView;
@@ -43,56 +46,25 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
         this.recyclerView = recyclerView;
     }
 
-
     @Override
     public TextRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_card_text, parent, false);
         return new ViewHolder(view);
     }
 
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView);
-        if (Common.DEBUG) {
-            Log.v(Common.TAG, "onDetachedFromRecyclerView");
-        }
-    }
-
-
-    @Override
-    public void onViewAttachedToWindow(ViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
-        if (Common.DEBUG) {
-            Log.v(Common.TAG, "onViewAttachedToWindow");
-        }
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(ViewHolder holder) {
-        super.onViewDetachedFromWindow(holder);
-        if (Common.DEBUG) {
-            Log.v(Common.TAG, "onViewDetachedFromWindow");
-        }
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        if (Common.DEBUG) {
-            Log.v(Common.TAG, "onBindViewHolder");
-        }
-    }
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(final TextRecyclerAdapter.ViewHolder holder, int position) {
-        if (Common.DEBUG) {
-            Log.v(Common.TAG, "onBindViewHolder");
-        }
-
         CustomText customText = data.get(position);
         holder.oriEditText.setText(customText.oriText);
         holder.newEditText.setText(customText.newText);
+        if(multiSelectMode){
+            holder.checkBox.setVisibility(View.VISIBLE);
+            holder.checkBox.setChecked(customText.isCheck);
+        }else {
+            holder.checkBox.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     public ArrayList<CustomText> getData() {
@@ -112,22 +84,89 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
 
     }
 
+    public ArrayList<CustomText> getSelectedItem(){
+        ArrayList<CustomText> list = new ArrayList<>();
+        for(CustomText customText:data){
+            if(customText.isCheck){
+                list.add(new CustomText(customText));
+            }
+        }
+        Snackbar.make(recyclerView, mContext.getString(android.R.string.copy) + " " +
+                mContext.getString(R.string.succeed), Snackbar.LENGTH_LONG).show();
+        return list;
+    }
+
+    public ArrayList<CustomText> cutSelectedItem(){
+        ArrayList<CustomText> list = new ArrayList<>();
+        for(int i = 0; i < data.size(); i++){
+            if(data.get(i).isCheck){
+                list.add(new CustomText(data.get(i)));
+                data.remove(i);
+                i--;
+            }
+        }
+        notifyDataSetChanged();
+        recyclerView.scrollToPosition(0);
+        Snackbar.make(recyclerView, mContext.getString(android.R.string.cut) + " " +
+                mContext.getString(R.string.succeed), Snackbar.LENGTH_LONG).show();
+        return list;
+    }
+
+    public void deselectAllItem(){
+        for(CustomText customText:data){
+            customText.isCheck = false;
+        }
+        notifyDataSetChanged();
+    }
+
+    public void pasteClipBoard(ArrayList<CustomText> clipboard){
+        for(int i=0; i<clipboard.size();i++){
+            data.add(i,new CustomText(clipboard.get(i)));
+        }
+        notifyItemRangeInserted(0, clipboard.size());
+        recyclerView.scrollToPosition(0);
+        Snackbar.make(recyclerView, mContext.getString(android.R.string.paste) + " " +
+                mContext.getString(R.string.succeed), Snackbar.LENGTH_LONG).show();
+    }
+
+    public void selectAll(){
+        if(!selectAll){
+            for(CustomText customText:data){
+                customText.isCheck = true;
+            }
+            selectAll = true;
+            notifyDataSetChanged();
+        }else{
+            selectAll = false;
+            deselectAllItem();
+        }
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public Button clearButton;
         public Button operateButton;
         public EditText oriEditText;
         public EditText newEditText;
+        public CheckBox checkBox;
 
-        public ViewHolder(View view) {
+        public ViewHolder(final View view) {
             super(view);
             clearButton = (Button)view.findViewById(R.id.button_clear);
             operateButton = (Button)view.findViewById(R.id.button_serial);
             oriEditText = (EditText)view.findViewById(R.id.editText_original_text);
             newEditText = (EditText)view.findViewById(R.id.editText_new_text);
+            checkBox = (CheckBox)view.findViewById(R.id.check_box);
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    data.get(getAdapterPosition()).isCheck=b;
+                }
+            });
             clearButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onClickView(view,ViewHolder.this);
+                    onClickView(view, ViewHolder.this);
                 }
             });
             oriEditText.addTextChangedListener(new TextWatcher() {
@@ -167,7 +206,7 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
             operateButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onClickView(view,ViewHolder.this);
+                    onClickView(view, ViewHolder.this);
                 }
             });
         }

@@ -19,7 +19,7 @@
             android:title="@string/setting_further_replace_enable"
             android:key="ImageText"
             android:summary="@string/setting_further_replace_summary"
-            android:defaultValue="true"/>
+            android:defaultValue="false"/>
         <EditTextPreference
             android:layout="@layout/preference_item"
             android:title="@string/setting_custom_message"

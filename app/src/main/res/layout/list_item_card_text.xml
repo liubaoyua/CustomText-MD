@@ -54,21 +54,32 @@
                 android:imeOptions="actionDone"
                 android:layout_height="wrap_content"/>
 
+            <CheckBox
+                android:id="@+id/check_box"
+                android:padding="8dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:focusable="true"
+                android:visibility="invisible"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true" />
+
             <!--<android.support.design.widget.TextInputLayout-->
 
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_toEndOf="@id/button_serial"-->
-                <!--android:layout_toRightOf="@id/button_serial">-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_toEndOf="@id/button_serial"-->
+            <!--android:layout_toRightOf="@id/button_serial">-->
 
-                <!--<EditText-->
-                    <!--android:id="@+id/editText_original_text"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:hint="@string/ori_text_hint"-->
-                    <!--android:imeOptions="actionDone" />-->
+            <!--<EditText-->
+            <!--android:id="@+id/editText_original_text"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="@string/ori_text_hint"-->
+            <!--android:imeOptions="actionDone" />-->
 
             <!--</android.support.design.widget.TextInputLayout>-->
 
@@ -99,34 +110,34 @@
                 android:textSize="18sp" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
-            android:hint="@string/new_text_hint"
-            app:met_primaryColor ="@color/accent"
-            app:met_floatingLabelText = "@string/new_text_hint"
-            app:met_floatingLabel="highlight"
-            android:id="@+id/editText_new_text"
-            android:layout_toRightOf="@id/button_clear"
-            android:layout_toEndOf="@id/button_clear"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:imeOptions="actionDone"
-            android:layout_height="wrap_content"/>
+                android:hint="@string/new_text_hint"
+                app:met_primaryColor ="@color/accent"
+                app:met_floatingLabelText = "@string/new_text_hint"
+                app:met_floatingLabel="highlight"
+                android:id="@+id/editText_new_text"
+                android:layout_toRightOf="@id/button_clear"
+                android:layout_toEndOf="@id/button_clear"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:imeOptions="actionDone"
+                android:layout_height="wrap_content"/>
 
             <!--<android.support.design.widget.TextInputLayout-->
 
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_toEndOf="@id/button_clear"-->
-                <!--android:layout_toRightOf="@id/button_clear">-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_toEndOf="@id/button_clear"-->
+            <!--android:layout_toRightOf="@id/button_clear">-->
 
-                <!--<EditText-->
-                    <!--android:id="@+id/editText_new_text"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:hint="@string/new_text_hint"-->
-                    <!--android:imeOptions="actionDone" />-->
+            <!--<EditText-->
+            <!--android:id="@+id/editText_new_text"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="@string/new_text_hint"-->
+            <!--android:imeOptions="actionDone" />-->
 
             <!--</android.support.design.widget.TextInputLayout>-->
 

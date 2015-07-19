@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,16 +40,64 @@ public class SetText extends AppCompatActivity {
     private SwitchCompat switchCompat;
 
     private String packageName = "";
-    private CharSequence appName = "";
+    private String appName = "";
     private int maxPage = 0;
     private int position = -1;
 
+    private static ArrayList<CustomText> clipboard = new ArrayList<>();
     private ArrayList<CustomText> data = new ArrayList<>();
 
     // mPrefs 用于当前 packageName 所在包的数据读写， prefs 是全局信息
     private SharedPreferences mPrefs, prefs;
 
+    private boolean isInActionMode;
+    private ActionMode actionMode;
+    private ActionMode.Callback mCallback = new ActionMode.Callback() {
 
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.menu_copy:{
+                    clipboard = textRecyclerAdapter.getSelectedItem();
+//                    updateActionModeTitle();
+                    break;
+                }
+                case R.id.menu_cut:{
+                    clipboard = textRecyclerAdapter.cutSelectedItem();
+                    break;
+                }
+                case R.id.menu_paste:{
+                    textRecyclerAdapter.pasteClipBoard(clipboard);
+                    break;
+                }
+                case R.id.menu_select_all:{
+                    textRecyclerAdapter.selectAll();
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            getMenuInflater().inflate(R.menu.menu_action_mode, menu);
+            isInActionMode = true;
+            textRecyclerAdapter.multiSelectMode=true;
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            actionMode = null;
+            textRecyclerAdapter.deselectAllItem();
+            isInActionMode = false;
+            textRecyclerAdapter.multiSelectMode=false;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+    };
 
 
     @Override
@@ -74,7 +123,7 @@ public class SetText extends AppCompatActivity {
                         + packageName ,Toast.LENGTH_SHORT).show();
                 this.finish();
             }else {
-                appName = packageInfo.applicationInfo.loadLabel(getPackageManager());
+                appName = packageInfo.applicationInfo.loadLabel(getPackageManager()).toString();
             }
         }
 
@@ -223,11 +272,11 @@ public class SetText extends AppCompatActivity {
             startActivity(intent);
 
         }else if(id == R.id.action_clear_all){
+            textRecyclerAdapter.notifyItemRangeRemoved(0, textRecyclerAdapter.getData().size());
             textRecyclerAdapter.setData(new ArrayList<CustomText>());
             for (int i = 0; i < Common.DEFAULT_NUM ; i++) {
                 textRecyclerAdapter.getData().add(new CustomText());
             }
-            textRecyclerAdapter.notifyDataSetChanged();
             switchCompat.setChecked(false);
             prefs.edit().remove(packageName).commit();
             Snackbar.make(mRecyclerView
@@ -241,6 +290,15 @@ public class SetText extends AppCompatActivity {
                             textRecyclerAdapter.notifyDataSetChanged();
                         }
                     }).show();
+        }else if(id == R.id.action_select_mode){
+            if(actionMode != null) {
+                return false;
+            }
+            if(!isInActionMode){
+                actionMode = startSupportActionMode(mCallback);
+                textRecyclerAdapter.notifyDataSetChanged();
+            }
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

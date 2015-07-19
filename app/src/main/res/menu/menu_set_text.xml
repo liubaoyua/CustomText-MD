@@ -24,6 +24,11 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_select_mode"
+        android:title="@string/menu_select_mode"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_app_info"
         android:title="@string/menu_app_info"
         android:orderInCategory="100"

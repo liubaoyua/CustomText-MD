@@ -5,9 +5,9 @@ package liubaoyua.customtext.utils;
  * constants
  */
 public class Common {
-    public static Boolean DEBUG = true;
+    public static Boolean DEBUG = false;
     public static Boolean FAST_DEBUG = false;
-    public static Boolean XPOSED_DEBUG = true;
+    public static Boolean XPOSED_DEBUG = false;
 
     public static String TAG = "liu_bao_yua";
     public final static String POSITION_ARG = "position";
