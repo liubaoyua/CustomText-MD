@@ -267,15 +267,15 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
 
                         } else if (id == R.id.nav_exit) {
 //                            onDestroy();
-                            finish();
-//                            System.exit(0);
+//                            finish();
+                            System.exit(0);
                         } else if (id == R.id.nav_restore) {
                             doImport();
                         }
-                        else if (id == R.id.nav_crash){
-//                            测试崩溃
-                            String s = null;System.out.println( s.toCharArray() );
-                        }
+//                        else if (id == R.id.nav_crash){
+////                            测试崩溃
+//                            String s = null;System.out.println( s.toCharArray() );
+//                        }
                         mDrawerLayout.closeDrawers();
                         return true;
                     }
@@ -531,7 +531,7 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
                     appList.add(globalAppInfo);
                 }
                 if(sharedPackageInfo != null){
-                    sharedAppInfo = new AppInfo(sharedPackageInfo,getString(R.string.sharing_replacement),Common.SHARING_SETTING_PACKAGE_NAME);
+                    sharedAppInfo = new AppInfo(sharedPackageInfo,getString(R.string.enabled_replacement),Common.SHARING_SETTING_PACKAGE_NAME);
                     if(prefs.getBoolean(sharedAppInfo.packageName, false)){
                         sharedAppInfo.state = AppInfo.ENABLED;
                     }else{

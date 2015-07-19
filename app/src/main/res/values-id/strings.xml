@@ -125,5 +125,6 @@
     <string name="setting_module_disabled">Modul dinonaktifkan</string>
     <string name="setting_module_enabled">Module diaktifkan</string>
     <string name="global_replacement">Penggantian Global</string>
-    <string name="sharing_replacement">Pengganti Berbagi</string>
+    <string name="enabled_replacement">Diaktifkan Apps </string>
+    <string name="menu_select_mode">Mode Edit</string>
 </resources>

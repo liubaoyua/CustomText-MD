@@ -115,7 +115,7 @@ public class SetText extends AppCompatActivity {
         if(packageName.equals(Common.GLOBAL_SETTING_PACKAGE_NAME)){
             appName = getString(R.string.global_replacement);
         }else if(packageName.equals(Common.SHARING_SETTING_PACKAGE_NAME)) {
-            appName = getString(R.string.sharing_replacement);
+            appName = getString(R.string.enabled_replacement);
         }else{
             PackageInfo packageInfo = Utils.getPackageInfoByPackageName(this,packageName);
             if(packageInfo == null){
@@ -227,9 +227,9 @@ public class SetText extends AppCompatActivity {
 
         }else if(id == R.id.action_add_item){
             int size = textRecyclerAdapter.getData().size();
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < 10; i++) {
                     textRecyclerAdapter.getData().add(new CustomText());
-                    textRecyclerAdapter.notifyItemRangeInserted(size, size + 4);
+                    textRecyclerAdapter.notifyItemRangeInserted(size, size + 9);
                     Snackbar.make(mRecyclerView
                             , getString(R.string.menu_add_item) + " " + getString(R.string.succeed)
                             , Snackbar.LENGTH_LONG).show();

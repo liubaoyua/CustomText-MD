@@ -126,5 +126,6 @@
     <string name="setting_module_disabled">Modul ist deaktiviert</string>
     <string name="setting_module_enabled">Modul ist aktiviert</string>
     <string name="global_replacement">Globale Ersatz</string>
-    <string name="sharing_replacement">Teilen Ersatz</string>
+    <string name="enabled_replacement">Aktiviert Apps </string>
+    <string name="menu_select_mode">Edit-Modus</string>
 </resources>

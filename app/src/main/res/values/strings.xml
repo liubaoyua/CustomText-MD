@@ -69,7 +69,7 @@
     <string name="menu_add_item">Add More Item</string>
     <string name="menu_clear_empty">Clear Empty </string>
     <string name="menu_relaunch_app">Relaunch App</string>
-    <string name="menu_select_mode">Multiple Choice</string>
+    <string name="menu_select_mode">Edit Mode</string>
     <string name="menu_app_info">App Info</string>
     <string name="menu_market_link">Market Link</string>
     <string name="menu_clear_all">Clear All</string>
@@ -125,6 +125,6 @@
     <string name="imp_exp_no_backup_found">No backups found</string>
     <string name="setting_module_disabled">Module is disabled</string>
     <string name="setting_module_enabled">Module is enabled</string>
-    <string name="sharing_replacement">Sharing replacement</string>
+    <string name="enabled_replacement">Enabled Apps </string>
     <string name="global_replacement">Global Replacement</string>
 </resources>

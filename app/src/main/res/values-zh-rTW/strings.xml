@@ -126,5 +126,6 @@
         \n drakeet/material-design-settings
     </string>
     <string name="global_replacement">全局替換</string>
-    <string name="sharing_replacement">共享替換</string>
+    <string name="enabled_replacement">已啟用應用</string>
+    <string name="menu_select_mode">編輯模式</string>
 </resources>
