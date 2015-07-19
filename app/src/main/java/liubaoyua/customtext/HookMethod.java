@@ -115,7 +115,7 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                             if (isCurrentHackEnabled) {
                                 abc = Utils.replaceAllFromList(currentTexts,abc);
                             }
-                            if(isSharedHackEnabled){
+                            if(isSharedHackEnabled && isCurrentHackEnabled){
                                 abc = Utils.replaceAllFromList(sharedTexts,abc);
                             }
                             if (isGlobalHackEnabled) {
@@ -134,7 +134,7 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                             if (isCurrentHackEnabled) {
                                 abc = Utils.replaceAllFromList(currentTexts,abc);
                             }
-                            if(isSharedHackEnabled){
+                            if(isSharedHackEnabled && isCurrentHackEnabled){
                                 abc = Utils.replaceAllFromList(sharedTexts,abc);
                             }
                             if (isGlobalHackEnabled) {

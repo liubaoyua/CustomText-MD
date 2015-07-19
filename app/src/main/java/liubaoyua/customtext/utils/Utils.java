@@ -3,7 +3,9 @@ package liubaoyua.customtext.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.util.Log;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -248,6 +250,17 @@ public abstract class Utils {
         }
         Utils.trimTextList(list);
         return list;
+    }
+
+    public static Html.ImageGetter getImageGetter(final int picMagnification){
+        return new Html.ImageGetter(){
+            public Drawable getDrawable(String source){
+                Drawable d=Drawable.createFromPath(source);
+                d.setBounds(0,0,d.getIntrinsicWidth() * picMagnification
+                        ,d.getIntrinsicHeight()* picMagnification);
+                return d;
+            }
+        };
     }
 }
 

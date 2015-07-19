@@ -73,6 +73,10 @@
     <string name="menu_market_link">Market Link</string>
     <string name="menu_clear_all">Clear All</string>
 
+    <string name="menu_select_all">Select All</string>
+    <string name="menu_cut">Cut</string>
+    <string name="menu_copy">Copy</string>
+    <string name="menu_paste">Paste</string>
 
     <!--layout resource-->
     <string name="button_operate">Action</string>
