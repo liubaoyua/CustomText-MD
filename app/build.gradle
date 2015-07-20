@@ -8,7 +8,7 @@ android {
         applicationId "liubaoyua.customtext"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 17
+        versionCode 20
         versionName "2.0 MD"
 //       resConfigs "en","zh-"
         resConfigs "nodpi", "hdpi","xxhdpi"

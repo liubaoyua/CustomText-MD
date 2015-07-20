@@ -8,6 +8,7 @@ import android.text.Html;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -91,12 +92,12 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                 }
             };
         } else {
-            if (!(isGlobalHackEnabled || !isCurrentHackEnabled || isSharedHackEnabled))
+            if (!(isGlobalHackEnabled || isCurrentHackEnabled ))
                 return;
 
-            final ArrayList<CustomText> currentTexts = Utils.loadListFromPrefs(mPrefs,isCurrentHackEnabled);
-            final ArrayList<CustomText> sharedTexts = Utils.loadListFromPrefs(sPrefs,isSharedHackEnabled);
-            final ArrayList<CustomText> globalTexts = Utils.loadListFromPrefs(prefs,isGlobalHackEnabled);
+            final ArrayList<CustomText> currentTexts = loadListFromPrefs(mPrefs, isCurrentHackEnabled);
+            final ArrayList<CustomText> sharedTexts = loadListFromPrefs(sPrefs, isSharedHackEnabled && isCurrentHackEnabled);
+            final ArrayList<CustomText> globalTexts = loadListFromPrefs(prefs, isGlobalHackEnabled);
 
             if (isInDebugMode) {
                 XposedBridge.log(Common.PACKAGE_NAME + currentTexts.toString());
@@ -113,13 +114,13 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                         if (actualText != null) {
                             String abc = actualText.toString();
                             if (isCurrentHackEnabled) {
-                                abc = Utils.replaceAllFromList(currentTexts,abc);
+                                abc = replaceAllFromList(currentTexts,abc);
                             }
                             if(isSharedHackEnabled && isCurrentHackEnabled){
-                                abc = Utils.replaceAllFromList(sharedTexts,abc);
+                                abc = replaceAllFromList(sharedTexts, abc);
                             }
                             if (isGlobalHackEnabled) {
-                                abc = Utils.replaceAllFromList(globalTexts,abc);
+                                abc = replaceAllFromList(globalTexts, abc);
                             }
                             setTextFromHtml(abc,methodHookParam,0);
                         }
@@ -132,13 +133,13 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                         if (methodHookParam.args[0] instanceof String) {
                             String abc = (String) methodHookParam.args[0];
                             if (isCurrentHackEnabled) {
-                                abc = Utils.replaceAllFromList(currentTexts,abc);
+                                abc = replaceAllFromList(currentTexts, abc);
                             }
                             if(isSharedHackEnabled && isCurrentHackEnabled){
-                                abc = Utils.replaceAllFromList(sharedTexts,abc);
+                                abc = replaceAllFromList(sharedTexts, abc);
                             }
                             if (isGlobalHackEnabled) {
-                                abc = Utils.replaceAllFromList(globalTexts,abc);
+                                abc = replaceAllFromList(globalTexts, abc);
                             }
                             setTextFromHtml(abc,methodHookParam,0);
                         }
@@ -165,5 +166,54 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                 param.args[n] = text;
             else param.args[n] = text.toString();
         } else param.args[n] = html;
+    }
+
+    public static String replaceAllFromList(List<CustomText> texts, String abc){
+        for (int i = 0; i < texts.size(); i++) {
+            CustomText customText = texts.get(i);
+            abc = abc.replaceAll(customText.oriText, customText.newText);
+        }
+        return abc;
+    }
+
+    public ArrayList<CustomText> loadListFromPrefs(XSharedPreferences prefs, Boolean enabled){
+
+        if (!enabled){
+//            XposedBridge.log(Common.DEFAULT_APP_NAME +!enabled );
+            return new ArrayList<>();
+        }
+        ArrayList<CustomText> list = new ArrayList<>();
+//        XposedBridge.log(Common.DEFAULT_APP_NAME +enabled );
+        final int num = (prefs.getInt(Common.MAX_PAGE_OLD, 0) + 1) * Common.DEFAULT_NUM;
+        for (int i = 0; i < num; i++) {
+            String oriString = prefs.getString(Common.ORI_TEXT_PREFIX + i, "");
+            String newString = prefs.getString(Common.NEW_TEXT_PREFIX + i, "");
+            CustomText customText = new CustomText(oriString, newString);
+            list.add(customText);
+        }
+//        XposedBridge.log(Common.DEFAULT_APP_NAME +enabled +" before trim " + list.toString()  );
+        list = trimTextList(list);
+        return list;
+    }
+
+    public static Html.ImageGetter getImageGetter(final int picMagnification){
+        return new Html.ImageGetter(){
+            public Drawable getDrawable(String source){
+                Drawable d=Drawable.createFromPath(source);
+                d.setBounds(0,0,d.getIntrinsicWidth() * picMagnification
+                        ,d.getIntrinsicHeight()* picMagnification);
+                return d;
+            }
+        };
+    }
+
+    public static ArrayList<CustomText> trimTextList(ArrayList<CustomText> a){
+        for(int i = 0; i < a.size(); i++){
+            if(a.get(i).oriText.equals("")){
+                a.remove(i);
+                i--;
+            }
+        }
+        return a;
     }
 }

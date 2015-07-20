@@ -128,15 +128,6 @@ public abstract class Utils {
             return false;
     }
 
-    public static ArrayList<CustomText> trimTextList(ArrayList<CustomText> a){
-        for(int i = 0; i < a.size(); i++){
-            if(a.get(i).oriText.equals("")){
-                a.remove(i);
-                i--;
-            }
-        }
-        return a;
-    }
 
     public static boolean emptyDirectory(File directory) {
         boolean result = true;
@@ -228,39 +219,5 @@ public abstract class Utils {
         return packageInfo;
     }
 
-    public static String replaceAllFromList(List<CustomText> texts, String abc){
-        for (int i = 0; i < texts.size(); i++) {
-            CustomText customText = texts.get(i);
-            abc = abc.replaceAll(customText.oriText, customText.newText);
-        }
-        return abc;
-    }
-
-    public static ArrayList<CustomText> loadListFromPrefs(XSharedPreferences prefs, Boolean enabled){
-        if (!enabled){
-            return new ArrayList<>();
-        }
-        ArrayList<CustomText> list = new ArrayList<>();
-        final int num = (prefs.getInt(Common.MAX_PAGE_OLD, 0) + 1) * Common.DEFAULT_NUM;
-        for (int i = 0; i < num; i++) {
-            String oriString = prefs.getString(Common.ORI_TEXT_PREFIX + i, "");
-            String newString = prefs.getString(Common.NEW_TEXT_PREFIX + i, "");
-            CustomText customText = new CustomText(oriString, newString);
-            list.add(customText);
-        }
-        Utils.trimTextList(list);
-        return list;
-    }
-
-    public static Html.ImageGetter getImageGetter(final int picMagnification){
-        return new Html.ImageGetter(){
-            public Drawable getDrawable(String source){
-                Drawable d=Drawable.createFromPath(source);
-                d.setBounds(0,0,d.getIntrinsicWidth() * picMagnification
-                        ,d.getIntrinsicHeight()* picMagnification);
-                return d;
-            }
-        };
-    }
 }
 
