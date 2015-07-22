@@ -59,9 +59,9 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
         final boolean isInThisApp = lpparam.packageName.equals(Common.PACKAGE_NAME);
         final boolean isSharedHackEnabled = prefs.getBoolean(Common.SHARING_SETTING_PACKAGE_NAME,false);
 
-        if (isInDebugMode) {
-            XposedBridge.log(Common.PACKAGE_NAME + " : now you are in " + lpparam.packageName);
-        }
+//        if (isInDebugMode) {
+//            XposedBridge.log(Common.PACKAGE_NAME + " " + lpparam.packageName +(!isGlobalHackEnabled && !isCurrentHackEnabled));
+//        }
 
         XC_MethodHook textMethodHook;
         if (isInThisApp) {
@@ -92,7 +92,7 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                 }
             };
         } else {
-            if (!(isGlobalHackEnabled || isCurrentHackEnabled ))
+            if (!isGlobalHackEnabled && !isCurrentHackEnabled)
                 return;
 
             final ArrayList<CustomText> currentTexts = loadListFromPrefs(mPrefs, isCurrentHackEnabled);
@@ -154,7 +154,7 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
         findAndHookMethod("android.view.GLES20Canvas", null, "drawText", String.class,
                 float.class, float.class, Paint.class, textMethodHook);
 
-        if(isInDebugMode){
+        if (isInDebugMode) {
             XposedBridge.log(Common.DEFAULT_APP_NAME + ":  findAndHookDone");
         }
     }
