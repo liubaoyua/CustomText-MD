@@ -21,5 +21,8 @@
     <color name="blue_grey_divider">#B6B6B6</color>
 
 
+    <color name="background">#FFEEEEEE</color>
+    <color name="white">#FFFFFFFF</color>
+
 
 </resources>

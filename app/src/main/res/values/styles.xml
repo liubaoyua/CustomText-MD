@@ -8,7 +8,7 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
-        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowBackground">@color/background</item>
     </style>
 
 
@@ -21,7 +21,7 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
         <item name="colorControlHighlight">@color/accent_light</item>
-        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowBackground">@color/background</item>
     </style>
 
     <style name="Widget.CardContent" parent="android:Widget">
@@ -35,6 +35,7 @@
     <style name="menu_labels_style">
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@android:color/white</item>
+
     </style>
 
 </resources>
