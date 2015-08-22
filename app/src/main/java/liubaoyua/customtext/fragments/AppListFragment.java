@@ -17,9 +17,9 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.adapters.AppRecyclerAdapter;
+import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.entity.NewListEvent;
 import liubaoyua.customtext.ui.SetTextActivity;
-import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.utils.Common;
 
 public class AppListFragment extends Fragment {
@@ -28,27 +28,17 @@ public class AppListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private AppRecyclerAdapter appRecyclerAdapter;
 
-    public void setAppList(List<AppInfo> appList) {
-        if(appRecyclerAdapter != null){
-            appRecyclerAdapter.getFilter().setAppList(appList);
-        }else{
-            throw new IllegalStateException("appRecyclerAdapter is null");
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_fragment_app, container, false);
-        mRecyclerView = (RecyclerView)view.findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         return mRecyclerView;
     }
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -79,9 +69,17 @@ public class AppListFragment extends Fragment {
            appRecyclerAdapter.getFilter().filter(nameFilter);
     }
 
-    public List<AppInfo> getAppList(){
-        if(appRecyclerAdapter != null){
+    public List<AppInfo> getAppList() {
+        if (appRecyclerAdapter != null) {
             return appRecyclerAdapter.getFilter().getAppList();
+        } else {
+            throw new IllegalStateException("appRecyclerAdapter is null");
+        }
+    }
+
+    public void setAppList(List<AppInfo> appList) {
+        if(appRecyclerAdapter != null){
+            appRecyclerAdapter.getFilter().setAppList(appList);
         }else{
             throw new IllegalStateException("appRecyclerAdapter is null");
         }
@@ -98,5 +96,23 @@ public class AppListFragment extends Fragment {
     public void notifyDataSetChanged(){
         if(appRecyclerAdapter != null)
             appRecyclerAdapter.notifyDataSetChanged();
+    }
+
+    public void stopScrolling() {
+        if (mRecyclerView != null) {
+            mRecyclerView.stopScroll();
+        }
+    }
+
+    public void scrollToTopOrBottom() {
+        if (mRecyclerView == null)
+            return;
+
+        if (mRecyclerView.canScrollVertically(-1)) {
+            mRecyclerView.smoothScrollToPosition(0);
+        } else {
+            mRecyclerView.smoothScrollToPosition(appRecyclerAdapter.getItemCount() - 1);
+        }
+
     }
 }

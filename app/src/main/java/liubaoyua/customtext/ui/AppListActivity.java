@@ -45,7 +45,6 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.net.CookieHandler;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,10 +56,10 @@ import java.util.Locale;
 
 import de.greenrobot.event.EventBus;
 import liubaoyua.customtext.R;
+import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.entity.NewListEvent;
 import liubaoyua.customtext.fragments.AppListFragment;
 import liubaoyua.customtext.fragments.FragmentAdapter;
-import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.utils.Common;
 import liubaoyua.customtext.utils.DBManager;
 import liubaoyua.customtext.utils.PicassoTools;
@@ -68,6 +67,7 @@ import liubaoyua.customtext.utils.Utils;
 
 public class AppListActivity extends AppCompatActivity {
 
+    private static File prefsDir = new File(Environment.getDataDirectory() + "/data/" + Common.PACKAGE_NAME + "/shared_prefs");
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ViewPager mViewPager;
@@ -77,17 +77,12 @@ public class AppListActivity extends AppCompatActivity {
     private AppListFragment recentListFragment;
     private SearchView mSearchView;
     private FragmentAdapter fragmentAdapter;
-
     private Context context;
-
     private List<AppListFragment> fragmentList = new ArrayList<>();
     private List<String> titles =null;
     private String nameFilter;
     private SharedPreferences prefs;
-
     private boolean hasDataBase = false;
-
-    private static File prefsDir = new File(Environment.getDataDirectory()+"/data/" + Common.PACKAGE_NAME + "/shared_prefs" );
 
     @SuppressWarnings("deprecation")
     @Override
@@ -190,28 +185,42 @@ public class AppListActivity extends AppCompatActivity {
     }
 
     private void setupViewPager() {
-        if(mTabLayout == null){
-            mTabLayout = (TabLayout) findViewById(R.id.tabs);
-            mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)));
-            mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
-        }
-        if(appListFragment == null){
-            appListFragment = new AppListFragment();
-        }
-        if (recentListFragment == null){
-            recentListFragment = new AppListFragment();
-            fragmentList.add(appListFragment);
-            fragmentList.add(recentListFragment);
-        }
-        if(mViewPager == null) {
-            mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        }
-        if(fragmentAdapter == null){
-            fragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragmentList, titles);
-            mViewPager.setAdapter(fragmentAdapter);
-            mTabLayout.setupWithViewPager(mViewPager);
-            mTabLayout.setTabsFromPagerAdapter(fragmentAdapter);
-        }
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)));
+        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
+
+        appListFragment = new AppListFragment();
+
+        recentListFragment = new AppListFragment();
+        fragmentList.add(appListFragment);
+        fragmentList.add(recentListFragment);
+
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        fragmentAdapter = new FragmentAdapter(getSupportFragmentManager(), fragmentList, titles);
+        mViewPager.setAdapter(fragmentAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setTabsFromPagerAdapter(fragmentAdapter);
+
+        fragmentList.get(mViewPager.getCurrentItem()).stopScrolling();
+
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mViewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                fragmentList.get(tab.getPosition()).stopScrolling();
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                fragmentList.get(tab.getPosition()).scrollToTopOrBottom();
+            }
+        });
+
 }
 
     @TargetApi(21)
@@ -406,6 +415,61 @@ public class AppListActivity extends AppCompatActivity {
          new LoadAppsTask(true).execute();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (Common.DEBUG) {
+            Log.d(Common.TAG, "onActivityResult");
+        }
+        if (requestCode == Common.APP_REQUEST_CODE) {
+            if (resultCode == Common.APP_RESULT_CODE) {
+                boolean isEnabled = data.getBooleanExtra(Common.IS_ENABLED_ARG, false);
+                int position = data.getIntExtra(Common.POSITION_ARG, -1);
+                if (Common.DEBUG) {
+                    Log.d(Common.TAG, "onActivityResult  " + isEnabled + "  position   " + position);
+                }
+                if (position != -1) {
+                    List<AppInfo> list = recentListFragment.getAppList();
+                    List<AppInfo> showingList = fragmentList.get(mViewPager.getCurrentItem()).getShowingAppList();
+                    if (showingList == null)
+                        return;
+                    AppInfo temp = showingList.get(position);
+                    if (isEnabled) {
+                        temp.state = AppInfo.ENABLED;
+                        if (!list.contains(temp)) {
+                            list.add(0, temp);
+                        }
+                    } else {
+                        temp.state = AppInfo.DISABLED;
+                    }
+                    appListFragment.notifyDataSetChanged();
+                    recentListFragment.notifyDataSetChanged();
+                }
+            }
+        }
+    }
+
+    //EventBus event
+    public void onEvent(NewListEvent event) {
+        if (hasDataBase) {
+            List<AppInfo> appList = DBManager.getInstance(context).query();
+            appListFragment.setAppList(appList);
+            recentListFragment.setAppList(Utils.getRecentList(appList));
+            recentListFragment.filter(nameFilter);
+            appListFragment.filter(nameFilter);
+            new LoadAppsTask(false).execute();
+        } else {
+            new LoadAppsTask(true).execute();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PicassoTools.destroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     private class LoadAppsTask extends AsyncTask<Void,String,Void> {
         private ProgressDialog dialog = null;
         private Boolean showDialog = false;
@@ -416,7 +480,7 @@ public class AppListActivity extends AppCompatActivity {
         }
         @Override
         protected void onPreExecute() {
-            if(showDialog){
+            if (showDialog) {
                 dialog = new ProgressDialog(AppListActivity.this);
                 dialog.setMessage(getString(R.string.dialog_loading));
                 dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -427,63 +491,63 @@ public class AppListActivity extends AppCompatActivity {
 
         @Override
         protected void onProgressUpdate(String... values) {
-            if(dialog != null)
+            if (dialog != null)
                 dialog.setMessage(values[0]);
         }
 
 
         @Override
         protected Void doInBackground(Void... params) {
-            appList  = new ArrayList<>();
-            PackageManager pm =getPackageManager();
+            appList = new ArrayList<>();
+            PackageManager pm = getPackageManager();
             List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
-            if(dialog != null)
+            if (dialog != null)
                 dialog.setMax(packages.size());
-            int i =1;
+            int i = 1;
             for (PackageInfo pkgInfo : packages) {
-                if(dialog != null)
+                if (dialog != null)
                     dialog.setProgress(i++);
                 ApplicationInfo applicationInfo = pkgInfo.applicationInfo;
                 if (applicationInfo == null)
                     continue;
-                if (applicationInfo.packageName.equals(Common.PACKAGE_NAME)){
+                if (applicationInfo.packageName.equals(Common.PACKAGE_NAME)) {
                     continue;
                 }
-                if(dialog != null)
+                if (dialog != null)
                     publishProgress(getString(R.string.dialog_loading) + "\n" + applicationInfo.loadLabel(pm).toString());
                 AppInfo appInfo = new AppInfo(pkgInfo, applicationInfo.loadLabel(pm).toString());
-                if(prefs.contains(appInfo.packageName)){
-                    if(prefs.getBoolean(appInfo.packageName, false)){
+                if (prefs.contains(appInfo.packageName)) {
+                    if (prefs.getBoolean(appInfo.packageName, false)) {
                         appInfo.state = AppInfo.ENABLED;
-                    }else{
+                    } else {
                         appInfo.state = AppInfo.DISABLED;
                     }
                 }
                 appList.add(appInfo);
-                if(Common.FAST_DEBUG){
+                if (Common.FAST_DEBUG) {
                     Log.d(Common.TAG, appInfo.toString());
-                    if(appList.size()>6)
+                    if (appList.size() > 6)
                         break;
                 }
             }
 
-            PackageInfo globalPackageInfo = Utils.getPackageInfoByPackageName(context,Common.PACKAGE_NAME);
-            PackageInfo sharedPackageInfo = Utils.getPackageInfoByPackageName(context,Common.PACKAGE_NAME);
-            if(globalPackageInfo != null){
-                AppInfo globalAppInfo = new AppInfo(globalPackageInfo,getString(R.string.global_replacement),Common.GLOBAL_SETTING_PACKAGE_NAME);
-                if(prefs.getBoolean(globalAppInfo.packageName, false)){
+            PackageInfo globalPackageInfo = Utils.getPackageInfoByPackageName(context, Common.PACKAGE_NAME);
+            PackageInfo sharedPackageInfo = Utils.getPackageInfoByPackageName(context, Common.PACKAGE_NAME);
+            if (globalPackageInfo != null) {
+                AppInfo globalAppInfo = new AppInfo(globalPackageInfo, getString(R.string.global_replacement), Common.GLOBAL_SETTING_PACKAGE_NAME);
+                if (prefs.getBoolean(globalAppInfo.packageName, false)) {
                     globalAppInfo.state = AppInfo.ENABLED;
-                }else{
+                } else {
                     globalAppInfo.state = AppInfo.DISABLED;
                 }
                 appList.add(globalAppInfo);
             }
 
-            if(sharedPackageInfo != null){
-                AppInfo sharedAppInfo = new AppInfo(sharedPackageInfo,getString(R.string.enabled_replacement),Common.SHARING_SETTING_PACKAGE_NAME);
-                if(prefs.getBoolean(sharedAppInfo.packageName, false)){
+            if (sharedPackageInfo != null) {
+                AppInfo sharedAppInfo = new AppInfo(sharedPackageInfo, getString(R.string.enabled_replacement), Common.SHARING_SETTING_PACKAGE_NAME);
+                if (prefs.getBoolean(sharedAppInfo.packageName, false)) {
                     sharedAppInfo.state = AppInfo.ENABLED;
-                }else{
+                } else {
                     sharedAppInfo.state = AppInfo.DISABLED;
                 }
                 appList.add(sharedAppInfo);
@@ -496,12 +560,12 @@ public class AppListActivity extends AppCompatActivity {
                 }
             });
 
-            try{
+            try {
                 DBManager.getInstance(context).delete();
                 DBManager.getInstance(context).insert(appList);
-                prefs.edit().putBoolean(Common.PREFS_HAS_DATABASE,true).apply();
+                prefs.edit().putBoolean(Common.PREFS_HAS_DATABASE, true).apply();
                 hasDataBase = true;
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -510,13 +574,13 @@ public class AppListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aa) {
-            if(recentListFragment != null ){
+            if (recentListFragment != null) {
                 recentListFragment.setAppList(Utils.getRecentList(appList));
                 appListFragment.setAppList(appList);
                 appListFragment.filter(nameFilter);
                 recentListFragment.filter(nameFilter);
             }
-            if(dialog!=null)
+            if (dialog != null)
                 dialog.dismiss();
         }
     }
@@ -525,11 +589,11 @@ public class AppListActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(File... params) {
             File backupDir = params[0];
-          if(!backupDir.exists())
+            if (!backupDir.exists())
                 backupDir.mkdirs();
-            if(prefsDir.exists()){
+            if (prefsDir.exists()) {
                 String files[] = prefsDir.list();
-                if(files.length!=0){
+                if (files.length != 0) {
                     for (String file : files) {
                         File srcFile = new File(prefsDir, file);
                         File destFile = new File(backupDir, file);
@@ -537,7 +601,7 @@ public class AppListActivity extends AppCompatActivity {
                             Utils.CopyFile(srcFile, destFile);
                         } catch (IOException ex) {
                             return getString(R.string.imp_exp_export_error, ex.getMessage());
-                        } catch (Exception ex){
+                        } catch (Exception ex) {
                             return ex.getMessage();
                         }
                     }
@@ -568,7 +632,7 @@ public class AppListActivity extends AppCompatActivity {
                     destFile.setWritable(true, true);
                 } catch (IOException ex) {
                     return getString(R.string.imp_exp_import_error, ex.getMessage());
-                } catch (Exception ex){
+                } catch (Exception ex) {
                     return ex.getMessage();
                 }
             }
@@ -580,61 +644,5 @@ public class AppListActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(Common.DEBUG){
-            Log.d(Common.TAG,"onActivityResult");
-        }
-        if(requestCode == Common.APP_REQUEST_CODE){
-            if(resultCode == Common.APP_RESULT_CODE){
-                boolean isEnabled = data.getBooleanExtra(Common.IS_ENABLED_ARG,false);
-                int position = data.getIntExtra(Common.POSITION_ARG,-1);
-                if(Common.DEBUG){
-                    Log.d(Common.TAG,"onActivityResult  "+isEnabled + "  position   " + position);
-                }
-                if(position != -1){
-                    List<AppInfo> list = recentListFragment.getAppList();
-                    List<AppInfo> showingList = fragmentList.get(mViewPager.getCurrentItem()).getShowingAppList();
-                    if(showingList == null)
-                        return;
-                    AppInfo temp = showingList.get(position);
-                    if(isEnabled){
-                        temp.state = AppInfo.ENABLED;
-                        if(!list.contains(temp)){
-                            list.add(0, temp);
-                        }
-                    }else{
-                        temp.state = AppInfo.DISABLED;
-                    }
-                    appListFragment.notifyDataSetChanged();
-                    recentListFragment.notifyDataSetChanged();
-                }
-            }
-        }
-    }
-
-
-    //EventBus event
-    public void onEvent(NewListEvent event){
-        if(hasDataBase){
-            List<AppInfo> appList = DBManager.getInstance(context).query();
-            appListFragment.setAppList(appList);
-            recentListFragment.setAppList(Utils.getRecentList(appList));
-            recentListFragment.filter(nameFilter);
-            appListFragment.filter(nameFilter);
-            new LoadAppsTask(false).execute();
-        }else{
-            new LoadAppsTask(true).execute();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        PicassoTools.destroy();
-        EventBus.getDefault().unregister(this);
     }
 }
