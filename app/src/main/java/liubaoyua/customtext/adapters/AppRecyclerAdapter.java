@@ -3,12 +3,9 @@ package liubaoyua.customtext.adapters;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +18,7 @@ import com.squareup.picasso.Target;
 
 import java.util.List;
 
-import liubaoyua.customtext.utils.AppIconRequestHandler;
+import liubaoyua.customtext.utils.IconLoader;
 import liubaoyua.customtext.utils.AppInfo;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.utils.AppListFilter;
@@ -73,7 +70,7 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
         }
 
         PicassoTools.getInstance()
-                .load(AppIconRequestHandler.SCHEME_PACKAGE_NAME + ":" + temp.packageName)
+                .load(IconLoader.SCHEME_PACKAGE_NAME + ":" + temp.packageName)
                 .noFade().into(holder);
     }
 

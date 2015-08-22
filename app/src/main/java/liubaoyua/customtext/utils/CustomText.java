@@ -7,14 +7,14 @@ package liubaoyua.customtext.utils;
 public class CustomText {
     public String oriText = "";
     public String newText = "";
-    public boolean isRegex = false;
-    public int textColor = 0 ;
-    public boolean underLine = false;
-    public boolean isAvailable = true;
-
-    public boolean isWorkInEditText = false;
-    public boolean isReplacedToAPic = false;
-    public int picMagnification = 1;
+//    public boolean isRegex = false;
+//    public int textColor = 0 ;
+//    public boolean underLine = false;
+//    public boolean isAvailable = true;
+//
+//    public boolean isWorkInEditText = false;
+//    public boolean isReplacedToAPic = false;
+//    public int picMagnification = 1;
 
     public boolean isCheck = false;
 

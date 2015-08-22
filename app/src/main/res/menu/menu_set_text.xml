@@ -1,6 +1,57 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context="liubaoyua.customtext.ui.SetText">
+
+    <item
+        android:id="@+id/action_switch"
+        android:title="@string/menu_switch"
+        app:actionViewClass="android.support.v7.widget.SwitchCompat"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/more"
+        android:icon="@mipmap/ic_more_vert_white_24dp"
+        android:title="@string/menu_more"
+        app:showAsAction="always">
+
+        <menu xmlns:android="http://schemas.android.com/apk/res/android">
+            <item
+                android:id="@+id/action_add_item"
+                android:title="@string/menu_add_item"
+                android:orderInCategory="100"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_clear_empty"
+                android:title="@string/menu_clear_empty"
+                android:orderInCategory="100"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_relaunch_app"
+                android:title="@string/menu_relaunch_app"
+                android:orderInCategory="100"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_select_mode"
+                android:title="@string/menu_select_mode"
+                android:orderInCategory="100"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_app_info"
+                android:title="@string/menu_app_info"
+                android:orderInCategory="100"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_market_link"
+                android:title="@string/menu_market_link"
+                android:orderInCategory="100"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_clear_all"
+                android:title="@string/menu_clear_all"
+                android:orderInCategory="100"
+                app:showAsAction="never" />
+
+        </menu>
+    </item>
     <!--<string name="menu_add_item">增加楼层</string>-->
     <!--<string name="menu_clear_empty">清除空行</string>-->
     <!--<string name="menu_relaunch_app">重开应用</string>-->
@@ -8,45 +59,5 @@
     <!--<string name="menu_market_link">市场链接</string>-->
     <!--<string name="menu_clear_all">清除所有</string>-->
 
-    <item
-        android:id="@+id/action_add_item"
-        android:title="@string/menu_add_item"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_clear_empty"
-        android:title="@string/menu_clear_empty"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_relaunch_app"
-        android:title="@string/menu_relaunch_app"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_select_mode"
-        android:title="@string/menu_select_mode"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_app_info"
-        android:title="@string/menu_app_info"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_market_link"
-        android:title="@string/menu_market_link"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_clear_all"
-        android:title="@string/menu_clear_all"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_switch"
-        android:title="@string/menu_switch"
-        app:actionViewClass="android.support.v7.widget.SwitchCompat"
-        app:showAsAction="ifRoom"/>
 </menu>

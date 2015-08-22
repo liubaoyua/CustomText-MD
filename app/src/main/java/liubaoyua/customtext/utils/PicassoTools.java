@@ -11,16 +11,12 @@ public abstract class PicassoTools {
     private static LruCache picassoCache;
     
     public static void init(Context ctx) {
-        if (instance == null) 
-        {  
+        if (instance == null) {
             Picasso.Builder builder = new Picasso.Builder(ctx);
-            builder.addRequestHandler(new AppIconRequestHandler(ctx));
+            builder.addRequestHandler(new IconLoader(ctx));
             picassoCache = new LruCache(ctx);
             builder.memoryCache(picassoCache);
             instance = builder.build();
-//            if(Common.DEBUG_MODE2){
-                instance.setIndicatorsEnabled(true);
-//            }
         }
     }
     

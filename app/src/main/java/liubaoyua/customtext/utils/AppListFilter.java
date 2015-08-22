@@ -25,10 +25,6 @@ public class AppListFilter extends Filter {
         this.appList = appList;
     }
 
-    public void setAdapter(AppRecyclerAdapter adapter) {
-        this.adapter = adapter;
-    }
-
     public void setAppList(List<AppInfo> newList){
         this.appList = newList;
     }

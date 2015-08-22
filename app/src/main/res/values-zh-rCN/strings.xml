@@ -64,6 +64,7 @@
     <string name="menu_search">搜索</string>
 
     <string name="menu_home">主页</string>
+    <string name="menu_refresh">刷新</string>
     <string name="menu_info">关于</string>
     <string name="menu_restore">还原</string>
     <string name="menu_backup">备份</string>
@@ -71,6 +72,7 @@
     <string name="menu_exit">退出</string>
     <string name="menu_switch">开关</string>
 
+    <string name="menu_more">更多</string>
     <string name="menu_add_item">增加十楼</string>
     <string name="menu_clear_empty">清除空行</string>
     <string name="menu_relaunch_app">重启应用</string>

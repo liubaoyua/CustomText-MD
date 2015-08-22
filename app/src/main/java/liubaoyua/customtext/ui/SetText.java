@@ -34,7 +34,6 @@ import liubaoyua.customtext.utils.Utils;
 
 public class SetText extends AppCompatActivity {
 
-//    private FloatingActionsMenu fam;
     private RecyclerView mRecyclerView;
     private TextRecyclerAdapter textRecyclerAdapter;
     private SwitchCompat switchCompat;
@@ -53,13 +52,11 @@ public class SetText extends AppCompatActivity {
     private boolean isInActionMode;
     private ActionMode actionMode;
     private ActionMode.Callback mCallback = new ActionMode.Callback() {
-
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.menu_copy:{
                     clipboard = textRecyclerAdapter.getSelectedItem();
-//                    updateActionModeTitle();
                     break;
                 }
                 case R.id.menu_cut:{
@@ -127,12 +124,6 @@ public class SetText extends AppCompatActivity {
             }
         }
 
-
-        if (Common.DEBUG){
-            Log.d(Common.TAG, "is in SetText page for " + packageName);
-        }
-
-
         prefs = getSharedPreferences(Common.PREFS, MODE_WORLD_READABLE);
         mPrefs = getSharedPreferences(packageName, MODE_WORLD_READABLE);
 
@@ -175,7 +166,6 @@ public class SetText extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_set_text, menu);
-
         // systemui 要特殊处理
         if(!packageName.equals(Common.SYSTEM_UI_PACKAGE_NAME) ){
             if(getPackageManager().getLaunchIntentForPackage(packageName) == null){

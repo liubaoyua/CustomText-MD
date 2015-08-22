@@ -17,13 +17,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class AppIconRequestHandler extends RequestHandler {
+public class IconLoader extends RequestHandler {
 
     /** Uri scheme for app icons */
     public static final String SCHEME_PACKAGE_NAME = "packageName";
     private PackageManager mPackageManager;
 
-    public AppIconRequestHandler(Context context) {
+    public IconLoader(Context context) {
         mPackageManager = context.getPackageManager();
     }
 
@@ -42,11 +42,11 @@ public class AppIconRequestHandler extends RequestHandler {
         if(SCHEME_PACKAGE_NAME.equals(schemeStr)){
             try {
                 drawable = mPackageManager.getApplicationIcon(packageName);
-            } catch (PackageManager.NameNotFoundException ignored) {
-                ignored.printStackTrace();
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
             }
             if (drawable != null) {
-                bitmap =  DrawableUtils.drawableToBitmap(drawable);
+                bitmap =  Utils.drawableToBitmap(drawable);
             }
         }
         return new Result(bitmap, Picasso.LoadedFrom.DISK);

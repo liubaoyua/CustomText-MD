@@ -1,5 +1,6 @@
 package liubaoyua.customtext.ui;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,9 +10,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -57,14 +57,12 @@ import java.util.Locale;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.fragments.AppListFragment;
 import liubaoyua.customtext.fragments.FragmentAdapter;
-import liubaoyua.customtext.interfaces.FragmentCommunicator;
 import liubaoyua.customtext.utils.AppInfo;
 import liubaoyua.customtext.utils.Common;
-import liubaoyua.customtext.utils.DrawableUtils;
 import liubaoyua.customtext.utils.PicassoTools;
 import liubaoyua.customtext.utils.Utils;
 
-public class AppList extends AppCompatActivity implements FragmentCommunicator {
+public class AppList extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -204,13 +202,9 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
         }
         if(appListFragment == null){
             appListFragment = new AppListFragment();
-            appListFragment.setAppList(new ArrayList<AppInfo>());
-//            appListFragment.prepareAdapter();
         }
         if (recentListFragment == null){
             recentListFragment = new AppListFragment();
-            recentListFragment.setAppList(new ArrayList<AppInfo>());
-//            recentListFragment.prepareAdapter();
             fragmentList.add(appListFragment);
             fragmentList.add(recentListFragment);
         }
@@ -225,28 +219,32 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
         }
 }
 
+    @TargetApi(21)
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         int id = menuItem.getItemId();
-                        if (id == R.id.nav_settings) {
-                            startActivity(new Intent(context, Settings.class));
-                        } else if (id == R.id.nav_backup) {
-                            doExport();
-
-                        } else if (id == R.id.nav_exit) {
-//                            onDestroy();
-//                            finish();
-                            System.exit(0);
-                        } else if (id == R.id.nav_restore) {
-                            doImport();
+                        switch (id){
+                            case R.id.nav_refresh:
+                                refreshList(); break;
+                            case R.id.nav_settings:
+                                startActivity(new Intent(context, Settings.class));
+                                break;
+                            case R.id.nav_backup:
+                                doExport();
+                                break;
+                            case R.id.nav_exit:
+                                if(Build.VERSION.SDK_INT >= 21){
+                                    finishAndRemoveTask();
+                                }else {
+                                    System.exit(0);
+                                }
+                                break;
+                            case R.id.nav_restore:
+                                doImport();
                         }
-//                        else if (id == R.id.nav_crash){
-////                            测试崩溃
-//                            String s = null;System.out.println( s.toCharArray() );
-//                        }
                         mDrawerLayout.closeDrawers();
                         return true;
                     }
@@ -409,9 +407,8 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
         builder.create().show();
     }
 
-    @Override
-    public void refreshlist() {
-         new LoadAppsTask(false).execute();
+    public void refreshList() {
+         new LoadAppsTask(true).execute();
     }
 
     class LoadAppsTask extends AsyncTask<Void,String,Void> {
@@ -531,8 +528,6 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
                     recentListFragment.filter(nameFilter);
                 }
             }
-            appListFragment.setRefreshing(false);
-            recentListFragment.setRefreshing(false);
             if(dialog!=null)
                 dialog.dismiss();
         }
