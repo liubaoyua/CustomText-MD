@@ -14,14 +14,17 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.adapters.AppRecyclerAdapter;
-import liubaoyua.customtext.ui.SetText;
-import liubaoyua.customtext.utils.AppInfo;
+import liubaoyua.customtext.entity.NewListEvent;
+import liubaoyua.customtext.ui.SetTextActivity;
+import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.utils.Common;
 
 public class AppListFragment extends Fragment {
 
+    private static int count = 0;
     private RecyclerView mRecyclerView;
     private AppRecyclerAdapter appRecyclerAdapter;
 
@@ -57,12 +60,18 @@ public class AppListFragment extends Fragment {
         appRecyclerAdapter.setOnItemClickListener(new AppRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, String packageName) {
-                Intent intent = new Intent(getActivity(), SetText.class);
+                Intent intent = new Intent(getActivity(), SetTextActivity.class);
                 intent.putExtra(Common.POSITION_ARG, position);
                 intent.putExtra(Common.PACKAGE_NAME_ARG, packageName);
                 getActivity().startActivityForResult(intent, Common.APP_REQUEST_CODE);
             }
         });
+        // 两个界面都加载好后进行数据加载
+        count ++;
+        if(count == 2){
+            EventBus.getDefault().post(new NewListEvent());
+            count = 0;
+        }
     }
 
     public void filter(String nameFilter){

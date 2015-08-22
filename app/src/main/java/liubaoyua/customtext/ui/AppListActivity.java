@@ -45,6 +45,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.net.CookieHandler;
 import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,15 +55,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import de.greenrobot.event.EventBus;
 import liubaoyua.customtext.R;
+import liubaoyua.customtext.entity.NewListEvent;
 import liubaoyua.customtext.fragments.AppListFragment;
 import liubaoyua.customtext.fragments.FragmentAdapter;
-import liubaoyua.customtext.utils.AppInfo;
+import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.utils.Common;
+import liubaoyua.customtext.utils.DBManager;
 import liubaoyua.customtext.utils.PicassoTools;
 import liubaoyua.customtext.utils.Utils;
 
-public class AppList extends AppCompatActivity {
+public class AppListActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -81,11 +85,15 @@ public class AppList extends AppCompatActivity {
     private String nameFilter;
     private SharedPreferences prefs;
 
+    private boolean hasDataBase = false;
+
     private static File prefsDir = new File(Environment.getDataDirectory()+"/data/" + Common.PACKAGE_NAME + "/shared_prefs" );
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_app_list);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -101,47 +109,34 @@ public class AppList extends AppCompatActivity {
             mActionBar.setDisplayHomeAsUpEnabled(true);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer);
-        if (mDrawerLayout != null) {
-            setupDrawerLayout();
-        }
+        setupDrawerLayout();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nv_main_navigation);
-        if (navigationView != null) {
-            setupDrawerContent(navigationView);
-        }
+        setupDrawerContent(navigationView);
+
         context = getApplicationContext();
         PicassoTools.init(context);
 
         prefs = getSharedPreferences(Common.PREFS, MODE_WORLD_READABLE);
-        SharedPreferences.Editor editor;
-        editor = prefs.edit();
-        editor.putString(Common.PACKAGE_NAME_ARG,"^"+getString(R.string.app_name)+"$");
-        editor.putString(Common.MESSAGE, getString(R.string.setting_default_message));
+        hasDataBase = prefs.getBoolean(Common.PREFS_HAS_DATABASE,false);
+
+        prefs.edit().putString(Common.PACKAGE_NAME_ARG, "^" + getString(R.string.app_name) + "$");
+        prefs.edit().putString(Common.MESSAGE, getString(R.string.setting_default_message));
 
         int version = prefs.getInt(Common.PACKAGE_VERSION_CODE,0);
 
-        PackageInfo packageInfo = null;
         try{
-            packageInfo = getPackageManager().getPackageInfo(Common.PACKAGE_NAME, PackageManager.GET_UNINSTALLED_PACKAGES);
-        }catch (PackageManager.NameNotFoundException e){
-            e.printStackTrace();
-        }
-        if(packageInfo != null){
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(Common.PACKAGE_NAME, 0);
             if(packageInfo.versionCode > version){
                 Utils.showMessage(this,packageInfo.versionName);
             }
-            editor.putInt(Common.PACKAGE_VERSION_CODE,packageInfo.versionCode);
+            prefs.edit().putInt(Common.PACKAGE_VERSION_CODE, packageInfo.versionCode);
+        }catch (PackageManager.NameNotFoundException e){
+            e.printStackTrace();
         }
-        editor.apply();
 
+        prefs.edit().apply();
         setupViewPager();
-        new LoadAppsTask(true).execute();
-    }
-
-    @Override
-    protected void onStart(){
-        super.onStart();
-
     }
 
     @Override
@@ -230,7 +225,7 @@ public class AppList extends AppCompatActivity {
                             case R.id.nav_refresh:
                                 refreshList(); break;
                             case R.id.nav_settings:
-                                startActivity(new Intent(context, Settings.class));
+                                startActivity(new Intent(context, SettingActivity.class));
                                 break;
                             case R.id.nav_backup:
                                 doExport();
@@ -353,7 +348,7 @@ public class AppList extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
-                AlertDialog.Builder builder = new AlertDialog.Builder(AppList.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(AppListActivity.this);
                 builder.setTitle(R.string.menu_restore);
                 builder.setMessage(R.string.imp_exp_confirm);
                 builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -411,10 +406,10 @@ public class AppList extends AppCompatActivity {
          new LoadAppsTask(true).execute();
     }
 
-    class LoadAppsTask extends AsyncTask<Void,String,Void> {
+    private class LoadAppsTask extends AsyncTask<Void,String,Void> {
         private ProgressDialog dialog = null;
         private Boolean showDialog = false;
-        private List<AppInfo> appList,recentList;
+        private List<AppInfo> appList;
 
         public LoadAppsTask(Boolean showDialog){
             this.showDialog = showDialog;
@@ -422,7 +417,7 @@ public class AppList extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             if(showDialog){
-                dialog = new ProgressDialog(AppList.this);
+                dialog = new ProgressDialog(AppListActivity.this);
                 dialog.setMessage(getString(R.string.dialog_loading));
                 dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 dialog.setCancelable(false);
@@ -439,99 +434,91 @@ public class AppList extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            appList  = Collections.synchronizedList(new ArrayList<AppInfo>());
-            recentList = Collections.synchronizedList(new ArrayList<AppInfo>());
+            appList  = new ArrayList<>();
             PackageManager pm =getPackageManager();
-            if(appList.size()==0){
-                List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+            List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+            if(dialog != null)
+                dialog.setMax(packages.size());
+            int i =1;
+            for (PackageInfo pkgInfo : packages) {
                 if(dialog != null)
-                    dialog.setMax(packages.size());
-                int i =1;
-                for (PackageInfo pkgInfo : packages) {
-                    if(dialog != null)
-                        dialog.setProgress(i++);
-                    ApplicationInfo appInfo = pkgInfo.applicationInfo;
-                    if (appInfo == null)
-                        continue;
-                    if (appInfo.packageName.equals(Common.PACKAGE_NAME)){
-                        continue;
-                    }
-                    if(dialog != null)
-                        publishProgress(getString(R.string.dialog_loading) + "\n" + appInfo.loadLabel(pm).toString());
-                    AppInfo appInfoItem = new AppInfo(pkgInfo, appInfo.loadLabel(pm).toString());
-                    if(prefs.contains(appInfoItem.packageName)){
-                        if(prefs.getBoolean(appInfoItem.packageName, false)){
-                            appInfoItem.state = AppInfo.ENABLED;
-                        }else{
-                            appInfoItem.state = AppInfo.DISABLED;
-                        }
-                        recentList.add(appInfoItem);
-                    }
-                    appList.add(appInfoItem);
-//                    Log.d(Common.TAG, appInfoItem.toString());
-                    if(Common.FAST_DEBUG){
-                        Log.d(Common.TAG, appInfoItem.toString());
-                        if(appList.size()>6)
-                            break;
-                    }
+                    dialog.setProgress(i++);
+                ApplicationInfo applicationInfo = pkgInfo.applicationInfo;
+                if (applicationInfo == null)
+                    continue;
+                if (applicationInfo.packageName.equals(Common.PACKAGE_NAME)){
+                    continue;
                 }
-                Collections.sort(recentList, new Comparator<AppInfo>() {
-                    @Override
-                    public int compare(AppInfo lhs, AppInfo rhs) {
-                        return Collator.getInstance(Locale.getDefault()).compare(lhs.appName, rhs.appName);
-                    }
-                });
-
-                PackageInfo globalPackageInfo = Utils.getPackageInfoByPackageName(context,Common.PACKAGE_NAME);
-                PackageInfo sharedPackageInfo = Utils.getPackageInfoByPackageName(context,Common.PACKAGE_NAME);
-                AppInfo globalAppInfo = null;
-                AppInfo sharedAppInfo = null;
-                if(globalPackageInfo != null){
-                    globalAppInfo = new AppInfo(globalPackageInfo,getString(R.string.global_replacement),Common.GLOBAL_SETTING_PACKAGE_NAME);
-                    if(prefs.getBoolean(globalAppInfo.packageName, false)){
-                        globalAppInfo.state = AppInfo.ENABLED;
+                if(dialog != null)
+                    publishProgress(getString(R.string.dialog_loading) + "\n" + applicationInfo.loadLabel(pm).toString());
+                AppInfo appInfo = new AppInfo(pkgInfo, applicationInfo.loadLabel(pm).toString());
+                if(prefs.contains(appInfo.packageName)){
+                    if(prefs.getBoolean(appInfo.packageName, false)){
+                        appInfo.state = AppInfo.ENABLED;
                     }else{
-                        globalAppInfo.state = AppInfo.DISABLED;
+                        appInfo.state = AppInfo.DISABLED;
                     }
-                    recentList.add(0,globalAppInfo);
-                    appList.add(globalAppInfo);
                 }
-                if(sharedPackageInfo != null){
-                    sharedAppInfo = new AppInfo(sharedPackageInfo,getString(R.string.enabled_replacement),Common.SHARING_SETTING_PACKAGE_NAME);
-                    if(prefs.getBoolean(sharedAppInfo.packageName, false)){
-                        sharedAppInfo.state = AppInfo.ENABLED;
-                    }else{
-                        sharedAppInfo.state = AppInfo.DISABLED;
-                    }
-                    recentList.add(1,sharedAppInfo);
-                    appList.add(sharedAppInfo);
+                appList.add(appInfo);
+                if(Common.FAST_DEBUG){
+                    Log.d(Common.TAG, appInfo.toString());
+                    if(appList.size()>6)
+                        break;
                 }
-                Collections.sort(appList, new Comparator<AppInfo>() {
-                    @Override
-                    public int compare(AppInfo lhs, AppInfo rhs) {
-                        return Collator.getInstance(Locale.getDefault()).compare(lhs.appName, rhs.appName);
-                    }
-                });
-
             }
+
+            PackageInfo globalPackageInfo = Utils.getPackageInfoByPackageName(context,Common.PACKAGE_NAME);
+            PackageInfo sharedPackageInfo = Utils.getPackageInfoByPackageName(context,Common.PACKAGE_NAME);
+            if(globalPackageInfo != null){
+                AppInfo globalAppInfo = new AppInfo(globalPackageInfo,getString(R.string.global_replacement),Common.GLOBAL_SETTING_PACKAGE_NAME);
+                if(prefs.getBoolean(globalAppInfo.packageName, false)){
+                    globalAppInfo.state = AppInfo.ENABLED;
+                }else{
+                    globalAppInfo.state = AppInfo.DISABLED;
+                }
+                appList.add(globalAppInfo);
+            }
+
+            if(sharedPackageInfo != null){
+                AppInfo sharedAppInfo = new AppInfo(sharedPackageInfo,getString(R.string.enabled_replacement),Common.SHARING_SETTING_PACKAGE_NAME);
+                if(prefs.getBoolean(sharedAppInfo.packageName, false)){
+                    sharedAppInfo.state = AppInfo.ENABLED;
+                }else{
+                    sharedAppInfo.state = AppInfo.DISABLED;
+                }
+                appList.add(sharedAppInfo);
+            }
+
+            Collections.sort(appList, new Comparator<AppInfo>() {
+                @Override
+                public int compare(AppInfo lhs, AppInfo rhs) {
+                    return Collator.getInstance(Locale.getDefault()).compare(lhs.appName, rhs.appName);
+                }
+            });
+
+            try{
+                DBManager.getInstance(context).delete();
+                DBManager.getInstance(context).insert(appList);
+                prefs.edit().putBoolean(Common.PREFS_HAS_DATABASE,true).apply();
+                hasDataBase = true;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aa) {
-//            setupViewPager();
-            if(recentListFragment != null){
-                if(!Utils.checkList(appList, appListFragment.getAppList())){
-                    appListFragment.setAppList(appList);
-                    appListFragment.filter(nameFilter);
-                    recentListFragment.setAppList(recentList);
-                    recentListFragment.filter(nameFilter);
-                }
+            if(recentListFragment != null ){
+                recentListFragment.setAppList(Utils.getRecentList(appList));
+                appListFragment.setAppList(appList);
+                appListFragment.filter(nameFilter);
+                recentListFragment.filter(nameFilter);
             }
             if(dialog!=null)
                 dialog.dismiss();
         }
-
     }
 
     class ExportTask extends AsyncTask<File, String, String> {
@@ -567,8 +554,6 @@ public class AppList extends AppCompatActivity {
 
     class ImportTask extends AsyncTask<File, String, String> {
 
-
-        @SuppressWarnings("deprecation")
         @Override
         protected String doInBackground(File... params) {
             File inFile = params[0];
@@ -632,16 +617,24 @@ public class AppList extends AppCompatActivity {
     }
 
 
+    //EventBus event
+    public void onEvent(NewListEvent event){
+        if(hasDataBase){
+            List<AppInfo> appList = DBManager.getInstance(context).query();
+            appListFragment.setAppList(appList);
+            recentListFragment.setAppList(Utils.getRecentList(appList));
+            recentListFragment.filter(nameFilter);
+            appListFragment.filter(nameFilter);
+            new LoadAppsTask(false).execute();
+        }else{
+            new LoadAppsTask(true).execute();
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(Common.DEBUG){
-            Log.d(Common.TAG,"activity onDestroy isFinishing " + isFinishing());
-        }
         PicassoTools.destroy();
-        if(fragmentAdapter != null){
-            fragmentAdapter = null;
-        }
-        context = null;
+        EventBus.getDefault().unregister(this);
     }
 }

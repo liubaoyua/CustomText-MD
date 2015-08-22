@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +16,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
-import liubaoyua.customtext.utils.CustomText;
+import liubaoyua.customtext.entity.CustomText;
 import liubaoyua.customtext.R;
-import liubaoyua.customtext.utils.Common;
 
 /**
  * Created by liubaoyua on 2015/6/19 0019.

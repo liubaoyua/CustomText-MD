@@ -8,8 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
-import android.text.Html;
-import android.util.Log;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -27,8 +25,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XSharedPreferences;
 import liubaoyua.customtext.R;
+import liubaoyua.customtext.entity.AppInfo;
+import liubaoyua.customtext.entity.CustomText;
 
 /**
  * Created by liubaoyua on 2015/6/20 0020.
@@ -37,33 +36,38 @@ import liubaoyua.customtext.R;
 public abstract class Utils {
 
     public static String getPinYin(String src) {
-        char[] t1 = null;
-        t1 = src.toCharArray();
-        String[] t2 = new String[t1.length];
-        // 设置汉字拼音输出的格式
-
-        HanyuPinyinOutputFormat t3 = new HanyuPinyinOutputFormat();
-        t3.setCaseType(HanyuPinyinCaseType.LOWERCASE);
-        t3.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
-        t3.setVCharType(HanyuPinyinVCharType.WITH_V);
         String t4 = "";
-        int t0 = t1.length;
-        try {
-            for (int i = 0; i < t0; i++) {
-                // 判断能否为汉字字符
-                // System.out.println(t1[i]);
-                if (Character.toString(t1[i]).matches("[\\u4E00-\\u9FA5]+")) {
-                    t2 = PinyinHelper.toHanyuPinyinStringArray(t1[i], t3);// 将汉字的几种全拼都存到t2数组中
-                    t4 += t2[0];// 取出该汉字全拼的第一种读音并连接到字符串t4后
-                } else {
-                    // 如果不是汉字字符，间接取出字符并连接到字符串t4后
-                    t4 += Character.toString(t1[i]);
+        try{
+            char[] t1 = null;
+            t1 = src.toCharArray();
+            String[] t2 = new String[t1.length];
+            // 设置汉字拼音输出的格式
+
+            HanyuPinyinOutputFormat t3 = new HanyuPinyinOutputFormat();
+            t3.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+            t3.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+            t3.setVCharType(HanyuPinyinVCharType.WITH_V);
+            int t0 = t1.length;
+            try {
+                for (int i = 0; i < t0; i++) {
+                    // 判断能否为汉字字符
+                    // System.out.println(t1[i]);
+                    if (Character.toString(t1[i]).matches("[\\u4E00-\\u9FA5]+")) {
+                        t2 = PinyinHelper.toHanyuPinyinStringArray(t1[i], t3);// 将汉字的几种全拼都存到t2数组中
+                        t4 += t2[0];// 取出该汉字全拼的第一种读音并连接到字符串t4后
+                    } else {
+                        // 如果不是汉字字符，间接取出字符并连接到字符串t4后
+                        t4 += Character.toString(t1[i]);
+                    }
                 }
+            } catch (BadHanyuPinyinOutputFormatCombination e) {
+                e.printStackTrace();
             }
-        } catch (BadHanyuPinyinOutputFormatCombination e) {
+            return t4;
+        }catch (Exception e){
             e.printStackTrace();
+            return t4;
         }
-        return t4;
     }
 
     /**
@@ -192,6 +196,17 @@ public abstract class Utils {
             return true;
         }else
             return false;
+    }
+
+    public static List<AppInfo> getRecentList(List<AppInfo> appList){
+        List<AppInfo> temp = new ArrayList<>();
+        for(int i = 0; i < appList.size(); i++){
+            AppInfo info = appList.get(i);
+            if(info.state != AppInfo.UNKNOWN){
+                temp.add(info);
+            }
+        }
+        return temp;
     }
 
     public static void showMessage(Context context,String versionName){

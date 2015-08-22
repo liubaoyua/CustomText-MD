@@ -1,4 +1,4 @@
-package liubaoyua.customtext.utils;
+package liubaoyua.customtext.entity;
 
 /**
  * Created by liubaoyua on 2015/6/19 0019.

@@ -17,7 +17,7 @@ import liubaoyua.customtext.R;
 import liubaoyua.customtext.utils.Common;
 import liubaoyua.customtext.utils.Utils;
 
-public class Settings extends AppCompatActivity {
+public class SettingActivity extends AppCompatActivity {
     private SettingsFragment mSettingsFragment;
 
 

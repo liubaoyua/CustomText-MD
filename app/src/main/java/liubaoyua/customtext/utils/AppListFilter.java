@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 
 import liubaoyua.customtext.adapters.AppRecyclerAdapter;
+import liubaoyua.customtext.entity.AppInfo;
 
 /**
  * Created by liubaoyua on 2015/6/20 0020.
@@ -48,9 +49,9 @@ public class AppListFilter extends Filter {
                 }else if(appInfo.appName.contains(constraint)){
                     items.add(appInfo);
                 }else if(Locale.getDefault().equals(Locale.CHINA)||Locale.getDefault().equals(Locale.TAIWAN)){
-                    if(appInfo.appNamePinyin.contains(constraint)){
+                    if(appInfo.appNamePinYin.contains(constraint)){
                         items.add(appInfo);
-                    }else if(appInfo.appNamePinyinHeadChar.contains(constraint)){
+                    }else if(appInfo.appNameHeadChar.contains(constraint)){
                         items.add(appInfo);
                     }
                 }

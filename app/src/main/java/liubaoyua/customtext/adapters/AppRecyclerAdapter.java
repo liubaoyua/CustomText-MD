@@ -18,8 +18,9 @@ import com.squareup.picasso.Target;
 
 import java.util.List;
 
+import liubaoyua.customtext.utils.Common;
 import liubaoyua.customtext.utils.IconLoader;
-import liubaoyua.customtext.utils.AppInfo;
+import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.utils.AppListFilter;
 import liubaoyua.customtext.utils.PicassoTools;
@@ -134,12 +135,17 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
 
         @Override
         public void onPrepareLoad(Drawable placeHolderDrawable) {
-            iconView.setImageDrawable(icon);
+            if(!packageNameView.getText().toString().startsWith(Common.PACKAGE_NAME)){
+                iconView.setImageDrawable(icon);
+            }else {
+                iconView.setImageDrawable(errorIcon);
+            }
+
         }
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
-            iconView.setImageDrawable(errorIcon);
+
         }
 
         @Override

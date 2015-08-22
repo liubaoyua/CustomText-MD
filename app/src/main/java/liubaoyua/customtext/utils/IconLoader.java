@@ -42,8 +42,8 @@ public class IconLoader extends RequestHandler {
         if(SCHEME_PACKAGE_NAME.equals(schemeStr)){
             try {
                 drawable = mPackageManager.getApplicationIcon(packageName);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
+            } catch (Exception e){
+                drawable = null;
             }
             if (drawable != null) {
                 bitmap =  Utils.drawableToBitmap(drawable);

@@ -17,8 +17,7 @@ import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 import liubaoyua.customtext.utils.Common;
-import liubaoyua.customtext.utils.CustomText;
-import liubaoyua.customtext.utils.Utils;
+import liubaoyua.customtext.entity.CustomText;
 
 
 public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit {

@@ -25,14 +25,14 @@ import android.widget.Toast;
 
 import java.io.DataOutputStream;
 import java.util.ArrayList;
-import liubaoyua.customtext.utils.CustomText;
+import liubaoyua.customtext.entity.CustomText;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.adapters.TextRecyclerAdapter;
 import liubaoyua.customtext.utils.Common;
 import liubaoyua.customtext.utils.Utils;
 
 
-public class SetText extends AppCompatActivity {
+public class SetTextActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private TextRecyclerAdapter textRecyclerAdapter;
@@ -158,7 +158,7 @@ public class SetText extends AppCompatActivity {
         mRecyclerView = (RecyclerView)findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        textRecyclerAdapter = new TextRecyclerAdapter(SetText.this,data,mRecyclerView);
+        textRecyclerAdapter = new TextRecyclerAdapter(SetTextActivity.this,data,mRecyclerView);
         mRecyclerView.setAdapter(textRecyclerAdapter);
     }
 
@@ -305,7 +305,7 @@ public class SetText extends AppCompatActivity {
         }
         if(!Utils.isIdenticalTextList(data, textRecyclerAdapter.getData())){
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(SetText.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(SetTextActivity.this);
             builder.setIcon(R.mipmap.ic_launcher);
             builder.setTitle(getString(R.string.dialog_data_not_saved));
             builder.setMessage(getString(R.string.dialog_save_now));

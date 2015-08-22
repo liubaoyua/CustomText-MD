@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import liubaoyua.customtext.ui.AppList;
+import liubaoyua.customtext.ui.AppListActivity;
 import liubaoyua.customtext.utils.Common;
 
 /**
@@ -47,7 +47,7 @@ public class AppDebug extends Application {
         public void uncaughtException(Thread thread, Throwable ex) {
             writeErrorLog(ex);
             Intent intent = new Intent(getApplicationContext(),
-                    AppList.class);
+                    AppListActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             exit();
@@ -143,13 +143,3 @@ public class AppDebug extends Application {
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 }
-//    private RefWatcher mRefWatcher;
-
-//    @Override
-//    public void onCreate() {
-//        super.onCreate();
-//        Log.d(Common.TAG,"RefWatcher start");
-//        mRefWatcher = LeakCanary.install(this);
-//    }
-//
-//}
