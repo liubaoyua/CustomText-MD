@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.squareup.picasso.Picasso;
@@ -21,11 +22,9 @@ public class AppIconRequestHandler extends RequestHandler {
     /** Uri scheme for app icons */
     public static final String SCHEME_PACKAGE_NAME = "packageName";
     private PackageManager mPackageManager;
-    private File cacheDir;
 
     public AppIconRequestHandler(Context context) {
         mPackageManager = context.getPackageManager();
-        cacheDir = context.getCacheDir();
     }
 
     @Override
@@ -35,35 +34,19 @@ public class AppIconRequestHandler extends RequestHandler {
     }
 
     @Override
-    public Result load(Request request, int networkPolicy) throws IOException {
-
+    public Result load(Request request, int networkPolicy){
         Drawable drawable = null;
         Bitmap bitmap = null;
         String schemeStr = request.uri.getScheme();
-        String packageName = request.uri.toString().replace(SCHEME_PACKAGE_NAME+":", "");
+        String packageName = request.uri.getSchemeSpecificPart();
         if(SCHEME_PACKAGE_NAME.equals(schemeStr)){
-            File file = new File(cacheDir,packageName + ".png");
-            if(file.exists()){
-                bitmap = BitmapFactory.decodeFile(file.toString());
-            }else{
-                try {
-                    drawable = mPackageManager.getApplicationIcon(packageName);
-                } catch (PackageManager.NameNotFoundException ignored) {
-                    ignored.printStackTrace();
-                }
-                if (drawable != null) {
-                    bitmap =  DrawableUtils.drawableToBitmap(drawable);
-//                    //bitmap = ((BitmapDrawable) drawable).getBitmap();
-//                    Bitmap bmp = (((BitmapDrawable)drawable).getBitmap());
-                    try {
-                        FileOutputStream out = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
-                        out.flush();
-                        out.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
+            try {
+                drawable = mPackageManager.getApplicationIcon(packageName);
+            } catch (PackageManager.NameNotFoundException ignored) {
+                ignored.printStackTrace();
+            }
+            if (drawable != null) {
+                bitmap =  DrawableUtils.drawableToBitmap(drawable);
             }
         }
         return new Result(bitmap, Picasso.LoadedFrom.DISK);

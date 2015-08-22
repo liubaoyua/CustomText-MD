@@ -3,7 +3,6 @@ package liubaoyua.customtext.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -16,17 +15,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import liubaoyua.customtext.interfaces.FragmentCommunicator;
 import liubaoyua.customtext.utils.AppInfo;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.ui.SetText;
 import liubaoyua.customtext.adapters.AppRecyclerAdapter;
-import liubaoyua.customtext.utils.AppListFilter;
 import liubaoyua.customtext.utils.Common;
 
 public class AppListFragment extends Fragment {
@@ -91,7 +86,7 @@ public class AppListFragment extends Fragment {
 
             @Override
             public void onRefresh() {
-                communicator.reFreshList();
+                communicator.refreshlist();
             }
         });
     }

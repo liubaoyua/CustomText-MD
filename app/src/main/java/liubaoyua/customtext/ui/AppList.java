@@ -14,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -78,14 +79,9 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
     private Context context;
 
     private List<AppListFragment> fragmentList = new ArrayList<>();
-    private List<AppInfo> appList = Collections.synchronizedList(new ArrayList<AppInfo>());
-    private List<AppInfo> recentList = Collections.synchronizedList(new ArrayList<AppInfo>());
     private List<String> titles =null;
-
     private String nameFilter;
     private SharedPreferences prefs;
-
-    private LoadAppsTask loadAppsTask;
 
     private static File prefsDir = new File(Environment.getDataDirectory()+"/data/" + Common.PACKAGE_NAME + "/shared_prefs" );
 
@@ -93,8 +89,6 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_list);
-//        initSystemBar();
-        Log.v(Common.TAG, Locale.TAIWAN.toString() + Locale.CHINA.toString());
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -140,12 +134,10 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
             }
             editor.putInt(Common.PACKAGE_VERSION_CODE,packageInfo.versionCode);
         }
-        editor.commit();
+        editor.apply();
 
         setupViewPager();
-        loadAppsTask = new LoadAppsTask(true);
-        loadAppsTask.execute();
-
+        new LoadAppsTask(true).execute();
     }
 
     @Override
@@ -168,7 +160,6 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
                 fragmentList.get(0).filter(nameFilter);
                 fragmentList.get(1).filter(nameFilter);
                 mSearchView.clearFocus();
-//                mSearchView.setIconified(true);
                 return false;
             }
 
@@ -185,7 +176,7 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
 
 
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
+    public boolean onKeyUp(int keyCode,@NonNull KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_SEARCH && (event.getFlags() & KeyEvent.FLAG_CANCELED) == 0) {
             if (mSearchView.isShown()) {
                 mSearchView.setIconified(false);
@@ -194,26 +185,6 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
         }
         return super.onKeyUp(keyCode, event);
     }
-
-//    private void initSystemBar() {
-//        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-//            Window window = getWindow();
-//            // Translucent status bar
-//            window.setFlags(
-//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            // Translucent navigation bar
-//            window.setFlags(
-//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
-//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-//            SystemBarTintManager tintManager = new SystemBarTintManager(this);
-//            tintManager.setStatusBarTintEnabled(true);
-//            tintManager.setStatusBarTintResource(R.color.primary);
-//            SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
-//            findViewById(R.id.main_content).setPadding(0, config.getPixelInsetTop(true), 0, config.getPixelInsetBottom());
-////            mViewPager.setPadding(0,0,0,);
-//        }
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -439,16 +410,14 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
     }
 
     @Override
-    public void reFreshList() {
-        if(loadAppsTask == null || loadAppsTask.getStatus() == AsyncTask.Status.FINISHED){
-            loadAppsTask = new LoadAppsTask(false);
-            loadAppsTask.execute();
-        }
+    public void refreshlist() {
+         new LoadAppsTask(false).execute();
     }
 
     class LoadAppsTask extends AsyncTask<Void,String,Void> {
         private ProgressDialog dialog = null;
         private Boolean showDialog = false;
+        private List<AppInfo> appList,recentList;
 
         public LoadAppsTask(Boolean showDialog){
             this.showDialog = showDialog;
@@ -474,7 +443,7 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
         @Override
         protected Void doInBackground(Void... params) {
             appList  = Collections.synchronizedList(new ArrayList<AppInfo>());
-            recentList = Collections.synchronizedList(new ArrayList<AppInfo>());;
+            recentList = Collections.synchronizedList(new ArrayList<AppInfo>());
             PackageManager pm =getPackageManager();
             if(appList.size()==0){
                 List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
@@ -559,8 +528,7 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
                     appListFragment.setAppList(appList);
                     appListFragment.filter(nameFilter);
                     recentListFragment.setAppList(recentList);
-                    recentListFragment.filter(nameFilter);;
-                    new LoadAppsIcon(appList).execute();
+                    recentListFragment.filter(nameFilter);
                 }
             }
             appListFragment.setRefreshing(false);
@@ -676,55 +644,9 @@ public class AppList extends AppCompatActivity implements FragmentCommunicator {
             Log.d(Common.TAG,"activity onDestroy isFinishing " + isFinishing());
         }
         PicassoTools.destroy();
-        loadAppsTask = null;
         if(fragmentAdapter != null){
             fragmentAdapter = null;
         }
-        appList.clear();
-        recentList.clear();
-        appList = null;
-        recentList = null;
         context = null;
-    }
-
-    private class LoadAppsIcon extends  AsyncTask<Void,Void,Void>{
-        List<AppInfo> appInfoList;
-
-        public LoadAppsIcon(List<AppInfo> appInfoList) {
-            super();
-            this.appInfoList = appInfoList;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            for(AppInfo app:appInfoList){
-                File file =new File(context.getCacheDir(),app.packageName+".png");
-                if(!file.exists()) {
-                    try {
-                        Bitmap bmp = (((BitmapDrawable) context.getPackageManager().getApplicationIcon(app.packageName)).getBitmap());
-                        DrawableUtils.saveBitmapToCacheDir(context, app.packageName, bmp, false);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            return null;
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(Common.DEBUG){
-            Log.d(Common.TAG,"activity onPause isFinishing  " + isFinishing());
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(Common.DEBUG){
-            Log.d(Common.TAG,"activity  onStop isFinishing  " + isFinishing());
-        }
     }
 }

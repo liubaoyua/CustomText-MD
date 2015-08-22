@@ -44,10 +44,6 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
         return filter;
     }
 
-    public void setFilter(AppListFilter filter) {
-        this.filter = filter;
-    }
-
     public AppRecyclerAdapter(Context mContext, List<AppInfo> appList) {
         this.mContext = mContext;
         this.appList = appList;
@@ -62,7 +58,7 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
         return new ViewHolder(view,listener);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+
     @Override
     public void onBindViewHolder(final AppRecyclerAdapter.ViewHolder holder, int position) {
         final AppInfo temp = appList.get(position);
@@ -75,67 +71,10 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
             holder.appNameView.setTextColor(mContext.getResources().getColor(android.R.color.black));
             holder.packageNameView.setTextColor(mContext.getResources().getColor(android.R.color.black));
         }
-//        holder.iconView.setImageDrawable(icon);
-//        if(holder.imageLoader != null){
-//            holder.imageLoader.cancel(true);
-//        }
 
         PicassoTools.getInstance()
                 .load(AppIconRequestHandler.SCHEME_PACKAGE_NAME + ":" + temp.packageName)
-//                .resize(48, 48)
-//                .centerCrop()
                 .noFade().into(holder);
-
-//        另一种读取图片的方式
-//        holder.imageLoader = new AsyncTask<String, Void, Drawable>() {
-//
-//            @Override
-//            protected Drawable doInBackground(String... params) {
-//                String packageName = params[0];
-//                File file = new File(mContext.getCacheDir(),packageName +".png");
-//                if (file.exists()){
-////                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-//                    return new BitmapDrawable(mContext.getResources(),file.toString());
-//                }else{
-//                    Drawable drawable = null;
-//                    try{
-//                        drawable = mContext.getPackageManager().getApplicationIcon(packageName);
-//                    }catch (PackageManager.NameNotFoundException e) {
-//                        e.printStackTrace();
-//                    }
-//                    if(drawable != null){
-//                        Bitmap bmp = (((BitmapDrawable)drawable).getBitmap());
-//                        try {
-//                            FileOutputStream out = new FileOutputStream(file);
-//                            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-//                            out.flush();
-//                            out.close();
-//                        } catch (FileNotFoundException e) {
-//                            e.printStackTrace();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                    return drawable;
-//                }
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Drawable result) {
-//                if(result != null){
-//                    holder.iconView.setImageDrawable(result);
-//                }
-//            }
-//        }.execute(temp.packageName);
-
-
-//        第三种读取方法
-//        try {
-//            holder.iconView.setImageDrawable(mContext.getPackageManager().
-//                    getApplicationIcon(temp.packageName));
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @Override
@@ -173,7 +112,6 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
         public TextView appNameView;
         public TextView packageNameView;
         public ImageView iconView;
-//        AsyncTask<String, Void, Drawable> imageLoader;
 
         public ViewHolder(final View view, final OnItemClickListener listener) {
             super(view);
