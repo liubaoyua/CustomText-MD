@@ -73,8 +73,7 @@ public class AppListActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
-    private AppListFragment appListFragment;
-    private AppListFragment recentListFragment;
+
     private SearchView mSearchView;
     private FragmentAdapter fragmentAdapter;
     private Context context;
@@ -84,7 +83,9 @@ public class AppListActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     private boolean hasDataBase = false;
 
-    @SuppressWarnings("deprecation")
+    private List<AppInfo> allList = new ArrayList<>();
+
+    @SuppressWarnings("commit")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +117,7 @@ public class AppListActivity extends AppCompatActivity {
         hasDataBase = prefs.getBoolean(Common.PREFS_HAS_DATABASE,false);
 
         prefs.edit().putString(Common.PACKAGE_NAME_ARG, "^" + getString(R.string.app_name) + "$");
-        prefs.edit().putString(Common.MESSAGE, getString(R.string.setting_default_message));
+        prefs.edit().putString(Common.MESSAGE, getString(R.string.setting_default_message)).commit();
 
         int version = prefs.getInt(Common.PACKAGE_VERSION_CODE,0);
 
@@ -125,13 +126,19 @@ public class AppListActivity extends AppCompatActivity {
             if(packageInfo.versionCode > version){
                 Utils.showMessage(this,packageInfo.versionName);
             }
-            prefs.edit().putInt(Common.PACKAGE_VERSION_CODE, packageInfo.versionCode);
+            prefs.edit().putInt(Common.PACKAGE_VERSION_CODE, packageInfo.versionCode).commit();
         }catch (PackageManager.NameNotFoundException e){
             e.printStackTrace();
         }
 
-        prefs.edit().apply();
         setupViewPager();
+
+        if (hasDataBase) {
+            allList = DBManager.getInstance(context).query();
+            new LoadAppsTask(false).execute();
+        } else {
+            new LoadAppsTask(true).execute();
+        }
     }
 
     @Override
@@ -189,6 +196,9 @@ public class AppListActivity extends AppCompatActivity {
         mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)));
         mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
 
+
+        AppListFragment appListFragment;
+        AppListFragment recentListFragment;
         appListFragment = new AppListFragment();
 
         recentListFragment = new AppListFragment();
@@ -201,7 +211,6 @@ public class AppListActivity extends AppCompatActivity {
         mViewPager.setAdapter(fragmentAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabsFromPagerAdapter(fragmentAdapter);
-
         fragmentList.get(mViewPager.getCurrentItem()).stopScrolling();
 
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -220,6 +229,8 @@ public class AppListActivity extends AppCompatActivity {
                 fragmentList.get(tab.getPosition()).scrollToTopOrBottom();
             }
         });
+
+        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
 }
 
@@ -429,7 +440,7 @@ public class AppListActivity extends AppCompatActivity {
                     Log.d(Common.TAG, "onActivityResult  " + isEnabled + "  position   " + position);
                 }
                 if (position != -1) {
-                    List<AppInfo> list = recentListFragment.getAppList();
+                    List<AppInfo> list = fragmentList.get(0).getAppList();
                     List<AppInfo> showingList = fragmentList.get(mViewPager.getCurrentItem()).getShowingAppList();
                     if (showingList == null)
                         return;
@@ -442,8 +453,8 @@ public class AppListActivity extends AppCompatActivity {
                     } else {
                         temp.state = AppInfo.DISABLED;
                     }
-                    appListFragment.notifyDataSetChanged();
-                    recentListFragment.notifyDataSetChanged();
+                    fragmentList.get(0).notifyDataSetChanged();
+                    fragmentList.get(1).notifyDataSetChanged();
                 }
             }
         }
@@ -453,10 +464,10 @@ public class AppListActivity extends AppCompatActivity {
     public void onEvent(NewListEvent event) {
         if (hasDataBase) {
             List<AppInfo> appList = DBManager.getInstance(context).query();
-            appListFragment.setAppList(appList);
-            recentListFragment.setAppList(Utils.getRecentList(appList));
-            recentListFragment.filter(nameFilter);
-            appListFragment.filter(nameFilter);
+            fragmentList.get(0).setAppList(appList);
+            fragmentList.get(1).setAppList(Utils.getRecentList(appList));
+            fragmentList.get(1).filter(nameFilter);
+            fragmentList.get(0).filter(nameFilter);
             new LoadAppsTask(false).execute();
         } else {
             new LoadAppsTask(true).execute();
@@ -467,6 +478,7 @@ public class AppListActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         PicassoTools.destroy();
+        DBManager.getInstance(context).close();
         EventBus.getDefault().unregister(this);
     }
 
@@ -563,7 +575,7 @@ public class AppListActivity extends AppCompatActivity {
             try {
                 DBManager.getInstance(context).delete();
                 DBManager.getInstance(context).insert(appList);
-                prefs.edit().putBoolean(Common.PREFS_HAS_DATABASE, true).apply();
+                prefs.edit().putBoolean(Common.PREFS_HAS_DATABASE, true).commit();
                 hasDataBase = true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -574,12 +586,12 @@ public class AppListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aa) {
-            if (recentListFragment != null) {
-                recentListFragment.setAppList(Utils.getRecentList(appList));
-                appListFragment.setAppList(appList);
-                appListFragment.filter(nameFilter);
-                recentListFragment.filter(nameFilter);
-            }
+//                if (recentListFragment != null) {
+            fragmentList.get(1).setAppList(Utils.getRecentList(appList));
+            fragmentList.get(0).setAppList(appList);
+            fragmentList.get(0).filter(nameFilter);
+            fragmentList.get(1).filter(nameFilter);
+//            }
             if (dialog != null)
                 dialog.dismiss();
         }

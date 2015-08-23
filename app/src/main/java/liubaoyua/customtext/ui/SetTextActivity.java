@@ -1,13 +1,17 @@
 package liubaoyua.customtext.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
-import android.support.design.widget.Snackbar;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
@@ -18,32 +22,31 @@ import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
-
 import java.io.DataOutputStream;
 import java.util.ArrayList;
-import liubaoyua.customtext.entity.CustomText;
+
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.adapters.TextRecyclerAdapter;
+import liubaoyua.customtext.entity.CustomText;
 import liubaoyua.customtext.utils.Common;
 import liubaoyua.customtext.utils.Utils;
 
 
 public class SetTextActivity extends AppCompatActivity {
 
+    private static ArrayList<CustomText> clipboard = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private TextRecyclerAdapter textRecyclerAdapter;
     private SwitchCompat switchCompat;
-
     private String packageName = "";
     private String appName = "";
     private int maxPage = 0;
     private int position = -1;
-
-    private static ArrayList<CustomText> clipboard = new ArrayList<>();
     private ArrayList<CustomText> data = new ArrayList<>();
 
     // mPrefs 用于当前 packageName 所在包的数据读写， prefs 是全局信息
@@ -146,13 +149,14 @@ public class SetTextActivity extends AppCompatActivity {
         }
 
 
-        (findViewById(R.id.action_button_save))
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        saveData();
-                    }
-                });
+        final View fab = (findViewById(R.id.action_button_save));
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveData();
+//                String s = null;System.out.println( s.toCharArray());
+            }
+        });
 
 
         mRecyclerView = (RecyclerView)findViewById(R.id.recycler_view);
@@ -160,6 +164,60 @@ public class SetTextActivity extends AppCompatActivity {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         textRecyclerAdapter = new TextRecyclerAdapter(SetTextActivity.this,data,mRecyclerView);
         mRecyclerView.setAdapter(textRecyclerAdapter);
+        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+            float firstRawY, oldRawY, newRawY;
+            boolean flag = false;
+            float dy;
+            ;
+            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+            int fabBottomMargin = lp.bottomMargin;
+
+            public boolean onTouch(View v, MotionEvent event) {
+                int eventAction = event.getAction();
+                switch (eventAction) {
+                    case MotionEvent.ACTION_DOWN: // 按下事件，记录按下时手指在悬浮窗的XY坐标值
+                        firstRawY = oldRawY = event.getRawY();
+                        flag = false;
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        newRawY = event.getRawY();
+                        dy = newRawY - oldRawY;
+                        if (oldRawY == 0) {
+                            firstRawY = oldRawY = newRawY;
+                            flag = false;
+                            break;
+                        }
+                        if (dy < -50) {
+                            if (fab.getVisibility() == View.VISIBLE) {
+                                ObjectAnimator animator = ObjectAnimator.ofFloat(fab,
+                                        "translationY", 0, fab.getHeight() + fabBottomMargin);
+                                animator.addListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        fab.setVisibility(View.INVISIBLE);
+                                    }
+                                });
+                                animator.start();
+                            }
+                        } else if (dy > 50) {           // 下滑
+                            if (fab.getVisibility() == View.INVISIBLE) {
+                                fab.setVisibility(View.VISIBLE);
+                                ObjectAnimator animator = ObjectAnimator.ofFloat(fab,
+                                        "translationY", fab.getHeight() + fabBottomMargin, 0);
+                                animator.start();
+                            }
+                        }
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        flag = false;
+                        oldRawY = 0;
+                }
+                return false;
+            }
+        });
+
     }
 
     @Override

@@ -19,8 +19,8 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 
-import liubaoyua.customtext.entity.CustomText;
 import liubaoyua.customtext.R;
+import liubaoyua.customtext.entity.CustomText;
 
 /**
  * Created by liubaoyua on 2015/6/19 0019.
@@ -28,15 +28,15 @@ import liubaoyua.customtext.R;
 public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapter.ViewHolder> {
 
 
+    public boolean multiSelectMode = false;
     private Context mContext;
     private ArrayList<CustomText> data = new ArrayList<>();
-    public boolean multiSelectMode = false;
     private boolean selectAll = false;
     private CustomText tempCT = new CustomText();
     private CustomText undo = new CustomText();
     private RecyclerView recyclerView;
 
-    public TextRecyclerAdapter(Context mContext, ArrayList<CustomText> data,RecyclerView recyclerView) {
+    public TextRecyclerAdapter(Context mContext, ArrayList<CustomText> data, RecyclerView recyclerView) {
         this.mContext = mContext;
         setData(data);
         this.recyclerView = recyclerView;
@@ -137,77 +137,6 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
             deselectAllItem();
         }
     }
-
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public Button clearButton;
-        public Button operateButton;
-        public EditText oriEditText;
-        public EditText newEditText;
-        public CheckBox checkBox;
-
-        public ViewHolder(final View view) {
-            super(view);
-            clearButton = (Button)view.findViewById(R.id.button_clear);
-            operateButton = (Button)view.findViewById(R.id.button_serial);
-            oriEditText = (EditText)view.findViewById(R.id.editText_original_text);
-            newEditText = (EditText)view.findViewById(R.id.editText_new_text);
-            checkBox = (CheckBox)view.findViewById(R.id.check_box);
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    data.get(getAdapterPosition()).isCheck=b;
-                }
-            });
-            clearButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onClickView(view, ViewHolder.this);
-                }
-            });
-            oriEditText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    CustomText customText = data.get(getAdapterPosition());
-                    customText.oriText = oriEditText.getText().toString();
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
-            newEditText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    CustomText customText = data.get(getAdapterPosition());
-                    customText.newText = newEditText.getText().toString();
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
-            operateButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onClickView(view, ViewHolder.this);
-                }
-            });
-        }
-    }
-
 
     public void onClickView(View view,final ViewHolder viewHolder) {
         if(view.getId()==R.id.button_serial){
@@ -328,6 +257,75 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
                             notifyItemChanged(viewHolder.getAdapterPosition());
                         }
                     }).show();
+        }
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public Button clearButton;
+        public Button operateButton;
+        public EditText oriEditText;
+        public EditText newEditText;
+        public CheckBox checkBox;
+
+        public ViewHolder(final View view) {
+            super(view);
+            clearButton = (Button) view.findViewById(R.id.button_clear);
+            operateButton = (Button) view.findViewById(R.id.button_serial);
+            oriEditText = (EditText) view.findViewById(R.id.editText_original_text);
+            newEditText = (EditText) view.findViewById(R.id.editText_new_text);
+            checkBox = (CheckBox) view.findViewById(R.id.check_box);
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    data.get(getAdapterPosition()).isCheck = b;
+                }
+            });
+            clearButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onClickView(view, ViewHolder.this);
+                }
+            });
+            oriEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    CustomText customText = data.get(getAdapterPosition());
+                    customText.oriText = oriEditText.getText().toString();
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+            newEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    CustomText customText = data.get(getAdapterPosition());
+                    customText.newText = newEditText.getText().toString();
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+            operateButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onClickView(view, ViewHolder.this);
+                }
+            });
         }
     }
 }

@@ -1,5 +1,6 @@
 package liubaoyua.customtext.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.entity.NewListEvent;
 import liubaoyua.customtext.ui.SetTextActivity;
 import liubaoyua.customtext.utils.Common;
+import liubaoyua.customtext.utils.Utils;
 
 public class AppListFragment extends Fragment {
 
@@ -114,5 +116,52 @@ public class AppListFragment extends Fragment {
             mRecyclerView.smoothScrollToPosition(appRecyclerAdapter.getItemCount() - 1);
         }
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Utils.myLog("onStop" + "   " + (appRecyclerAdapter == null));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Utils.myLog("onPause" + "   " + (appRecyclerAdapter == null));
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Utils.myLog("onResume" + "   " + (appRecyclerAdapter == null));
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Utils.myLog("onStart" + "   " + (appRecyclerAdapter == null));
+    }
+
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Utils.myLog("onDetach" + "   " + (appRecyclerAdapter == null));
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Utils.myLog("onDestroy" + "   " + (appRecyclerAdapter == null));
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Utils.myLog("onAttach" + "   " + (appRecyclerAdapter == null));
     }
 }

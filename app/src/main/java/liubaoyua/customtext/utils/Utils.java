@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -261,5 +262,10 @@ public abstract class Utils {
         return bitmap;
     }
 
+    public static void myLog(String msg) {
+        if (Common.DEBUG) {
+            Log.d("liubaoyua", msg);
+        }
+    }
 }
 

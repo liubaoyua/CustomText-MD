@@ -81,6 +81,12 @@
     public static ** valueOf(java.lang.String);
 }
 
+#eventbus的相关函数
+-keepclassmembers class ** {
+    public void onEvent*(**);
+}
+
+
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
 }
