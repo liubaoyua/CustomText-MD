@@ -1,6 +1,7 @@
-package liubaoyua.customtext;
+package liubaoyua.customtext.app;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Environment;
@@ -13,32 +14,45 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
+import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.ui.AppListActivity;
 import liubaoyua.customtext.utils.Common;
+import liubaoyua.customtext.utils.DBManager;
+import liubaoyua.customtext.utils.PicassoTools;
 
 /**
  * Created by kazzy on 2015/7/14 0014.
  * debug test
  */
-public class AppDebug extends Application {
+public class MyApplication extends Application {
     private static final String LOG_DIR = Environment
             .getExternalStorageDirectory().getAbsolutePath() + "/Custom Text/";
     private static final String LOG_NAME = "crash_log_" + getCurrentDateString() + ".txt";
     private ArrayList<Activity> list = new ArrayList<>();
 
+    private List<AppInfo> allList = new ArrayList<>();
+    private static MyApplication application;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        if(!Common.DEBUG){
+        if(Common.CRASH_LOG){
            Thread.setDefaultUncaughtExceptionHandler(handler);
+        } else {
+            clearCrashLog();
         }
+        application = this;
+        PicassoTools.init(getApplicationContext());
+
     }
 
     Thread.UncaughtExceptionHandler handler = new Thread.UncaughtExceptionHandler() {
@@ -57,7 +71,6 @@ public class AppDebug extends Application {
     /**
      * 打印错误日志
      *
-     * @param ex
      */
     protected void writeErrorLog(Throwable ex) {
         String info = null;
@@ -142,4 +155,57 @@ public class AppDebug extends Application {
         // 杀死该应用进程
         android.os.Process.killProcess(android.os.Process.myPid());
     }
+
+    public static MyApplication getInstance() {
+        return application;
+    }
+
+    @Override
+    public void onTerminate() {
+        PicassoTools.destroy();
+        DBManager.getInstance(getApplicationContext()).close();
+        super.onTerminate();
+        System.exit(0);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        PicassoTools.clearCache();
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        PicassoTools.clearCache();
+    }
+
+    protected List<AppInfo> getAllList(){
+        return allList;
+    }
+
+    protected void setAllList(List<AppInfo> allList){
+        this.allList = allList;
+    }
+
+
+    private void clearCrashLog(){
+        final String prefix = "crash_log";
+        final File file = new File(LOG_DIR);
+        if(!file.exists() || !file.isDirectory()){
+            return;
+        }
+
+        String[] logList = file.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                return filename.startsWith(prefix) && (new File(dir, filename).isFile());
+            }
+        });
+
+        for(String log:logList){
+            new File(file,log).delete();
+        }
+    }
+
 }

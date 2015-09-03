@@ -18,8 +18,9 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.adapters.AppRecyclerAdapter;
+import liubaoyua.customtext.app.AppHelper;
 import liubaoyua.customtext.entity.AppInfo;
-import liubaoyua.customtext.entity.NewListEvent;
+import liubaoyua.customtext.entity.DataLoadedEvent;
 import liubaoyua.customtext.ui.SetTextActivity;
 import liubaoyua.customtext.utils.Common;
 import liubaoyua.customtext.utils.Utils;
@@ -29,11 +30,18 @@ public class AppListFragment extends Fragment {
     private static int count = 0;
     private RecyclerView mRecyclerView;
     private AppRecyclerAdapter appRecyclerAdapter;
-    private Communicator communicator;
+    private String type = Common.FRAG_TYPE_ALL_LIST;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle arguments = getArguments();
+        EventBus.getDefault().register(this);
+        if (arguments == null) {
+            throw new IllegalStateException("Fragment with no Arguments");
+        } else {
+            type = arguments.getString(Common.FRAG_TYPE);
+        }
     }
 
     @Override
@@ -48,8 +56,15 @@ public class AppListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext(), LinearLayout.VERTICAL, false));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        appRecyclerAdapter = new AppRecyclerAdapter(getActivity(), new ArrayList<AppInfo>());
-        appRecyclerAdapter = new AppRecyclerAdapter(getActivity(), new ArrayList<AppInfo>());
+
+        List<AppInfo> appList = new ArrayList<>();
+        if(type.equals(Common.FRAG_TYPE_ALL_LIST)){
+            appList.addAll(AppHelper.getAllList());
+        }else if(type.equals(Common.FRAG_TYPE_RECENT_LIST)){
+            appList.addAll(AppHelper.getRecentList());
+        }
+
+        appRecyclerAdapter = new AppRecyclerAdapter(getActivity(), appList);
         mRecyclerView.setAdapter(appRecyclerAdapter);
         appRecyclerAdapter.setOnItemClickListener(new AppRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -57,12 +72,9 @@ public class AppListFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), SetTextActivity.class);
                 intent.putExtra(Common.POSITION_ARG, position);
                 intent.putExtra(Common.PACKAGE_NAME_ARG, packageName);
-                getActivity().startActivityForResult(intent, Common.APP_REQUEST_CODE);
+                getActivity().startActivity(intent);
             }
         });
-        // 两个界面都加载好后进行数据加载
-        count ++;
-
     }
 
     public void filter(String nameFilter){
@@ -74,14 +86,6 @@ public class AppListFragment extends Fragment {
         if (appRecyclerAdapter != null) {
             return appRecyclerAdapter.getFilter().getAppList();
         } else {
-            throw new IllegalStateException("appRecyclerAdapter is null");
-        }
-    }
-
-    public void setAppList(List<AppInfo> appList) {
-        if(appRecyclerAdapter != null){
-            appRecyclerAdapter.getFilter().setAppList(appList);
-        }else{
             throw new IllegalStateException("appRecyclerAdapter is null");
         }
     }
@@ -111,7 +115,6 @@ public class AppListFragment extends Fragment {
             return;
         }
 
-
         if (mRecyclerView.canScrollVertically(-1)) {
             mRecyclerView.smoothScrollToPosition(0);
         } else {
@@ -137,7 +140,7 @@ public class AppListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (count >= 2) {
-            EventBus.getDefault().post(new NewListEvent());
+            EventBus.getDefault().post(new DataLoadedEvent());
             count = 0;
         }
         Utils.myLog("onResume" + "   " + (appRecyclerAdapter == null));
@@ -161,6 +164,7 @@ public class AppListFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         Utils.myLog("onDestroy" + "   " + (appRecyclerAdapter == null));
     }
 
@@ -168,11 +172,21 @@ public class AppListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        communicator = (Communicator)context;
         Utils.myLog("onAttach" + "   " + (appRecyclerAdapter == null));
     }
 
-    public interface Communicator {
-        List<AppInfo> getList();
+    public void onEventMainThread(DataLoadedEvent event){
+        Utils.myLog("fragment onEventMainThread");
+        if (type.equals(Common.FRAG_TYPE_ALL_LIST)){
+            if(appRecyclerAdapter != null ){
+                appRecyclerAdapter.getFilter().setAppList(AppHelper.getAllList());
+                appRecyclerAdapter.getFilter().reFilter();
+            }
+        }else if(type.equals(Common.FRAG_TYPE_RECENT_LIST)){
+            if(appRecyclerAdapter != null){
+                appRecyclerAdapter.getFilter().setAppList(AppHelper.getRecentList());
+                appRecyclerAdapter.getFilter().reFilter();
+            }
+        }
     }
 }

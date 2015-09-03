@@ -8,7 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -29,10 +31,15 @@ import android.widget.Toast;
 
 import java.io.DataOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.adapters.TextRecyclerAdapter;
+import liubaoyua.customtext.app.AppHelper;
+import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.entity.CustomText;
+import liubaoyua.customtext.entity.DataLoadedEvent;
 import liubaoyua.customtext.utils.Common;
 import liubaoyua.customtext.utils.Utils;
 
@@ -40,13 +47,16 @@ import liubaoyua.customtext.utils.Utils;
 public class SetTextActivity extends AppCompatActivity {
 
     private static ArrayList<CustomText> clipboard = new ArrayList<>();
+
     private RecyclerView mRecyclerView;
     private TextRecyclerAdapter textRecyclerAdapter;
     private SwitchCompat switchCompat;
+
     private String packageName = "";
     private String appName = "";
     private int maxPage = 0;
     private int position = -1;
+
     private ArrayList<CustomText> data = new ArrayList<>();
 
     // mPrefs 用于当前 packageName 所在包的数据读写， prefs 是全局信息
@@ -91,10 +101,14 @@ public class SetTextActivity extends AppCompatActivity {
             textRecyclerAdapter.deselectAllItem();
             isInActionMode = false;
             textRecyclerAdapter.multiSelectMode=false;
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                getWindow().setStatusBarColor(getColor(R.color.primary_dark));
         }
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+              getWindow().setStatusBarColor(Color.rgb(0,0,0));
             return false;
         }
     };
@@ -168,7 +182,7 @@ public class SetTextActivity extends AppCompatActivity {
             float firstRawY, oldRawY, newRawY;
             boolean flag = false;
             float dy;
-            ;
+
             CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
             int fabBottomMargin = lp.bottomMargin;
 
@@ -305,7 +319,7 @@ public class SetTextActivity extends AppCompatActivity {
                     }).show();
 
         }else if(id == R.id.action_relaunch_app){
-            killPackage(packageName);
+            Utils.killPackage(packageName);
             if(!packageName.equals(Common.SYSTEM_UI_PACKAGE_NAME)){
                 Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage(packageName);
                 startActivity(LaunchIntent);
@@ -358,11 +372,7 @@ public class SetTextActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        if(Common.DEBUG){
-            Log.d(Common.TAG,"onBackPressed different texts" +Utils.isIdenticalTextList(data, textRecyclerAdapter.getData()));
-        }
         if(!Utils.isIdenticalTextList(data, textRecyclerAdapter.getData())){
-
             AlertDialog.Builder builder = new AlertDialog.Builder(SetTextActivity.this);
             builder.setIcon(R.mipmap.ic_launcher);
             builder.setTitle(getString(R.string.dialog_data_not_saved));
@@ -390,31 +400,24 @@ public class SetTextActivity extends AppCompatActivity {
             });
             builder.show();
         }else{
-            Intent intent = new Intent();
-            intent.putExtra(Common.IS_ENABLED_ARG,switchCompat.isChecked());
-            intent.putExtra(Common.POSITION_ARG, position);
-            setResult(Common.APP_RESULT_CODE, intent);
+            AppInfo info = Utils.getAppInfoByPackageName(packageName);
+            if(info != null){
+                if(prefs.contains(packageName)){
+                    if(prefs.getBoolean(packageName,false)){
+                        info.state = AppInfo.ENABLED;
+                    }else {
+                        info.state = AppInfo.DISABLED;
+                    }
+                }else {
+                    info.state = AppInfo.UNKNOWN;
+                }
+                EventBus.getDefault().post(new DataLoadedEvent());
+            }
             super.onBackPressed();
         }
 
     }
 
-    private void killPackage(String packageToKill) {
-        // code modified from :
-        // http://forum.xda-developers.com/showthread.php?t=2235956&page=6
-        try { // get superuser
-            Process su = Runtime.getRuntime().exec("su");
-            if (su == null)
-                return;
-            DataOutputStream os = new DataOutputStream(su.getOutputStream());
-            os.writeBytes("pkill " + packageToKill + "\n");
-            os.writeBytes("exit\n");
-            su.waitFor();
-            os.close();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
 
     private void saveData(){
         ArrayList<CustomText> newData = textRecyclerAdapter.getData();

@@ -121,14 +121,8 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationZ", 20, 0);
-                    animator.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            listener.onItemClick(getAdapterPosition(), appList.get(getAdapterPosition()).packageName);
-                        }
-                    });
-                    animator.start();
+                    if(listener != null)
+                        listener.onItemClick(getAdapterPosition(), appList.get(getAdapterPosition()).packageName);
                 }
             });
         }

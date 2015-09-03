@@ -19,6 +19,7 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import liubaoyua.customtext.R;
+import liubaoyua.customtext.app.AppHelper;
 import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.entity.CustomText;
 
@@ -267,5 +269,34 @@ public abstract class Utils {
             Log.d("liubaoyua", msg);
         }
     }
+
+    public static AppInfo getAppInfoByPackageName(String packageName){
+        List<AppInfo> allList = AppHelper.getAllList();
+        for(AppInfo info: allList){
+            if(info.packageName.equals(packageName)){
+                return info;
+            }
+        }
+        return null;
+    }
+
+    public static void killPackage(String packageToKill) {
+        // code modified from :
+        // http://forum.xda-developers.com/showthread.php?t=2235956&page=6
+        try { // get superuser
+            Process su = Runtime.getRuntime().exec("su");
+            if (su == null)
+                return;
+            DataOutputStream os = new DataOutputStream(su.getOutputStream());
+            os.writeBytes("pkill " + packageToKill + "\n");
+            os.writeBytes("exit\n");
+            su.waitFor();
+            os.close();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
 

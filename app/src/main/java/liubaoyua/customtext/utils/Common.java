@@ -6,6 +6,7 @@ package liubaoyua.customtext.utils;
  */
 public class Common {
     public static Boolean DEBUG = true;
+    public static Boolean CRASH_LOG = false;
     public static Boolean FAST_DEBUG = false;
     public static Boolean XPOSED_DEBUG = true;
 
@@ -43,5 +44,9 @@ public class Common {
     public static int DEFAULT_NUM = 10 ;
     public static int APP_REQUEST_CODE = 123;
     public static int APP_RESULT_CODE = 682;
+
+    public static String FRAG_TYPE = "type";
+    public static String FRAG_TYPE_ALL_LIST = "AllLIst";
+    public static String FRAG_TYPE_RECENT_LIST = "RecentList";
 
 }

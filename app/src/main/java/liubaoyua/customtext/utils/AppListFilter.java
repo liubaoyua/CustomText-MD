@@ -2,6 +2,7 @@ package liubaoyua.customtext.utils;
 
 import android.widget.Filter;
 
+import java.io.File;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +20,7 @@ import liubaoyua.customtext.entity.AppInfo;
 public class AppListFilter extends Filter {
     private AppRecyclerAdapter adapter;
     private List<AppInfo> appList;
+    private CharSequence text = "";
 
     public AppListFilter(AppRecyclerAdapter adapter, List<AppInfo> appList){
         super();
@@ -36,6 +38,7 @@ public class AppListFilter extends Filter {
 
     @Override
     protected FilterResults performFiltering(final CharSequence constraint){
+        text = constraint;
         List<AppInfo> items = new ArrayList<>();
         items.clear();
 //               判断 包名 和 应用名 里面是否含有 constraint
@@ -93,4 +96,9 @@ public class AppListFilter extends Filter {
             adapter.notifyDataSetChanged();
         }
     }
+
+    public void reFilter(){
+        filter(text);
+    }
+
 }
