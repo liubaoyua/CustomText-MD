@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
 
@@ -18,8 +18,8 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
             android:orientation="horizontal"
             android:paddingLeft="8dp"
             android:paddingRight="8dp">
@@ -32,47 +32,47 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_margin="8dp"
-                android:textAllCaps="false"
                 android:background="@drawable/button_bg"
                 android:gravity="center"
                 android:text="@string/button_operate"
+                android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
             <!--android:hint="@string/ori_text_hint"-->
 
             <!--app:met_baseColor="@color/accent"-->
             <com.rengwuxian.materialedittext.MaterialEditText
-                android:hint="@string/ori_text_hint"
-                app:met_primaryColor ="@color/accent"
-                app:met_floatingLabelText = "@string/ori_text_hint"
-                app:met_floatingLabel="highlight"
-                android:layout_toRightOf="@id/button_serial"
-                android:layout_toEndOf="@id/button_serial"
                 android:id="@+id/editText_original_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
+                android:layout_toEndOf="@id/button_serial"
+                android:layout_toRightOf="@id/button_serial"
+                android:hint="@string/ori_text_hint"
                 android:imeOptions="actionDone"
-                android:layout_height="wrap_content"/>
+                app:met_floatingLabel="highlight"
+                app:met_floatingLabelText="@string/ori_text_hint"
+                app:met_primaryColor="@color/accent" />
 
             <CheckBox
                 android:id="@+id/check_box"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:focusable="true"
-                android:visibility="invisible"
-                android:layout_alignParentRight="true"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true" />
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:focusable="true"
+                android:visibility="invisible" />
 
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
             android:gravity="center"
             android:orientation="horizontal"
-            android:background="?android:attr/selectableItemBackground"
             android:paddingLeft="8dp"
             android:paddingRight="8dp">
 
@@ -84,26 +84,26 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_margin="8dp"
-                android:textAllCaps="false"
                 android:background="@drawable/button_bg"
                 android:gravity="center"
                 android:text="@string/button_clear"
+                android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
-                android:hint="@string/new_text_hint"
-                app:met_primaryColor ="@color/accent"
-                app:met_floatingLabelText = "@string/new_text_hint"
-                app:met_floatingLabel="highlight"
                 android:id="@+id/editText_new_text"
-                android:layout_toRightOf="@id/button_clear"
-                android:layout_toEndOf="@id/button_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_width="wrap_content"
+                android:layout_toEndOf="@id/button_clear"
+                android:layout_toRightOf="@id/button_clear"
+                android:hint="@string/new_text_hint"
                 android:imeOptions="actionDone"
-                android:layout_height="wrap_content"/>
+                app:met_floatingLabel="highlight"
+                app:met_floatingLabelText="@string/new_text_hint"
+                app:met_primaryColor="@color/accent" />
 
         </RelativeLayout>
 

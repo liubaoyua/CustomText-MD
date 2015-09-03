@@ -29,6 +29,7 @@ public class AppListFragment extends Fragment {
     private static int count = 0;
     private RecyclerView mRecyclerView;
     private AppRecyclerAdapter appRecyclerAdapter;
+    private Communicator communicator;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class AppListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext(), LinearLayout.VERTICAL, false));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//        appRecyclerAdapter = new AppRecyclerAdapter(getActivity(), new ArrayList<AppInfo>());
         appRecyclerAdapter = new AppRecyclerAdapter(getActivity(), new ArrayList<AppInfo>());
         mRecyclerView.setAdapter(appRecyclerAdapter);
         appRecyclerAdapter.setOnItemClickListener(new AppRecyclerAdapter.OnItemClickListener() {
@@ -60,10 +62,7 @@ public class AppListFragment extends Fragment {
         });
         // 两个界面都加载好后进行数据加载
         count ++;
-        if(count == 2){
-            EventBus.getDefault().post(new NewListEvent());
-            count = 0;
-        }
+
     }
 
     public void filter(String nameFilter){
@@ -107,8 +106,11 @@ public class AppListFragment extends Fragment {
     }
 
     public void scrollToTopOrBottom() {
-        if (mRecyclerView == null)
+        if (mRecyclerView == null) {
+            Utils.myLog("in method scrollToTopOrBottom :  mRecyclerView is null");
             return;
+        }
+
 
         if (mRecyclerView.canScrollVertically(-1)) {
             mRecyclerView.smoothScrollToPosition(0);
@@ -134,6 +136,10 @@ public class AppListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (count >= 2) {
+            EventBus.getDefault().post(new NewListEvent());
+            count = 0;
+        }
         Utils.myLog("onResume" + "   " + (appRecyclerAdapter == null));
     }
 
@@ -162,6 +168,11 @@ public class AppListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+//        communicator = (Communicator)context;
         Utils.myLog("onAttach" + "   " + (appRecyclerAdapter == null));
+    }
+
+    public interface Communicator {
+        List<AppInfo> getList();
     }
 }

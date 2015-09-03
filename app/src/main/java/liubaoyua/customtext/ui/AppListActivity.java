@@ -133,6 +133,7 @@ public class AppListActivity extends AppCompatActivity {
 
         setupViewPager();
 
+        Utils.myLog("before loading database");
         if (hasDataBase) {
             allList = DBManager.getInstance(context).query();
             new LoadAppsTask(false).execute();
@@ -462,6 +463,8 @@ public class AppListActivity extends AppCompatActivity {
 
     //EventBus event
     public void onEvent(NewListEvent event) {
+
+        Utils.myLog("onEvent NewListEvent");
         if (hasDataBase) {
             List<AppInfo> appList = DBManager.getInstance(context).query();
             fragmentList.get(0).setAppList(appList);
@@ -586,12 +589,12 @@ public class AppListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aa) {
-//                if (recentListFragment != null) {
-            fragmentList.get(1).setAppList(Utils.getRecentList(appList));
-            fragmentList.get(0).setAppList(appList);
-            fragmentList.get(0).filter(nameFilter);
-            fragmentList.get(1).filter(nameFilter);
-//            }
+            if (fragmentList.get(0) != null) {
+                fragmentList.get(1).setAppList(Utils.getRecentList(appList));
+                fragmentList.get(0).setAppList(appList);
+                fragmentList.get(0).filter(nameFilter);
+                fragmentList.get(1).filter(nameFilter);
+            }
             if (dialog != null)
                 dialog.dismiss();
         }
