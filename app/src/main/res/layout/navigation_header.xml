@@ -5,15 +5,16 @@
     android:background="?attr/colorPrimaryDark"
     android:gravity="center"
     android:orientation="vertical"
-
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
     <!--android:padding="16dp"-->
 
     <ImageView
+        android:id="@+id/nav_bg"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-
-        android:background="@mipmap/ic_user_background"/>
+        android:layout_height="168dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_user_background" />
     <!--android:layout_marginTop="16dp"-->
     <!--<TextView-->
         <!--android:layout_width="match_parent"-->

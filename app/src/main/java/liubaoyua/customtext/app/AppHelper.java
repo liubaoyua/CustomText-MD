@@ -1,5 +1,7 @@
 package liubaoyua.customtext.app;
 
+import android.os.Environment;
+
 import java.util.List;
 
 import liubaoyua.customtext.entity.AppInfo;
@@ -10,6 +12,9 @@ import liubaoyua.customtext.utils.Utils;
  */
 public class AppHelper {
 
+    public static final String EXTERNAL_DIR = Environment
+            .getExternalStorageDirectory().getAbsolutePath() + "/Custom Text/";
+
     public static MyApplication getApplication(){
         return MyApplication.getInstance();
     }
@@ -18,12 +23,12 @@ public class AppHelper {
         return getApplication().getAllList();
     }
 
-    public static List<AppInfo> getRecentList(){
-        return Utils.getRecentList(getAllList());
-    }
-
     public static void setAllList(List<AppInfo> allList){
         getApplication().setAllList(allList);
+    }
+
+    public static List<AppInfo> getRecentList() {
+        return Utils.getRecentList(getAllList());
     }
 
     public static void terminal(){

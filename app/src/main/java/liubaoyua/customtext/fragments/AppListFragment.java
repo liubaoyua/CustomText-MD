@@ -1,6 +1,5 @@
 package liubaoyua.customtext.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -98,11 +97,6 @@ public class AppListFragment extends Fragment {
         }
     }
 
-    public void notifyDataSetChanged(){
-        if(appRecyclerAdapter != null)
-            appRecyclerAdapter.notifyDataSetChanged();
-    }
-
     public void stopScrolling() {
         if (mRecyclerView != null) {
             mRecyclerView.stopScroll();
@@ -124,59 +118,13 @@ public class AppListFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        Utils.myLog("onStop" + "   " + (appRecyclerAdapter == null));
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Utils.myLog("onPause" + "   " + (appRecyclerAdapter == null));
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (count >= 2) {
-            EventBus.getDefault().post(new DataLoadedEvent());
-            count = 0;
-        }
-        Utils.myLog("onResume" + "   " + (appRecyclerAdapter == null));
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Utils.myLog("onStart" + "   " + (appRecyclerAdapter == null));
-    }
-
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Utils.myLog("onDetach" + "   " + (appRecyclerAdapter == null));
-    }
-
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        Utils.myLog("onDestroy" + "   " + (appRecyclerAdapter == null));
     }
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Utils.myLog("onAttach" + "   " + (appRecyclerAdapter == null));
-    }
 
     public void onEventMainThread(DataLoadedEvent event){
-        Utils.myLog("fragment onEventMainThread");
         if (type.equals(Common.FRAG_TYPE_ALL_LIST)){
             if(appRecyclerAdapter != null ){
                 appRecyclerAdapter.getFilter().setAppList(AppHelper.getAllList());

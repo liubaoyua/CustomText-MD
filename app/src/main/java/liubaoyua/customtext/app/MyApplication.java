@@ -1,14 +1,9 @@
 package liubaoyua.customtext.app;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Intent;
-import android.os.Environment;
 import android.util.Log;
-
-//import com.squareup.leakcanary.LeakCanary;
-//import com.squareup.leakcanary.RefWatcher;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -29,18 +24,49 @@ import liubaoyua.customtext.utils.Common;
 import liubaoyua.customtext.utils.DBManager;
 import liubaoyua.customtext.utils.PicassoTools;
 
+//import com.squareup.leakcanary.LeakCanary;
+//import com.squareup.leakcanary.RefWatcher;
+
 /**
  * Created by kazzy on 2015/7/14 0014.
  * debug test
  */
 public class MyApplication extends Application {
-    private static final String LOG_DIR = Environment
-            .getExternalStorageDirectory().getAbsolutePath() + "/Custom Text/";
-    private static final String LOG_NAME = "crash_log_" + getCurrentDateString() + ".txt";
-    private ArrayList<Activity> list = new ArrayList<>();
 
-    private List<AppInfo> allList = new ArrayList<>();
+    private static final String LOG_NAME = "crash_log_" + getCurrentDateString() + ".txt";
     private static MyApplication application;
+    private ArrayList<Activity> list = new ArrayList<>();
+    Thread.UncaughtExceptionHandler handler = new Thread.UncaughtExceptionHandler() {
+
+        @Override
+        public void uncaughtException(Thread thread, Throwable ex) {
+            writeErrorLog(ex);
+            Intent intent = new Intent(getApplicationContext(),
+                    AppListActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            exit();
+        }
+    };
+    private List<AppInfo> allList = new ArrayList<>();
+
+    /**
+     * 获取当前日期
+     *
+     * @return
+     */
+    private static String getCurrentDateString() {
+        String result = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss",
+                Locale.getDefault());
+        Date nowDate = new Date();
+        result = sdf.format(nowDate);
+        return result;
+    }
+
+    public static MyApplication getInstance() {
+        return application;
+    }
 
     @Override
     public void onCreate() {
@@ -54,19 +80,6 @@ public class MyApplication extends Application {
         PicassoTools.init(getApplicationContext());
 
     }
-
-    Thread.UncaughtExceptionHandler handler = new Thread.UncaughtExceptionHandler() {
-
-        @Override
-        public void uncaughtException(Thread thread, Throwable ex) {
-            writeErrorLog(ex);
-            Intent intent = new Intent(getApplicationContext(),
-                    AppListActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            exit();
-        }
-    };
 
     /**
      * 打印错误日志
@@ -98,7 +111,7 @@ public class MyApplication extends Application {
             }
         }
         Log.d("example", "崩溃信息\n" + info);
-        File dir = new File(LOG_DIR);
+        File dir = new File(AppHelper.EXTERNAL_DIR);
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -113,20 +126,6 @@ public class MyApplication extends Application {
             e.printStackTrace();
         }
 
-    }
-
-    /**
-     * 获取当前日期
-     *
-     * @return
-     */
-    private static String getCurrentDateString() {
-        String result = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss",
-                Locale.getDefault());
-        Date nowDate = new Date();
-        result = sdf.format(nowDate);
-        return result;
     }
 
     /**
@@ -154,10 +153,6 @@ public class MyApplication extends Application {
         }
         // 杀死该应用进程
         android.os.Process.killProcess(android.os.Process.myPid());
-    }
-
-    public static MyApplication getInstance() {
-        return application;
     }
 
     @Override
@@ -191,7 +186,7 @@ public class MyApplication extends Application {
 
     private void clearCrashLog(){
         final String prefix = "crash_log";
-        final File file = new File(LOG_DIR);
+        final File file = new File(AppHelper.EXTERNAL_DIR);
         if(!file.exists() || !file.isDirectory()){
             return;
         }

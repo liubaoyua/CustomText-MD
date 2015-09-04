@@ -135,4 +135,9 @@
         \n drakeet/material-design-settings
     </string>
     <string name="menu_select_mode">编辑模式</string>
+    <string name="select_picture">选择图片</string>
+    <string-array name="change_picture">
+        <item>选择图片</item>
+        <item>默认图片</item>
+    </string-array>
 </resources>

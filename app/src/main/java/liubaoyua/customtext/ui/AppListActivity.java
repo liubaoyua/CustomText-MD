@@ -10,6 +10,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,6 +38,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -80,6 +83,7 @@ public class AppListActivity extends AppCompatActivity {
     private String nameFilter;
     private SharedPreferences prefs;
     private boolean hasDataBase = false;
+    private ImageView headerView;
 
     @SuppressWarnings("commit")
     @Override
@@ -137,6 +141,37 @@ public class AppListActivity extends AppCompatActivity {
         } else {
             new LoadAppsTask(false).execute();
         }
+
+        headerView = (ImageView) findViewById(R.id.nav_bg);
+        String filePatch = prefs.getString(Common.PREF_HEAD_VIEW, null);
+        if (filePatch != null && new File(filePatch).exists()) {
+            headerView.setImageBitmap(BitmapFactory.decodeFile(filePatch));
+            prefs.edit().putString(Common.PREF_HEAD_VIEW, filePatch).apply();
+        } else {
+            headerView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_user_background));
+            prefs.edit().putString(Common.PREF_HEAD_VIEW, null).apply();
+        }
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AppListActivity.this);
+                builder.setCustomTitle(null);
+                builder.setItems(R.array.change_picture, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Utils.launchImagePiker(AppListActivity.this);
+                                break;
+                            case 1:
+                            default:
+                                headerView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_user_background));
+                        }
+                    }
+                });
+                builder.create().show();
+            }
+        });
     }
 
     @Override
@@ -283,6 +318,30 @@ public class AppListActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == 0) {
+            Utils.myLog("get result");
+            try {
+                Uri selectedImageUri = data.getData();
+                String filePatch = Utils.parsePicturePath(headerView.getContext(), selectedImageUri);
+                Utils.myLog("get result" + filePatch);
+                if (filePatch != null && new File(filePatch).exists()) {
+                    headerView.setImageBitmap(BitmapFactory.decodeFile(filePatch));
+                    prefs.edit().putString(Common.PREF_HEAD_VIEW, filePatch).commit();
+                } else {
+                    headerView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_user_background));
+                    prefs.edit().putString(Common.PREF_HEAD_VIEW, null).commit();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     @Override

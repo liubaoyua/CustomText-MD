@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -21,7 +20,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -29,14 +27,11 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
-import java.io.DataOutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import de.greenrobot.event.EventBus;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.adapters.TextRecyclerAdapter;
-import liubaoyua.customtext.app.AppHelper;
 import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.entity.CustomText;
 import liubaoyua.customtext.entity.DataLoadedEvent;
@@ -92,6 +87,7 @@ public class SetTextActivity extends AppCompatActivity {
             getMenuInflater().inflate(R.menu.menu_action_mode, menu);
             isInActionMode = true;
             textRecyclerAdapter.multiSelectMode=true;
+            Utils.configStatusBarColor(SetTextActivity.this, Color.rgb(0, 0, 0));
             return true;
         }
 
@@ -101,14 +97,11 @@ public class SetTextActivity extends AppCompatActivity {
             textRecyclerAdapter.deselectAllItem();
             isInActionMode = false;
             textRecyclerAdapter.multiSelectMode=false;
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                getWindow().setStatusBarColor(getColor(R.color.primary_dark));
+            Utils.configStatusBarColor(SetTextActivity.this, getResources().getColor(R.color.primary_dark));
         }
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-              getWindow().setStatusBarColor(Color.rgb(0,0,0));
             return false;
         }
     };
@@ -456,4 +449,5 @@ public class SetTextActivity extends AppCompatActivity {
                     }).show();
         }
     }
+
 }
