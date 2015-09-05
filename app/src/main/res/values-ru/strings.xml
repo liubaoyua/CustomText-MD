@@ -86,8 +86,8 @@
     <string name="setting_feedback_summary">"Email:liubaoyua@gmail.com 
 
 CoolApk Market: пишите на этот адрес: @liubaoyua и я увижу"</string>
-    <string name="setting_further_replace_enable">Расширенная замена</string>
-    <string name="setting_further_replace_summary">Позволяет заменять больше типов текста (если в виджетах, что-то отображается неверно, отключите этот параметр)</string>
+    <string name="setting_more_type">Расширенная замена</string>
+    <string name="setting_more_type_summary">Позволяет заменять больше типов текста (если в виджетах, что-то отображается неверно, отключите этот параметр)</string>
     <string name="setting_global_setting">Общие настройки</string>
     <string name="setting_like">Понравилось приложение?</string>
     <string name="setting_like_summary">Если Вам нравится это приложение, пожалуйста, оцените его в Google Play.</string>

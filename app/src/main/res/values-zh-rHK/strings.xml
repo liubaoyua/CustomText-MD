@@ -87,8 +87,8 @@
     <string name="setting_module_switch">模塊開關</string>
     <string name="setting_module_enabled">模塊已啟用</string>
     <string name="setting_module_disabled">模塊已禁用</string>
-    <string name="setting_further_replace_enable">深度替換</string>
-    <string name="setting_further_replace_summary">將替換更多類型的字符（如果導致圖片不正確，請取消這個選項）</string>
+    <string name="setting_more_type">深度替換</string>
+    <string name="setting_more_type_summary">將替換更多類型的字符（如果導致圖片不正確，請取消這個選項）</string>
     <string name="setting_custom_message">自定義信息</string>
     <string name="setting_default_message">模塊可用</string>
     <string name="setting_custom_message_summary">修改模塊可用時在主界面上顯示的信息</string>

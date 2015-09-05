@@ -12,7 +12,7 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:background="@color/primary"
+        android:background="?android:attr/selectableItemBackground"
         android:src="@mipmap/ic_user_background"
         android:contentDescription="@string/app_name" />
 
@@ -33,11 +33,12 @@
         <!--android:textColor="@color/white"-->
         <!--android:textSize="30sp" />-->
 
-    <!--<FrameLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:clickable="true"-->
-        <!--android:background="?android:attr/selectableItemBackground">-->
-    <!--</FrameLayout>-->
+    <FrameLayout
+        android:id="@+id/another_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:background="?android:attr/selectableItemBackground">
+    </FrameLayout>
 
 </FrameLayout>

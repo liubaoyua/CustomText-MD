@@ -1,6 +1,7 @@
 package liubaoyua.customtext.ui;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,12 +29,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -152,7 +155,8 @@ public class AppListActivity extends AppCompatActivity {
             prefs.edit().putString(Common.PREF_HEAD_VIEW, null).apply();
         }
 //        findViewById(R.id.head_frame)
-            headerView    .setOnClickListener(new View.OnClickListener() {
+//            headerView
+        findViewById(R.id.another_frame)  .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(AppListActivity.this);
@@ -162,7 +166,7 @@ public class AppListActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                Utils.launchImagePiker(AppListActivity.this,Common.REQUEST_CODE_FOR_IMAGE);
+                                Utils.launchImagePiker(AppListActivity.this, Common.REQUEST_CODE_FOR_IMAGE);
                                 break;
                             case 1:
                             default:
@@ -170,7 +174,13 @@ public class AppListActivity extends AppCompatActivity {
                         }
                     }
                 });
-                builder.create().show();
+
+                Dialog dialog = builder.create();
+                dialog.show();
+                DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+                WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+                lp.width = displayMetrics.widthPixels * 3 / 4;
+                dialog.getWindow().setAttributes(lp);
             }
         });
     }

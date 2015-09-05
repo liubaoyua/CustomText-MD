@@ -97,8 +97,10 @@
     <string name="setting_module_switch">模块开关</string>
     <string name="setting_module_enabled">模块已启用</string>
     <string name="setting_module_disabled">模块已禁用</string>
-    <string name="setting_further_replace_enable">深度替换</string>
-    <string name="setting_further_replace_summary">将替换更多类型的字符（如果导致图片不正确，请取消这个选项）</string>
+    <string name="setting_more_type">深度替换</string>
+    <string name="setting_more_type_summary">将替换更多类型的字符（启用可能导致某些文本或图片显示不正确）</string>
+    <string name="setting_use_regex">正则表达式</string>
+    <string name="setting_use_regex_summary">替换默认支持正则表达式（如果出现某些文本无法替换，又不知道怎么解决，可以尝试关闭该选项）</string>
     <string name="setting_custom_message">自定义信息</string>
     <string name="setting_default_message">模块可用</string>
     <string name="setting_custom_message_summary">修改模块可用时在主界面上显示的信息</string>
@@ -143,11 +145,13 @@
     </string-array>
 
     <string name="menu_imp_exp_pref">导入导出</string>
+    <string name="menu_extra_setting">更多设置</string>
     <string name="dialog_imp_exp_message">可以将当前的配置文件导出分享给别人，也可以导入别人分享的配置文件。</string>
     <string name="dialog_pos_exp">导出</string>
     <string name="dialog_neg_imp">导入</string>
     <string name="toast_imp_succed">导入成功，请重启应用</string>
     <string name="toast_imp_fail">导入失败 : </string>
     <string name="toast_imp_fail_invaild_file">导入失败 : 文件不存在或无法读取或非 xml 配置文件 </string>
+    <string name="dialog_override_global_setting">以下选项设置会覆盖全局设置</string>
 
 </resources>

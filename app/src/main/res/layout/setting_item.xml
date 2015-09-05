@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    style="@style/Base.Widget.AppCompat.CompoundButton.CheckBox">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <CheckBox
+            style="@android:style/Widget.CompoundButton.CheckBox"
+            android:id="@+id/more_type_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:checked="false"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="#000"
+            android:layout_toLeftOf="@id/more_type_checkbox"
+            android:layout_toStartOf="@id/more_type_checkbox"
+            android:text="@string/setting_more_type"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <CheckBox
+            style="@android:style/Widget.CompoundButton.CheckBox"
+            android:id="@+id/use_regex_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textColor="#FFF"
+            android:checked="false"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:textColor="#000"
+            android:layout_toLeftOf="@id/use_regex_checkbox"
+            android:layout_toStartOf="@id/use_regex_checkbox"
+            android:text="@string/setting_use_regex"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

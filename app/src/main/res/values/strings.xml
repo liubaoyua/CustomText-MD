@@ -88,8 +88,8 @@
     <!--setting resource-->
     <string name="setting_global_setting">Global Settings</string>
     <string name="setting_module_switch">Module Switch</string>
-    <string name="setting_further_replace_enable">Extended Replacement</string>
-    <string name="setting_further_replace_summary">Replace more type of text(if something widget is incorrectly showed, you can uncheck this option)</string>
+    <string name="setting_more_type">Extended Replacement</string>
+    <string name="setting_more_type_summary">Replace more type of text(if something widget is incorrectly showed, you can uncheck this option)</string>
     <string name="setting_custom_message">Custom Message</string>
     <string name="setting_default_message">It works :)</string>
     <string name="setting_custom_message_summary">Change the message that show "It works:)"</string>

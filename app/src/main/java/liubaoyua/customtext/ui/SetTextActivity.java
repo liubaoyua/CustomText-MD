@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,15 +21,20 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 import de.greenrobot.event.EventBus;
 import liubaoyua.customtext.R;
@@ -270,9 +276,6 @@ public class SetTextActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
 //        <string name="menu_add_item">增加楼层</string>
@@ -390,7 +393,64 @@ public class SetTextActivity extends AppCompatActivity {
                     }
                 }
             });
-            builder.create().show();
+
+
+        } else if(id == R.id.action_extra_setting){
+            final AlertDialog.Builder builder = new AlertDialog.Builder(SetTextActivity.this);
+            builder.setTitle(R.string.dialog_override_global_setting);
+
+            CharSequence[] texts = new CharSequence[2];
+            texts[0] = getString(R.string.setting_more_type);
+            texts[1] = getString(R.string.setting_use_regex);
+
+
+//            LayoutInflater factory = LayoutInflater.from(getApplicationContext());
+//            View layout = factory.inflate(R.layout.setting_item, null);
+//            layout.setPadding(64,64,64,64);
+//            final CheckBox moreType = (CheckBox)layout.findViewById(R.id.more_type_checkbox);
+//            final CheckBox useRegex = (CheckBox)layout.findViewById(R.id.use_regex_checkbox);
+
+            boolean[] check = new boolean[2];
+            if(mPrefs.contains(Common.SETTING_MORE_TYPE)){
+                check[0] = mPrefs.getBoolean(Common.SETTING_MORE_TYPE,false);
+            }else{
+                check[0] = prefs.getBoolean(Common.SETTING_MORE_TYPE,false);
+            }
+
+            if(mPrefs.contains(Common.SETTING_USE_REGEX)){
+                check[1] = mPrefs.getBoolean(Common.SETTING_USE_REGEX,true);
+            }else{
+                check[1] = prefs.getBoolean(Common.SETTING_USE_REGEX,true);
+            }
+
+
+            Utils.myLog("mPrefs.contains(Common.SETTING_MORE_TYPE)" + mPrefs.contains(Common.SETTING_MORE_TYPE));
+            Utils.myLog("mPrefs.contains(Common.SETTING_USE_REGEX)" + mPrefs.contains(Common.SETTING_USE_REGEX));
+//            builder.setView(layout);
+            builder.setMultiChoiceItems(texts, check,
+                    new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            String key = which == 0 ? Common.SETTING_MORE_TYPE:Common.SETTING_USE_REGEX;
+                            mPrefs.edit().putBoolean(key, isChecked).commit();
+                        }
+                    });
+
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            Dialog dialog = builder.create();
+
+            dialog.show();
+
+//            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+//            WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+//            lp.width = displayMetrics.widthPixels * 3 / 4;
+//            dialog.getWindow().setAttributes(lp);
         }
 
         return super.onOptionsItemSelected(item);

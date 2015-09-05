@@ -16,10 +16,16 @@
             android:defaultValue="true"/>
         <CheckBoxPreference
             android:layout="@layout/preference_item"
-            android:title="@string/setting_further_replace_enable"
+            android:title="@string/setting_more_type"
             android:key="ImageText"
-            android:summary="@string/setting_further_replace_summary"
+            android:summary="@string/setting_more_type_summary"
             android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:layout="@layout/preference_item"
+            android:title="@string/setting_use_regex"
+            android:key="UseRegex"
+            android:summary="@string/setting_use_regex_summary"
+            android:defaultValue="true"/>
         <EditTextPreference
             android:layout="@layout/preference_item"
             android:title="@string/setting_custom_message"

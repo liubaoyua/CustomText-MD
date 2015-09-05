@@ -87,8 +87,8 @@
     <!--setting resource-->
     <string name="setting_global_setting">Pengaturan Global</string>
     <string name="setting_module_switch">Pindah Modul</string>
-    <string name="setting_further_replace_enable">Perpanjangan Pengganti</string>
-    <string name="setting_further_replace_summary">Ganti lebih banyak jenis teks(jika suatu widget tidak tampil dengan benar, Anda dapat hapus tanda centang pilihan ini)</string>
+    <string name="setting_more_type">Perpanjangan Pengganti</string>
+    <string name="setting_more_type_summary">Ganti lebih banyak jenis teks(jika suatu widget tidak tampil dengan benar, Anda dapat hapus tanda centang pilihan ini)</string>
     <string name="setting_custom_message">Pesan ubahsuaian</string>
     <string name="setting_default_message">Ini Bekerja :)</string>
     <string name="setting_custom_message_summary">Ubah pesan yang menampilkan "Ini Bekerja:)"</string>

@@ -87,8 +87,8 @@
     <!--setting resource-->
     <string name="setting_global_setting">Allgemeine Einstellungen</string>
     <string name="setting_module_switch">Modul-Schalter</string>
-    <string name="setting_further_replace_enable">Erweitertes Ersetzen</string>
-    <string name="setting_further_replace_summary">Ersetzt mehr Texttypen (falls etwas falsch angezeigt wird, kannst du diese Option deaktivieren)</string>
+    <string name="setting_more_type">Erweitertes Ersetzen</string>
+    <string name="setting_more_type_summary">Ersetzt mehr Texttypen (falls etwas falsch angezeigt wird, kannst du diese Option deaktivieren)</string>
     <string name="setting_custom_message">Eigene Nachricht</string>
     <string name="setting_default_message">Es funktioniert :)</string>
     <string name="setting_custom_message_summary">Ändere die Nachricht, die zeigt, dass "Es funktioniert :)"</string>
