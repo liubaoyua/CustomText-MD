@@ -27,11 +27,14 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import de.greenrobot.event.EventBus;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.adapters.TextRecyclerAdapter;
+import liubaoyua.customtext.app.AppHelper;
+import liubaoyua.customtext.app.MyApplication;
 import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.entity.CustomText;
 import liubaoyua.customtext.entity.DataLoadedEvent;
@@ -87,7 +90,7 @@ public class SetTextActivity extends AppCompatActivity {
             getMenuInflater().inflate(R.menu.menu_action_mode, menu);
             isInActionMode = true;
             textRecyclerAdapter.multiSelectMode=true;
-            Utils.configStatusBarColor(SetTextActivity.this, Color.rgb(0, 0, 0));
+            Utils.configStatusBarColor(SetTextActivity.this, Color.rgb(48, 48, 48));
             return true;
         }
 
@@ -113,7 +116,9 @@ public class SetTextActivity extends AppCompatActivity {
         setContentView(R.layout.activity_set_text);
         Intent intent = getIntent();
         packageName = intent.getStringExtra(Common.PACKAGE_NAME_ARG);
-        position = intent.getIntExtra(Common.POSITION_ARG,-1);
+//        position = intent.getIntExtra(Common.POSITION_ARG,-1);
+        prefs = getSharedPreferences(Common.PREFS, MODE_WORLD_READABLE);
+        mPrefs = getSharedPreferences(packageName, MODE_WORLD_READABLE);
 
         if(Common.FAST_DEBUG){
             packageName = Common.SYSTEM_UI_PACKAGE_NAME;
@@ -133,22 +138,6 @@ public class SetTextActivity extends AppCompatActivity {
                 appName = packageInfo.applicationInfo.loadLabel(getPackageManager()).toString();
             }
         }
-
-        prefs = getSharedPreferences(Common.PREFS, MODE_WORLD_READABLE);
-        mPrefs = getSharedPreferences(packageName, MODE_WORLD_READABLE);
-
-
-        maxPage = mPrefs.getInt(Common.MAX_PAGE_OLD, 0);
-
-        int count = (maxPage + 1) * Common.DEFAULT_NUM ;
-
-        for(int i = 0; i < count ; i++){
-            String oriText = mPrefs.getString(Common.ORI_TEXT_PREFIX + i,"");
-            String newText = mPrefs.getString(Common.NEW_TEXT_PREFIX + i,"");
-            CustomText customText = new CustomText(oriText,newText);
-            data.add(customText);
-        }
-
 
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -224,7 +213,23 @@ public class SetTextActivity extends AppCompatActivity {
                 return false;
             }
         });
+        reloadData();
 
+    }
+
+    private void reloadData(){
+        maxPage = mPrefs.getInt(Common.MAX_PAGE_OLD, 0);
+
+        int count = (maxPage + 1) * Common.DEFAULT_NUM ;
+
+        for(int i = 0; i < count ; i++){
+            String oriText = mPrefs.getString(Common.ORI_TEXT_PREFIX + i,"");
+            String newText = mPrefs.getString(Common.NEW_TEXT_PREFIX + i,"");
+            CustomText customText = new CustomText(oriText,newText);
+            data.add(customText);
+        }
+
+        textRecyclerAdapter.setData(data);
     }
 
     @Override
@@ -354,6 +359,38 @@ public class SetTextActivity extends AppCompatActivity {
                 textRecyclerAdapter.notifyDataSetChanged();
             }
             return true;
+        }else if(id ==R.id.action_imp_exp_pref){
+            AlertDialog.Builder builder = new AlertDialog.Builder(SetTextActivity.this);
+            builder.setTitle(R.string.menu_imp_exp_pref);
+            builder.setMessage(R.string.dialog_imp_exp_message);
+            builder.setNegativeButton(R.string.dialog_neg_imp, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Utils.getFileFromContent(SetTextActivity.this, Common.REQUEST_CODE_FOR_FILE);
+                    dialog.dismiss();
+                }
+            });
+            builder.setPositiveButton(R.string.dialog_pos_exp, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    File srcFile = new File(MyApplication.prefsDir, packageName + ".xml");
+                    Utils.myLog("srcFile is " + srcFile);
+                    File destFile = new File(MyApplication.backupDir, appName + "_" + packageName + ".xml");
+                    try {
+                        Utils.CopyFile(srcFile, destFile);
+                        destFile.setReadable(true, false);
+                        destFile.setWritable(true, true);
+                        Toast.makeText(SetTextActivity.this,
+                                getString(R.string.dialog_pos_exp) + getString(R.string.succeed) + "  "
+                                        + destFile.toString(), Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(SetTextActivity.this,
+                                getString(R.string.dialog_pos_exp) + getString(R.string.fail) + "  "
+                                        + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            builder.create().show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -411,25 +448,72 @@ public class SetTextActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == Common.REQUEST_CODE_FOR_FILE && resultCode == RESULT_OK){
+            String file = data.getData().getSchemeSpecificPart();
+            File srcFile = new File(file);
+            Utils.myLog("scrFile is "+ srcFile);
+            if(srcFile.exists() && file.endsWith(".xml")){
+                File destFile = new File(MyApplication.prefsDir, packageName + ".xml");
+                Utils.myLog("destFile is " + srcFile);
+                try {
+                    Utils.CopyFile(srcFile, destFile);
+                    destFile.setReadable(true, false);
+                    destFile.setWritable(true, true);
+                    Toast.makeText(SetTextActivity.this,
+                            getString(R.string.toast_imp_succed) ,Toast.LENGTH_LONG).show();
+                    new Thread(){
+                        @Override
+                        public void run() {
+                            super.run();
+                            try{
+                                Thread.sleep(2000);
+                            }catch (Exception e){
+
+                            }
+                            System.exit(0);
+                        }
+                    }.run();
+//                    Intent intent = new Intent(SetTextActivity.this, SetTextActivity.class);
+//                    intent.putExtra(Common.POSITION_ARG, position);
+//                    intent.putExtra(Common.PACKAGE_NAME_ARG, packageName);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    startActivity(intent);
+//                    finishAndRemoveTask();
+                }catch (Exception e){
+                    Toast.makeText(SetTextActivity.this,
+                            getString(R.string.toast_imp_fail) + e.getMessage() ,Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(SetTextActivity.this,
+                        getString(R.string.toast_imp_fail_invaild_file),Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     private void saveData(){
         ArrayList<CustomText> newData = textRecyclerAdapter.getData();
         data.clear();
         data.addAll(newData);
         SharedPreferences.Editor mEditor = mPrefs.edit();
+        mEditor.clear();
         for (int i = 0; i < newData.size(); i++) {
             CustomText temp = newData.get(i);
-            mEditor.putString(Common.ORI_TEXT_PREFIX+i,temp.oriText);
-            mEditor.putString(Common.NEW_TEXT_PREFIX + i, temp.newText);
+            if(temp.oriText != null && !temp.oriText.isEmpty())
+                 mEditor.putString(Common.ORI_TEXT_PREFIX+i,temp.oriText);
+            if(temp.newText != null && !temp.newText.isEmpty())
+                mEditor.putString(Common.NEW_TEXT_PREFIX + i, temp.newText);
         }
         int pageNum = newData.size()/Common.DEFAULT_NUM;
-        if(pageNum < maxPage){
-            int rest = (maxPage - pageNum) *Common.DEFAULT_NUM;
-            for (int i = 0; i < rest; i++) {
-                mEditor.remove(Common.ORI_TEXT_PREFIX + i);
-                mEditor.remove(Common.NEW_TEXT_PREFIX + i);
-            }
-        }
+//        if(pageNum < maxPage){
+//            int rest = (maxPage - pageNum) *Common.DEFAULT_NUM;
+//            for (int i = 0; i < rest; i++) {
+//                mEditor.remove(Common.ORI_TEXT_PREFIX + i);
+//                mEditor.remove(Common.NEW_TEXT_PREFIX + i);
+//            }
+//        }
         mEditor.putInt(Common.MAX_PAGE_OLD, pageNum);
         mEditor.commit();
         if(switchCompat.isChecked()){

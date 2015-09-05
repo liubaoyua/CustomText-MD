@@ -59,6 +59,7 @@ import java.util.Locale;
 import de.greenrobot.event.EventBus;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.app.AppHelper;
+import liubaoyua.customtext.app.MyApplication;
 import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.entity.DataLoadedEvent;
 import liubaoyua.customtext.fragments.AppListFragment;
@@ -69,7 +70,6 @@ import liubaoyua.customtext.utils.Utils;
 
 public class AppListActivity extends AppCompatActivity {
 
-    private static File prefsDir = new File(Environment.getDataDirectory() + "/data/" + Common.PACKAGE_NAME + "/shared_prefs");
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ViewPager mViewPager;
@@ -151,7 +151,8 @@ public class AppListActivity extends AppCompatActivity {
             headerView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_user_background));
             prefs.edit().putString(Common.PREF_HEAD_VIEW, null).apply();
         }
-        headerView.setOnClickListener(new View.OnClickListener() {
+//        findViewById(R.id.head_frame)
+            headerView    .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(AppListActivity.this);
@@ -161,7 +162,7 @@ public class AppListActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                Utils.launchImagePiker(AppListActivity.this);
+                                Utils.launchImagePiker(AppListActivity.this,Common.REQUEST_CODE_FOR_IMAGE);
                                 break;
                             case 1:
                             default:
@@ -270,7 +271,6 @@ public class AppListActivity extends AppCompatActivity {
 
 }
 
-    @TargetApi(21)
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -324,7 +324,7 @@ public class AppListActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == 0) {
+        if (resultCode == RESULT_OK && requestCode == Common.REQUEST_CODE_FOR_IMAGE) {
             Utils.myLog("get result");
             try {
                 Uri selectedImageUri = data.getData();
@@ -371,8 +371,7 @@ public class AppListActivity extends AppCompatActivity {
                     name[0] = sdf.format(d);
                 }
 
-                new ExportTask().execute(new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + Common.BACKUP_DIR, name[0]));
+                new ExportTask().execute(new File(MyApplication.backupDir, name[0]));
                 dialog.dismiss();
             }
         });
@@ -607,11 +606,11 @@ public class AppListActivity extends AppCompatActivity {
             File backupDir = params[0];
             if (!backupDir.exists())
                 backupDir.mkdirs();
-            if (prefsDir.exists()) {
-                String files[] = prefsDir.list();
+            if (MyApplication.prefsDir.exists()) {
+                String files[] = MyApplication.prefsDir.list();
                 if (files.length != 0) {
                     for (String file : files) {
-                        File srcFile = new File(prefsDir, file);
+                        File srcFile = new File(MyApplication.prefsDir, file);
                         File destFile = new File(backupDir, file);
                         try {
                             Utils.CopyFile(srcFile, destFile);
@@ -637,11 +636,11 @@ public class AppListActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(File... params) {
             File inFile = params[0];
-            Utils.emptyDirectory(prefsDir);
+            Utils.emptyDirectory(MyApplication.prefsDir);
             String files[] = inFile.list();
             for (String file : files) {
                 File srcFile = new File(inFile, file);
-                File destFile = new File(prefsDir, file);
+                File destFile = new File(MyApplication.prefsDir, file);
                 try {
                     Utils.CopyFile(srcFile, destFile);
                     destFile.setReadable(true, false);

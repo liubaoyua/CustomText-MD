@@ -69,9 +69,8 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
 
     public void setData(ArrayList<CustomText> data) {
         this.data = new ArrayList<>();
-        for(int i = 0; i < data.size(); i++){
-            this.data.add(new CustomText(data.get(i)));
-        }
+        this.data.addAll(data);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -136,6 +135,7 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
             selectAll = false;
             deselectAllItem();
         }
+        notifyDataSetChanged();
     }
 
     public void onClickView(View view,final ViewHolder viewHolder) {

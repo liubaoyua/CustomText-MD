@@ -3,6 +3,7 @@ package liubaoyua.customtext.app;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -33,10 +34,14 @@ import liubaoyua.customtext.utils.PicassoTools;
  */
 public class MyApplication extends Application {
 
+
+    public static File prefsDir = new File(Environment.getDataDirectory() + "/data/" + Common.PACKAGE_NAME + "/shared_prefs");
+    public static File backupDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Common.BACKUP_DIR);
     private static final String LOG_NAME = "crash_log_" + getCurrentDateString() + ".txt";
     private static MyApplication application;
     private ArrayList<Activity> list = new ArrayList<>();
-    Thread.UncaughtExceptionHandler handler = new Thread.UncaughtExceptionHandler() {
+
+    private Thread.UncaughtExceptionHandler handler = new Thread.UncaughtExceptionHandler() {
 
         @Override
         public void uncaughtException(Thread thread, Throwable ex) {

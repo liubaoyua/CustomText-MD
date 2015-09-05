@@ -316,17 +316,17 @@ public abstract class Utils {
     }
 
 
-    public static void launchImagePiker(Activity activity) {
+    public static void launchImagePiker(Activity activity, int requestCode) {
         Intent intent;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        } else {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+//        } else {
             intent = new Intent();
             intent.setAction(Intent.ACTION_GET_CONTENT);
-        }
+//        }
         intent.setType("image/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        activity.startActivityForResult(Intent.createChooser(intent, activity.getString(R.string.select_picture)), 0);
+        activity.startActivityForResult(Intent.createChooser(intent, activity.getString(R.string.select_picture)), requestCode);
     }
 
     public static String parsePicturePath(Context context, Uri uri) {
@@ -438,6 +438,16 @@ public abstract class Utils {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
+    public static void getFileFromContent(Activity activity, int requestCode){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("file/*");
+        try{
+
+            activity.startActivityForResult(intent, requestCode);
+        }catch (Exception e){
+
+        }
+    }
 
 }
 

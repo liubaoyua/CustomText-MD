@@ -71,6 +71,7 @@ public class AppListFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), SetTextActivity.class);
                 intent.putExtra(Common.POSITION_ARG, position);
                 intent.putExtra(Common.PACKAGE_NAME_ARG, packageName);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getActivity().startActivity(intent);
             }
         });

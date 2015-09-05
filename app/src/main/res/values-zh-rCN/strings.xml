@@ -8,6 +8,7 @@
     <string name="recent_apps">最近应用</string>
     <string name="error_found">发现错误，即将退出。错误信息： </string>
     <string name="succeed">成功</string>
+    <string name="fail">失败</string>
     <string name="undo">撤销</string>
     <string name="clear">清空</string>
     <string name="search_hint">应用名(或首字母)、包名等等</string>
@@ -140,4 +141,13 @@
         <item>选择图片</item>
         <item>默认图片</item>
     </string-array>
+
+    <string name="menu_imp_exp_pref">导入导出</string>
+    <string name="dialog_imp_exp_message">可以将当前的配置文件导出分享给别人，也可以导入别人分享的配置文件。</string>
+    <string name="dialog_pos_exp">导出</string>
+    <string name="dialog_neg_imp">导入</string>
+    <string name="toast_imp_succed">导入成功，请重启应用</string>
+    <string name="toast_imp_fail">导入失败 : </string>
+    <string name="toast_imp_fail_invaild_file">导入失败 : 文件不存在或无法读取或非 xml 配置文件 </string>
+
 </resources>

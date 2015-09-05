@@ -1,5 +1,6 @@
 package liubaoyua.customtext.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -42,7 +43,7 @@ public class IconLoader extends RequestHandler {
         if(SCHEME_PACKAGE_NAME.equals(schemeStr)){
             try {
                 drawable = mPackageManager.getApplicationIcon(packageName);
-            } catch (Exception e){
+            } catch (Throwable e){
                 drawable = null;
             }
             if (drawable != null) {
