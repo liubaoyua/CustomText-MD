@@ -40,8 +40,8 @@ public class Common {
     public static Boolean DEBUG = true;
     public static Boolean CRASH_LOG = false;
     public static Boolean FAST_DEBUG = false;
-    public static Boolean XPOSED_DEBUG = false;
-    public static String TAG = "liu_bao_yua";
+    public static Boolean XPOSED_DEBUG = true;
+    public static String TAG = "liubaoyua";
     public static int DEFAULT_NUM = 10 ;
     public static int REQUEST_CODE_FOR_IMAGE = 123;
     public static int REQUEST_CODE_FOR_FILE = 682;
