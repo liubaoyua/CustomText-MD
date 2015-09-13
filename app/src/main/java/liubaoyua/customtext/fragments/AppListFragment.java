@@ -113,7 +113,7 @@ public class AppListFragment extends Fragment {
         if (mRecyclerView.canScrollVertically(-1)) {
             mRecyclerView.smoothScrollToPosition(0);
         } else {
-            mRecyclerView.smoothScrollToPosition(appRecyclerAdapter.getItemCount() - 1);
+//            mRecyclerView.smoothScrollToPosition(appRecyclerAdapter.getItemCount() - 1);
         }
 
     }

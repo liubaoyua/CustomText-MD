@@ -1,6 +1,5 @@
 package liubaoyua.customtext.ui;
 
-import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -261,9 +260,11 @@ public class AppListActivity extends AppCompatActivity {
         fragmentList.get(mViewPager.getCurrentItem()).stopScrolling();
 
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            boolean reTab = true;
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
+                reTab = false;
             }
 
             @Override
@@ -273,7 +274,10 @@ public class AppListActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                fragmentList.get(tab.getPosition()).scrollToTopOrBottom();
+                if(reTab){
+                    fragmentList.get(tab.getPosition()).scrollToTopOrBottom();
+                }
+                reTab = true;
             }
         });
 

@@ -77,15 +77,6 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
 
         final String thisAppName = prefs.getString(Common.PACKAGE_NAME_ARG, Common.DEFAULT_APP_NAME);
 
-        if (isInDebugMode) {
-            XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   isGlobalHackEnabled： "  + isGlobalHackEnabled);
-            XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   isCurrentHackEnabled： "  + isCurrentHackEnabled);
-            XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   isInThisApp： "  + isInThisApp);
-            XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   isSharedHackEnabled： "  + isSharedHackEnabled);
-            XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   shouldUseRegex： "  + shouldUseRegex);
-            XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   shouldHackMoreType： "  + shouldHackMoreType);
-        }
-
         XC_MethodHook textMethodHook;
         if (isInThisApp) {
             final String hackSucceedMessage;
@@ -110,6 +101,14 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
         } else {
             if (!isGlobalHackEnabled && !isCurrentHackEnabled)
                 return;
+
+            if (isInDebugMode) {
+                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   isGlobalHackEnabled： "  + isGlobalHackEnabled);
+                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   isCurrentHackEnabled： "  + isCurrentHackEnabled);
+                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   isSharedHackEnabled： "  + isSharedHackEnabled);
+                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   shouldUseRegex： "  + shouldUseRegex);
+                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   shouldHackMoreType： "  + shouldHackMoreType);
+            }
 
             if(shouldUseRegex){
                 final PatternText[] current = loadPatternTextArrayFromPrefs(mPrefs,isCurrentHackEnabled);

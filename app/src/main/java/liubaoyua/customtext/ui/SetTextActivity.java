@@ -21,25 +21,19 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 import de.greenrobot.event.EventBus;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.adapters.TextRecyclerAdapter;
-import liubaoyua.customtext.app.AppHelper;
 import liubaoyua.customtext.app.MyApplication;
 import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.entity.CustomText;
@@ -256,6 +250,7 @@ public class SetTextActivity extends AppCompatActivity {
             menu.findItem(R.id.action_market_link).setEnabled(false);
             menu.findItem(R.id.action_app_info).setEnabled(false);
             menu.findItem(R.id.action_relaunch_app).setEnabled(false);
+            menu.findItem(R.id.action_imp_exp_pref).setEnabled(false);
         }
 
         MenuItem switchMenuItem = menu.findItem(R.id.action_switch).setVisible(true);
@@ -309,16 +304,23 @@ public class SetTextActivity extends AppCompatActivity {
             }
             textRecyclerAdapter.notifyDataSetChanged();
             Snackbar.make(mRecyclerView
-                    , getString(R.string.menu_clear_all)+" "+getString(R.string.succeed)
-                    ,Snackbar.LENGTH_LONG )
-                    .setAction(getString(R.string.undo), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            textRecyclerAdapter.setData(data);
-                            textRecyclerAdapter.notifyDataSetChanged();
-                        }
-                    }).show();
+                    , getString(R.string.menu_clear_empty) + " " + getString(R.string.succeed)
+                    , Snackbar.LENGTH_LONG).show();
 
+            int count = (maxPage + 1) * Common.DEFAULT_NUM ;
+
+            SharedPreferences.Editor editor = mPrefs.edit();
+            for(int i = 0; i < count ; i++){
+                if(mPrefs.contains(Common.ORI_TEXT_PREFIX + i)){
+                    if(mPrefs.getString(Common.ORI_TEXT_PREFIX + i,"").equals(""))
+                        editor.remove(Common.ORI_TEXT_PREFIX + i);
+                }
+                if(mPrefs.contains(Common.NEW_TEXT_PREFIX + i)){
+                    if(mPrefs.getString(Common.NEW_TEXT_PREFIX + i,"").equals(""))
+                        editor.remove(Common.NEW_TEXT_PREFIX + i);
+                }
+            }
+            editor.commit();
         }else if(id == R.id.action_relaunch_app){
             Utils.killPackage(packageName);
             if(!packageName.equals(Common.SYSTEM_UI_PACKAGE_NAME)){
@@ -529,7 +531,7 @@ public class SetTextActivity extends AppCompatActivity {
                         public void run() {
                             super.run();
                             try{
-                                Thread.sleep(2000);
+                                Thread.sleep(1000);
                             }catch (Exception e){
 
                             }
@@ -558,22 +560,22 @@ public class SetTextActivity extends AppCompatActivity {
         data.clear();
         data.addAll(newData);
         SharedPreferences.Editor mEditor = mPrefs.edit();
-        mEditor.clear();
+//        mEditor.clear();
         for (int i = 0; i < newData.size(); i++) {
             CustomText temp = newData.get(i);
-            if(temp.oriText != null && !temp.oriText.isEmpty())
+            if(!temp.oriText.isEmpty())
                  mEditor.putString(Common.ORI_TEXT_PREFIX+i,temp.oriText);
-            if(temp.newText != null && !temp.newText.isEmpty())
+            if(!temp.newText.isEmpty())
                 mEditor.putString(Common.NEW_TEXT_PREFIX + i, temp.newText);
         }
         int pageNum = newData.size()/Common.DEFAULT_NUM;
-//        if(pageNum < maxPage){
-//            int rest = (maxPage - pageNum) *Common.DEFAULT_NUM;
-//            for (int i = 0; i < rest; i++) {
-//                mEditor.remove(Common.ORI_TEXT_PREFIX + i);
-//                mEditor.remove(Common.NEW_TEXT_PREFIX + i);
-//            }
-//        }
+        if(pageNum < maxPage){
+            int rest = (maxPage - pageNum) *Common.DEFAULT_NUM;
+            for (int i = 0; i < rest; i++) {
+                mEditor.remove(Common.ORI_TEXT_PREFIX + i);
+                mEditor.remove(Common.NEW_TEXT_PREFIX + i);
+            }
+        }
         mEditor.putInt(Common.MAX_PAGE_OLD, pageNum);
         mEditor.commit();
         if(switchCompat.isChecked()){
