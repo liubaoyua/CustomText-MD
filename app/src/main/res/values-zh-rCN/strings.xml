@@ -124,19 +124,6 @@
         \n\n酷市场评论区:本人常驻酷安，欢迎在评论区
              评论、反馈、或调戏 @liubaoyua</string>
     <string name="setting_contributor">感谢帮助</string>
-    <string name="setting_contributor_summary">
-        \n tommy990607/提供 Html 代码支持
-        \n XXXXL / icon
-        \n
-        \n Nicolas Woelker/Deutsch-Übersetzung
-        \n dvaleron/русский перевод
-        \n Ravhi Rizaldi/Bahasa Indonesia
-        \n
-        \n mitchtech/XposedGroot
-        \n GermainZ/Hodor
-        \n rovo89/xposed &amp; Appsettings
-        \n drakeet/material-design-settings
-    </string>
     <string name="menu_select_mode">编辑模式</string>
     <string name="select_picture">选择图片</string>
     <string-array name="change_picture">

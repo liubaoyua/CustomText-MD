@@ -93,18 +93,7 @@
     <string name="setting_feedback_summary"> Email:liubaoyua@gmail.com
         \n\nCoolApk Market: Masukan dan @liubaoyua disini saya akan melihatnya </string>
     <string name="setting_contributor">Terima kasih banyak</string>
-    <string name="setting_contributor_summary">
-        \n tommy990607/kode sumber
-        \n
-        \n Nicolas Woelker/Deutsch-Übersetzung
-        \n dvaleron/русский перевод
-        \n Ravhi Rizaldi/Bahasa Indonesia
-        \n
-        \n mitchtech/XposedGroot
-        \n GermainZ/Hodor
-        \n rovo89/xposed &amp; Appsettings
-        \n drakeet/material-design-settings
-    </string>
+
     <string name="imp_exp_backup_hint">Masukan sesuatu</string>
     <string name="imp_exp_no_backup_found">Tidak ada cadangan ditemukan</string>
     <string name="setting_module_disabled">Modul dinonaktifkan</string>

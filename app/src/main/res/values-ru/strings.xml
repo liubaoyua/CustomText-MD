@@ -53,19 +53,6 @@
     <string name="setting_author_summary">Автор: liubaoyua. Нажмите, чтобы посетить мой микро-блог</string>
     <string name="setting_check_update">Проверка обновлений</string>
     <string name="setting_contributor">Благодарности</string>
-    <string name="setting_contributor_summary">
-        \n tommy990607/kode sumber
-        \n
-        \n Nicolas Woelker/Deutsch-Übersetzung
-        \n dvaleron/русский перевод
-        \n Ravhi Rizaldi/Bahasa Indonesia
-        \n XXXXL/icon
-        \n
-        \n mitchtech/XposedGroot
-        \n GermainZ/Hodor
-        \n rovo89/xposed &amp; Appsettings
-        \n drakeet/material-design-settings
-    </string>
     <string name="setting_custom_message">Пользовательское сообщение</string>
     <string name="setting_custom_message_summary">Измените сообщение, чтобы посмотреть, как это работает:)</string>
     <string name="setting_default_message">Это работает :)</string>

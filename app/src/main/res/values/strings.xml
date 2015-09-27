@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
     <!--code resource -->
     <string name="app_name">Custom Text</string>
     <string name="open">Open</string>
@@ -115,8 +115,10 @@
         \n tommy990607/source code
         \n XXXXL/icon
         \n
+        \n david082321/繁體中文(臺灣)
         \n Nicolas Woelker/Deutsch-Übersetzung
         \n dvaleron/русский перевод
+        \n Ravhi Rizaldi/Bahasa Indonesia
         \n
         \n mitchtech/XposedGroot
         \n GermainZ/Hodor
@@ -145,4 +147,9 @@
     <string name="dialog_imp_exp_message">You can share you pref files whit others or get pref files from other.</string>
     <string name="menu_extra_setting">More Settings</string>
     <string name="setting_debug">Debug Mode</string>
+
+    <string-array name="change_picture">
+        <item>Select a pic</item>
+        <item>Default pic</item>
+    </string-array>
 </resources>
