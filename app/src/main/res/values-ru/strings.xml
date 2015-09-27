@@ -9,20 +9,7 @@
     <string name="clipboard_is_empty">Буфер обмена пуст.</string>
     <string name="close">Закрыть</string>
     <string name="describe">Модуль предоставляет возможность изменять тексты на любые, по Вашему желанию. Разработано liubaoyua.</string>
-    <string name="dialog_about">"ЧТО НОВОГО: 
- \n  Полностью переписан код.
- \n  Поддержка Html.(спасибо tommy990607)
-  \n  Добавлены дополнительные параметры в настройки.
-  \n  Новые функции в следующей версии.
-  \n
- \n   ПРИМЕЧАНИЕ:
-  \n  Требуется Xposed framework. Исходники загружены из Github.
- 
-  \n  ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:
-  \n Модуль разработан просто для удовольствия. Я испытывал его много раз, тем не менее, могут возникнуть некоторые неизвестные проблемы. Поэтому, используйте его на свой страх и риск. Я не несу ответственности за то, что Вы с ним делаете.
 
-  \n АВТОР:liubaoyua
-  \n ТЕКУЩАЯ ВЕРСИЯ:"</string>
     <string name="dialog_about_title">Информация~</string>
     <string name="dialog_data_not_saved">Изменения ещё не сохранены</string>
     <string name="dialog_input_backup_name">Введите название бэкапа</string>
@@ -95,7 +82,7 @@ CoolApk Market: пишите на этот адрес: @liubaoyua и я увиж
     <string name="setting_module_enabled">Модуль включён</string>
     <string name="setting_module_function">Функционал модуля</string>
     <string name="setting_module_function_summary">Этот подуль поможет Вам заменять тексты в: IDs, названиях приложений, подписи оператора и т.д. Требуется Xposed.</string>
-    <string name="setting_module_name">Custom Text 2.0 MD</string>
+    <string name="setting_module_name">Custom Text</string>
     <string name="setting_module_switch">Включение модуля</string>
     <string name="succeed">успешно</string>
     <string name="switch_is_not_activated">Включить?</string>

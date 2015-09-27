@@ -14,21 +14,6 @@
     <string name="clipboard_is_empty">Papan klip Kosong</string>
     <string name="switch_is_not_activated">Aktifkan switch？</string>
     <string name="dialog_about_title">Katakanlah Sesuatu~</string>
-    <string name="dialog_about">LOG PEMBARUAN:
-        \n   Menulis Ulang kode sepenuhnya.
-        \n   Html didukung.(terima kasih tommy990607)
-        \n   Menambah lebih banyak pilihan dalam pengaturan.
-        \n   Fitur baru akan ditambahkan pada versi selanjutnya.
-        \n
-        \n   CATATAN:
-        \n   Xposed framework dibutuhkan. Kode sumber telah diunggah ke Github.
-        \n
-        \n   SANGGAHAN:
-        \n   Hal ini dibuat hanya untuk kesenangan. Saya telah mengujinya untuk berkali-kali, namun, beberapa masalah yang tidak diketahui dapat terjadi. Jadi, gunakan dengan risiko Anda sendiri. Saya tidak bertanggung jawab untuk apa yang Anda lakukan dengan itu.
-        \n
-        \n   PEMILIK:liubaoyua
-        \n   VERSI SAAT INI:
-    </string>
 
     <string name="dialog_title">Apa yang harus dilakukan?</string>
     <string name="dialog_data_not_saved">Modifikasi belum disimpan</string>
@@ -95,7 +80,7 @@
     <string name="setting_check_update">Periksa Pembaruan secara manual</string>
 
     <string name="setting_about_module">Tentang modul</string>
-    <string name="setting_module_name">Custom Text 2.0 MD</string>
+    <string name="setting_module_name">Custom Text</string>
     <string name="setting_author_summary">Pemilik: liubaoyua. Klik untuk mengunjungi blog mikro saya</string>
     <string name="setting_module_function">Fungsi modul</string>
     <string name="setting_module_function_summary">Ini membantu Anda mengganti teks seperti: ID, Nama App, Label Carrier, dll. Xposed dibutuhkan.</string>

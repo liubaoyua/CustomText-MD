@@ -68,10 +68,14 @@ public class SettingActivity extends AppCompatActivity {
 
     public static class SettingsFragment extends PreferenceFragment {
 
+        Preference version;
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
+            version = findPreference(Common.SETTING_VERSION_INFO);
+            String versionName = Utils.getPackageInfoByPackageName(getActivity(), getActivity().getPackageName()).versionName;
+            version.setTitle(version.getTitle() + " " + versionName);
         }
 
         @Override

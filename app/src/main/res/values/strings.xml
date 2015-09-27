@@ -15,13 +15,15 @@
     <string name="switch_is_not_activated">Enable the switch？</string>
     <string name="dialog_about_title">Something To Say~</string>
     <string name="dialog_about">UPDATE LOG:
-        \n   Completely rewrite the code.
-        \n   Html supported.(thanks tommy990607)
-        \n   Add more options in setting.
-        \n   New features will be add in next version.
+        \n   add a regex expression switch(that is why you can replace text which contain "+" or other chars。
+                 if you want to use regex, you can enable it in setting)
+        \n   import/export pref for a single app
+        \n   some UI changes
+        \n   some bugs fix.
         \n
         \n   NOTE:
-        \n   Xposed framework is required. The source code have been upload to Github.
+        \n   Xposed framework is required.
+        \n   CustomText is an openSource project, you can find it in Github.
         \n
         \n   DISCLAIMER:
         \n   It is made just for fun. I have tested it for many times, however, some unknown problem may occur. So, use it at your own risk. I am not responsible for what you do with it.
@@ -96,7 +98,7 @@
     <string name="setting_check_update">Check Update Manually</string>
 
     <string name="setting_about_module">About Module</string>
-    <string name="setting_module_name">Custom Text 2.0 MD</string>
+    <string name="setting_module_name">Custom Text</string>
     <string name="setting_author_summary">Author: liubaoyua. Click to visit my micro blog</string>
     <string name="setting_module_function">Module Function</string>
     <string name="setting_module_function_summary">It helps you replace texts such as: IDs, App names, carrier label, etc. Xposed is required.</string>
@@ -127,4 +129,20 @@
     <string name="setting_module_enabled">Module is enabled</string>
     <string name="enabled_replacement">Enabled Apps </string>
     <string name="global_replacement">Global Replacement</string>
+    <string name="setting_use_regex">Regex Expression</string>
+    <string name="setting_use_regex_summary">Use regex expression ( don\'t enable it if you don\'t know what it is </string>
+    <string name="toast_imp_fail">Import failed:</string>
+    <string name="toast_imp_fail_invaild_file">Import failed: file not found or isn\'t a xml file</string>
+    <string name="toast_imp_succed">Import Successfully. You need to relaunch this app to reload new data.</string>
+    <string name="select_picture">Select a pic</string>
+    <string name="menu_more">More</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_imp_exp_pref">Import\/Export</string>
+    <string name="fail">failed</string>
+    <string name="dialog_pos_exp">Export</string>
+    <string name="dialog_override_global_setting">Setting below will override global setting</string>
+    <string name="dialog_neg_imp">Import</string>
+    <string name="dialog_imp_exp_message">You can share you pref files whit others or get pref files from other.</string>
+    <string name="menu_extra_setting">More Settings</string>
+    <string name="setting_debug">Debug Mode</string>
 </resources>

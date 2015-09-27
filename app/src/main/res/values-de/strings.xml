@@ -14,21 +14,6 @@
     <string name="clipboard_is_empty">Zwischenablage ist leer</string>
     <string name="switch_is_not_activated">Schalter aktivieren？</string>
     <string name="dialog_about_title">Something To Say~</string>
-    <string name="dialog_about">CHANGELOG:
-        \n   Code komplett neu geschrieben.
-        \n   HTML wird unterstützt. (Dank an tommy990607)
-        \n   Mehr Optionen in den Einstellungen.
-        \n   Neue Features werden in den nächsten Versionen hinzugefügt.
-        \n
-        \n   BEMERKUNG:
-        \n   Xposed Framework benötigt. Quellcode auf Github hochgeladen.
-        \n
-        \n   DISCLAIMER:
-        \n   Diese App ist nur zum Spaß. Ich habe sie einige Male getestet, es könnten dennoch unbekannte Probleme auftreten. Benutzung erfolgt daher auf eigene Gefahr. Ich bin nicht verantwortlich für das, was du damit tust.
-        \n
-        \n   AUTOR: liubaoyua
-        \n   DERZEITIGE VERSION:
-    </string>
 
     <string name="dialog_title">Was tun?</string>
     <string name="dialog_data_not_saved">Änderungen nicht gespeichert</string>
@@ -95,7 +80,7 @@
     <string name="setting_check_update">Manuell auf Updates überprüfen</string>
 
     <string name="setting_about_module">Über das Modul</string>
-    <string name="setting_module_name">Custom Text 2.0 MD</string>
+    <string name="setting_module_name">Custom Text</string>
     <string name="setting_author_summary">Autor: liubaoyua. Klicken, um meinen micro blog zu besuchen</string>
     <string name="setting_module_function">Funktion des Moduls</string>
     <string name="setting_module_function_summary">Es hilft dir, Texte zu ersetzen wie: IDs, Appnamen, Mobilfunkbetreibername, etc. Xposed benötigt.</string>

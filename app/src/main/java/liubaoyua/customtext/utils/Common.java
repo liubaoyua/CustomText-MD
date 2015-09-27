@@ -31,6 +31,7 @@ public class Common {
     public final static String SETTING_MORE_TYPE = "ImageText";
     public final static String SETTING_USE_REGEX = "UseRegex";
 
+    public final static String SETTING_VERSION_INFO = "version";
     public final static String SETTING_HACK_SUCCEED_MESSAGE = "hackSucceedMessage";
     // in pref
     public final static String PREF_HEAD_VIEW = "HeadViewPicture";
@@ -40,7 +41,7 @@ public class Common {
     public static Boolean DEBUG = true;
     public static Boolean CRASH_LOG = false;
     public static Boolean FAST_DEBUG = false;
-    public static Boolean XPOSED_DEBUG = true;
+    public static Boolean XPOSED_DEBUG = false;
     public static String TAG = "liubaoyua";
     public static int DEFAULT_NUM = 10 ;
     public static int REQUEST_CODE_FOR_IMAGE = 123;

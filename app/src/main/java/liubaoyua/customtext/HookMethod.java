@@ -65,9 +65,9 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
 
         final boolean shouldUseRegex;
         if(mPrefs.contains(Common.SETTING_MORE_TYPE)){
-            shouldUseRegex = mPrefs.getBoolean(Common.SETTING_USE_REGEX,true);
+            shouldUseRegex = mPrefs.getBoolean(Common.SETTING_USE_REGEX,false);
         }else {
-            shouldUseRegex = prefs.getBoolean(Common.SETTING_USE_REGEX,true);
+            shouldUseRegex = prefs.getBoolean(Common.SETTING_USE_REGEX,false);
         }
 
         final boolean isGlobalHackEnabled = prefs.getBoolean(Common.PREFS, false);

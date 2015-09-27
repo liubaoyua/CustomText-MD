@@ -408,6 +408,7 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
                     }
                 }
             });
+            builder.create().show();
 
 
         } else if(id == R.id.action_extra_setting){
@@ -426,9 +427,9 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
             }
 
             if(mPrefs.contains(Common.SETTING_USE_REGEX)){
-                check[1] = mPrefs.getBoolean(Common.SETTING_USE_REGEX,true);
+                check[1] = mPrefs.getBoolean(Common.SETTING_USE_REGEX,false);
             }else{
-                check[1] = prefs.getBoolean(Common.SETTING_USE_REGEX,true);
+                check[1] = prefs.getBoolean(Common.SETTING_USE_REGEX,false);
             }
 
 
@@ -532,24 +533,25 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
                     destFile.setWritable(true, true);
                     Toast.makeText(SetTextActivity.this,
                             getString(R.string.toast_imp_succed) ,Toast.LENGTH_LONG).show();
-                    new Thread(){
-                        @Override
-                        public void run() {
-                            super.run();
-                            try{
-                                Thread.sleep(1000);
-                            }catch (Exception e){
-
-                            }
-                            System.exit(0);
-                        }
-                    }.run();
-//                    Intent intent = new Intent(SetTextActivity.this, SetTextActivity.class);
-//                    intent.putExtra(Common.POSITION_ARG, position);
-//                    intent.putExtra(Common.PACKAGE_NAME_ARG, packageName);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                    startActivity(intent);
-//                    finishAndRemoveTask();
+//                    recreate();
+//                    new Thread(){
+//                        @Override
+//                        public void run() {
+//                            super.run();
+//                            try{
+//                                Thread.sleep(1000);
+//                            }catch (Exception e){
+//
+//                            }
+//                            System.exit(0);
+//                        }
+//                    }.run();
+////                    Intent intent = new Intent(SetTextActivity.this, SetTextActivity.class);
+////                    intent.putExtra(Common.POSITION_ARG, position);
+////                    intent.putExtra(Common.PACKAGE_NAME_ARG, packageName);
+////                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+////                    startActivity(intent);
+////                    finishAndRemoveTask();
                 }catch (Exception e){
                     Toast.makeText(SetTextActivity.this,
                             getString(R.string.toast_imp_fail) + e.getMessage() ,Toast.LENGTH_LONG).show();

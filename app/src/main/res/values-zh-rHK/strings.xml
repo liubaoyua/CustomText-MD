@@ -13,21 +13,6 @@
     <string name="clipboard_is_empty">剪切板為空</string>
     <string name="switch_is_not_activated">是否啟用開關？ </string>
     <string name="dialog_about_title">想說什麼來著~</string>
-    <string name="dialog_about">更新日誌：
-        \n 完全重寫代碼，界面什麼的全改了
-        \n 支持替換為html (感謝tommy990607提供代碼)
-        \n 添加更多的設置選項。
-        \n 一些新功能將在之後的版本更新。
-        \n
-        \n 另：
-        \n 本應用需要安裝Xposed 框架才能使用。代碼已在 Github 開源。
-        \n
-        \n 免責聲明：
-        \n 作者已經盡量測試，但仍然可能出現未知的問題，請使用者自行承擔風險，作者不對你的使用負責，也不承擔任何損失。如有不爽，家無水錶，不收快遞，請勿跨省，謝謝合作。
-        \n
-        \n 作者：liubaoyua
-        \n 當前版本：
-    </string>
 
     <string name="dialog_title">來包辣條？ </string>
     <string name="dialog_data_not_saved">修改尚未保存</string>
@@ -95,7 +80,7 @@
     <string name="setting_check_update">手動檢查更新</string>
 
     <string name="setting_about_module">關於模塊</string>
-    <string name="setting_module_name">文本自定義2.0 MD</string>
+    <string name="setting_module_name">文本自定義</string>
     <string name="setting_author_summary">作者: liubaoyua. 我只能說，作者是個死宅(笑),寫個代碼都能拖那麼久，微博點這裡。 </string>
     <string name="setting_module_function">模塊功能</string>
     <string name="setting_module_function_summary">本模塊可以幫助您修改應用中顯示的文本，比如：應用名字、運營商標籤等手機上顯示的文字。使用前確保安裝了 Xposed 框架。更多使用方法請戳這裡。 </string>

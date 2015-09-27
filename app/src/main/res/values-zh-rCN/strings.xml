@@ -18,14 +18,14 @@
     <string name="enabled_replacement">已启用应用</string>
     <string name="dialog_about_title">想说什么来着~</string>
     <string name="dialog_about">更新日志：
-        \n   完全重写代码，界面什么的全改了
-        \n   支持替换为 html (感谢tommy990607提供代码)
-        \n   新图标由 XXXXL 提供。
-        \n   添加更多的设置选项。
-        \n   一些新功能将在之后的版本更新。
+        \n   新版功能：
+        \n   增加一个正则表达式的开关（这就是为何无法替换带有"+"等其他符号的原因。默认关闭了，有需要自行开启）
+        \n   可以为单个应用导入导出配置文件
+        \n   UI 调整
+        \n   修复一些 Bug..
         \n
         \n   另：
-        \n   本应用需要安装 Xposed 框架才能使用。代码已在 Github 开源。
+        \n   本应用需要安装 Xposed 框架才能使用。本项目已丢到 github，有需要去寻找吧。
         \n
         \n   免责声明：
         \n   作者已经尽量测试，但仍然可能出现未知的问题，请使用者自行承担风险，作者不对你的使用负责，也不承担任何损失。如有不爽，家无水表，不收快递，请勿跨省，谢谢合作。
@@ -100,14 +100,15 @@
     <string name="setting_more_type">深度替换</string>
     <string name="setting_more_type_summary">将替换更多类型的字符（启用可能导致某些文本或图片显示不正确）</string>
     <string name="setting_use_regex">正则表达式</string>
-    <string name="setting_use_regex_summary">替换默认支持正则表达式（如果出现某些文本无法替换，又不知道怎么解决，可以尝试关闭该选项）</string>
+    <string name="setting_debug">调试模式</string>
+    <string name="setting_use_regex_summary">替换默认支持正则表达式（如果出现）</string>
     <string name="setting_custom_message">自定义信息</string>
     <string name="setting_default_message">模块可用</string>
     <string name="setting_custom_message_summary">修改模块可用时在主界面上显示的信息</string>
     <string name="setting_check_update">手动检查更新</string>
 
     <string name="setting_about_module">关于模块</string>
-    <string name="setting_module_name">文本自定义 2.0 MD</string>
+    <string name="setting_module_name">文本自定义</string>
     <string name="setting_author_summary">作者: liubaoyua. 我只能说，作者是个死宅(笑),写个代码都能拖那么久，微博点这里。</string>
     <string name="setting_module_function">模块功能</string>
     <string name="setting_module_function_summary">本模块可以帮助您修改应用中显示的文本，比如：应用名字、运营商标签 等手机上显示的文字。使用前确保安装了 Xposed 框架。更多使用方法请戳这里。</string>
@@ -118,7 +119,6 @@
     <string name="setting_like_summary">如果觉得本应用不错的话，欢迎到应用商店给个好评哈</string>
     <string name="setting_feedback">建议反馈</string>
     <string name="setting_feedback_summary"> 邮箱:liubaoyua@gmail.com
-             (由于某些不能说的原因，很可能会延迟回复)
         \n\n百度贴吧:欢迎在xposed框架吧讨论。
              或者请艾特我 @liubaoyua
         \n\n酷市场评论区:本人常驻酷安，欢迎在评论区

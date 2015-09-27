@@ -20,7 +20,7 @@
             android:title="@string/setting_use_regex"
             android:key="UseRegex"
             android:summary="@string/setting_use_regex_summary"
-            android:defaultValue="true"/>
+            android:defaultValue="false"/>
         <EditTextPreference
             android:title="@string/setting_custom_message"
             android:summary="@string/setting_custom_message_summary"
@@ -31,8 +31,12 @@
         <Preference
             android:key="checkUpdate"
             android:title="@string/setting_check_update">
-
         </Preference>
+
+        <CheckBoxPreference
+            android:title="@string/setting_debug"
+            android:key="xposedDebug"
+            android:defaultValue="false"/>
 
     </PreferenceCategory>
 
@@ -40,6 +44,7 @@
         android:title="@string/setting_about_module">
         <Preference
             android:title="@string/setting_module_name"
+            android:key="version"
             android:summary="@string/setting_author_summary">
             <intent
                 android:action="android.intent.action.VIEW"
@@ -48,6 +53,9 @@
         <Preference
             android:title="@string/setting_module_function"
             android:summary="@string/setting_module_function_summary">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/liubaoyua/CustomText-MD"/>
         </Preference>
         <Preference
             android:title="@string/setting_attention"
