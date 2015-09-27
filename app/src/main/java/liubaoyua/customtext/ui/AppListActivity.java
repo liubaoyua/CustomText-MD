@@ -94,6 +94,7 @@ public class AppListActivity extends AppCompatActivity {
 //        EventBus.getDefault().register(this);
         setContentView(R.layout.activity_app_list);
 
+        Utils.configStatusBarColor(this);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 

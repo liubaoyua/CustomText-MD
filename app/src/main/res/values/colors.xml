@@ -25,4 +25,7 @@
     <color name="white">#FFFFFFFF</color>
 
 
+    <color name="main_activity_background">#EEEEEE</color>
+
+
 </resources>

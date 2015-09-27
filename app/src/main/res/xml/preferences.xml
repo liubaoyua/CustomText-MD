@@ -1,33 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PreferenceScreen
-    android:layout="@layout/preference_item"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/menu_settings">
     <PreferenceCategory
-        android:layout="@layout/preference_category_widget"
         android:title="@string/setting_global_setting">
 
         <CheckBoxPreference
-            android:layout="@layout/preference_item"
             android:title="@string/setting_module_switch"
             android:key="moduleswitch"
             android:summaryOn="@string/setting_module_enabled"
             android:summaryOff="@string/setting_module_disabled"
             android:defaultValue="true"/>
         <CheckBoxPreference
-            android:layout="@layout/preference_item"
             android:title="@string/setting_more_type"
             android:key="ImageText"
             android:summary="@string/setting_more_type_summary"
             android:defaultValue="false"/>
         <CheckBoxPreference
-            android:layout="@layout/preference_item"
             android:title="@string/setting_use_regex"
             android:key="UseRegex"
             android:summary="@string/setting_use_regex_summary"
             android:defaultValue="true"/>
         <EditTextPreference
-            android:layout="@layout/preference_item"
             android:title="@string/setting_custom_message"
             android:summary="@string/setting_custom_message_summary"
             android:hint="@string/setting_default_message"
@@ -35,7 +29,6 @@
         </EditTextPreference>
 
         <Preference
-            android:layout="@layout/preference_item"
             android:key="checkUpdate"
             android:title="@string/setting_check_update">
 
@@ -44,10 +37,8 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:layout="@layout/preference_category_widget"
         android:title="@string/setting_about_module">
         <Preference
-            android:layout="@layout/preference_item"
             android:title="@string/setting_module_name"
             android:summary="@string/setting_author_summary">
             <intent
@@ -55,19 +46,16 @@
                 android:data="http://weibo.com/u/2194313104"/>
         </Preference>
         <Preference
-            android:layout="@layout/preference_item"
             android:title="@string/setting_module_function"
             android:summary="@string/setting_module_function_summary">
         </Preference>
         <Preference
-            android:layout="@layout/preference_item"
             android:title="@string/setting_attention"
             android:key = "attention"
             android:summary="@string/setting_attention_summary">
         </Preference>
 
         <Preference
-            android:layout="@layout/preference_item"
             android:title="@string/setting_like"
             android:summary="@string/setting_like_summary">
             <intent
@@ -76,13 +64,11 @@
         </Preference>
 
         <Preference
-            android:layout="@layout/preference_item"
             android:title="@string/setting_feedback"
             android:summary="@string/setting_feedback_summary">
         </Preference>
 
         <Preference
-            android:layout="@layout/preference_item"
             android:title="@string/setting_contributor"
             android:summary="@string/setting_contributor_summary">
         </Preference>

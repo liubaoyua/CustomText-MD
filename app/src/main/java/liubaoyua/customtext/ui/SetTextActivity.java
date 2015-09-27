@@ -9,18 +9,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.graphics.Color;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.support.v7.widget.Toolbar;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -35,6 +38,7 @@ import de.greenrobot.event.EventBus;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.adapters.TextRecyclerAdapter;
 import liubaoyua.customtext.app.MyApplication;
+import liubaoyua.customtext.databinding.ActivitySetTextBinding;
 import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.entity.CustomText;
 import liubaoyua.customtext.entity.DataLoadedEvent;
@@ -42,13 +46,15 @@ import liubaoyua.customtext.utils.Common;
 import liubaoyua.customtext.utils.Utils;
 
 
-public class SetTextActivity extends AppCompatActivity {
+public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
     private static ArrayList<CustomText> clipboard = new ArrayList<>();
 
     private RecyclerView mRecyclerView;
     private TextRecyclerAdapter textRecyclerAdapter;
     private SwitchCompat switchCompat;
+    private Toolbar toolbar;
+    private AppBarLayout appbar;
 
     private String packageName = "";
     private String appName = "";
@@ -87,10 +93,9 @@ public class SetTextActivity extends AppCompatActivity {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            getMenuInflater().inflate(R.menu.menu_action_mode, menu);
+            mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
             isInActionMode = true;
             textRecyclerAdapter.multiSelectMode=true;
-            Utils.configStatusBarColor(SetTextActivity.this, Color.rgb(48, 48, 48));
             return true;
         }
 
@@ -100,7 +105,6 @@ public class SetTextActivity extends AppCompatActivity {
             textRecyclerAdapter.deselectAllItem();
             isInActionMode = false;
             textRecyclerAdapter.multiSelectMode=false;
-            Utils.configStatusBarColor(SetTextActivity.this, getResources().getColor(R.color.primary_dark));
         }
 
         @Override
@@ -113,49 +117,31 @@ public class SetTextActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_text);
-        Intent intent = getIntent();
-        packageName = intent.getStringExtra(Common.PACKAGE_NAME_ARG);
-//        position = intent.getIntExtra(Common.POSITION_ARG,-1);
-        prefs = getSharedPreferences(Common.PREFS, MODE_WORLD_READABLE);
-        mPrefs = getSharedPreferences(packageName, MODE_WORLD_READABLE);
+        ActivitySetTextBinding b = DataBindingUtil.setContentView(this, R.layout.activity_set_text);
 
-        if(Common.FAST_DEBUG){
-            packageName = Common.SYSTEM_UI_PACKAGE_NAME;
-        }
-
-        if(packageName.equals(Common.GLOBAL_SETTING_PACKAGE_NAME)){
-            appName = getString(R.string.global_replacement);
-        }else if(packageName.equals(Common.SHARING_SETTING_PACKAGE_NAME)) {
-            appName = getString(R.string.enabled_replacement);
-        }else{
-            PackageInfo packageInfo = Utils.getPackageInfoByPackageName(this,packageName);
-            if(packageInfo == null){
-                Toast.makeText(this.getApplicationContext(), getString(R.string.error_found)
-                        + packageName ,Toast.LENGTH_SHORT).show();
-                this.finish();
-            }else {
-                appName = packageInfo.applicationInfo.loadLabel(getPackageManager()).toString();
+        Utils.configStatusBarColor(this);
+        appbar = b.appBar;
+        toolbar = b.toolbar;
+        toolbar.inflateMenu(R.menu.menu_set_text);
+        toolbar.setTitle(getString(R.string.title_activity_settings));
+        toolbar.setNavigationIcon(R.mipmap.ic_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
-        }
+        });
+        toolbar.setOnMenuItemClickListener(this);
 
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(appName);
-        }
-
-
-        final View fab = (findViewById(R.id.action_button_save));
+        final FloatingActionButton fab = b.fabButton;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveData();
-//                String s = null;System.out.println( s.toCharArray());
             }
         });
 
-
-        mRecyclerView = (RecyclerView)findViewById(R.id.recycler_view);
+        mRecyclerView = b.recyclerView;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         textRecyclerAdapter = new TextRecyclerAdapter(SetTextActivity.this,data,mRecyclerView);
@@ -218,6 +204,33 @@ public class SetTextActivity extends AppCompatActivity {
     }
 
     private void reloadData(){
+        packageName = getIntent().getStringExtra(Common.PACKAGE_NAME_ARG);
+//        position = intent.getIntExtra(Common.POSITION_ARG,-1);
+        prefs = getSharedPreferences(Common.PREFS, MODE_WORLD_READABLE);
+        mPrefs = getSharedPreferences(packageName, MODE_WORLD_READABLE);
+
+        if(Common.FAST_DEBUG){
+            packageName = Common.SYSTEM_UI_PACKAGE_NAME;
+        }
+
+        if(packageName.equals(Common.GLOBAL_SETTING_PACKAGE_NAME)){
+            appName = getString(R.string.global_replacement);
+        }else if(packageName.equals(Common.SHARING_SETTING_PACKAGE_NAME)) {
+            appName = getString(R.string.enabled_replacement);
+        }else{
+            PackageInfo packageInfo = Utils.getPackageInfoByPackageName(this,packageName);
+            if(packageInfo == null){
+                Toast.makeText(this.getApplicationContext(), getString(R.string.error_found)
+                        + packageName ,Toast.LENGTH_SHORT).show();
+                this.finish();
+            }else {
+                appName = packageInfo.applicationInfo.loadLabel(getPackageManager()).toString();
+            }
+        }
+
+        toolbar.setTitle(appName);
+        onCreateToolbarMenu(toolbar.getMenu());
+
         maxPage = mPrefs.getInt(Common.MAX_PAGE_OLD, 0);
 
         int count = (maxPage + 1) * Common.DEFAULT_NUM ;
@@ -232,10 +245,11 @@ public class SetTextActivity extends AppCompatActivity {
         textRecyclerAdapter.setData(data);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_set_text, menu);
+
+
+
+    public boolean onCreateToolbarMenu(Menu menu) {
+
         // systemui 要特殊处理
         if(!packageName.equals(Common.SYSTEM_UI_PACKAGE_NAME) ){
             if(getPackageManager().getLaunchIntentForPackage(packageName) == null){
@@ -270,7 +284,7 @@ public class SetTextActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
 
 //        <string name="menu_add_item">增加楼层</string>
@@ -358,12 +372,11 @@ public class SetTextActivity extends AppCompatActivity {
         }else if(id == R.id.action_select_mode){
             if(actionMode != null) {
                 return false;
+            }else {
+                actionMode = toolbar.startActionMode(mCallback);
+                return true;
             }
-            if(!isInActionMode){
-                actionMode = startSupportActionMode(mCallback);
-                textRecyclerAdapter.notifyDataSetChanged();
-            }
-            return true;
+
         }else if(id ==R.id.action_imp_exp_pref){
             AlertDialog.Builder builder = new AlertDialog.Builder(SetTextActivity.this);
             builder.setTitle(R.string.menu_imp_exp_pref);
@@ -404,13 +417,6 @@ public class SetTextActivity extends AppCompatActivity {
             CharSequence[] texts = new CharSequence[2];
             texts[0] = getString(R.string.setting_more_type);
             texts[1] = getString(R.string.setting_use_regex);
-
-
-//            LayoutInflater factory = LayoutInflater.from(getApplicationContext());
-//            View layout = factory.inflate(R.layout.setting_item, null);
-//            layout.setPadding(64,64,64,64);
-//            final CheckBox moreType = (CheckBox)layout.findViewById(R.id.more_type_checkbox);
-//            final CheckBox useRegex = (CheckBox)layout.findViewById(R.id.use_regex_checkbox);
 
             boolean[] check = new boolean[2];
             if(mPrefs.contains(Common.SETTING_MORE_TYPE)){

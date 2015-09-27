@@ -69,7 +69,9 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
 
     public void setData(ArrayList<CustomText> data) {
         this.data = new ArrayList<>();
-        this.data.addAll(data);
+        for (int i = 0; i < data.size() ; i ++){
+            this.data.add(new CustomText(data.get(i)));
+        }
         notifyDataSetChanged();
     }
 
@@ -294,13 +296,13 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    CustomText customText = data.get(getAdapterPosition());
-                    customText.oriText = oriEditText.getText().toString();
+
                 }
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-
+                    CustomText customText = data.get(getAdapterPosition());
+                    customText.oriText = oriEditText.getText().toString();
                 }
             });
             newEditText.addTextChangedListener(new TextWatcher() {
@@ -311,13 +313,13 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    CustomText customText = data.get(getAdapterPosition());
-                    customText.newText = newEditText.getText().toString();
+
                 }
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-
+                    CustomText customText = data.get(getAdapterPosition());
+                    customText.newText = newEditText.getText().toString();
                 }
             });
             operateButton.setOnClickListener(new View.OnClickListener() {

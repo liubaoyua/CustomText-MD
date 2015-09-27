@@ -5,37 +5,51 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.os.Bundle;
 import android.preference.PreferenceScreen;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import liubaoyua.customtext.R;
+import liubaoyua.customtext.databinding.ActivitySettingsBinding;
 import liubaoyua.customtext.utils.Common;
 import liubaoyua.customtext.utils.Utils;
 
 public class SettingActivity extends AppCompatActivity {
     private SettingsFragment mSettingsFragment;
+    private Toolbar toolbar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
+        ActivitySettingsBinding b = DataBindingUtil.setContentView(this, R.layout.activity_settings);
+        toolbar = b.toolbar;
+        setupToolbar();
+        Utils.configStatusBarColor(this);
         if (savedInstanceState == null) {
             mSettingsFragment = new SettingsFragment();
             FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.settings_container, mSettingsFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.setting_content, mSettingsFragment).commit();
         }
 
+    }
+
+    private void setupToolbar(){
+        toolbar.setTitle(R.string.title_activity_settings);
+        toolbar.setNavigationIcon(R.mipmap.ic_back_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override

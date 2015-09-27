@@ -1,41 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">
-    </style>
-
-    <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
+
         <item name="android:windowBackground">@color/background</item>
+        <item name="mainActivityBackground">@color/main_activity_background</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeStyle">@style/ActionModeTheme</item>
+
+        <item name="android:actionBarStyle">@style/Toolbar</item>
+        <item name="android:actionModeCloseDrawable">@mipmap/ic_back_white_24dp</item>
+        <!-- ActionMode右边的按钮是一个特殊的CloseButton，分割线与CloseButton的Style有关 -->
+        <!-- 删除ActionMode的Divider-->
+        <item name="android:actionModeCloseButtonStyle">@null</item>
+        <item name="actionOverflowButtonStyle">@style/ActionModeTheme.OverFlow</item>
+    </style>
+
+    <style name="AppTheme.Blue">
+
     </style>
 
 
-    <style name="Theme.Blue" parent="Base.Theme.Blue">
+    <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
-
-    <style name="Base.Theme.Blue" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
-        <item name="colorControlHighlight">@color/accent_light</item>
-        <item name="android:windowBackground">@color/background</item>
+    <style name="ActionModeTheme" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="background">?attr/colorPrimary</item>
+        <item name="backgroundSplit">?attr/actionModeSplitBackground</item>
     </style>
 
-    <style name="Widget.CardContent" parent="android:Widget">
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:orientation">vertical</item>
+    <style name="ActionModeTheme.OverFlow" parent="@style/Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@mipmap/ic_more_vert_white_24dp</item>
     </style>
+    <!--<style name="Widget.CardContent" parent="android:Widget">-->
+        <!--<item name="android:paddingLeft">16dp</item>-->
+        <!--<item name="android:paddingRight">16dp</item>-->
+        <!--<item name="android:paddingTop">12dp</item>-->
+        <!--<item name="android:paddingBottom">12dp</item>-->
+        <!--<item name="android:orientation">vertical</item>-->
+    <!--</style>-->
 
-    <style name="menu_labels_style">
-        <item name="android:background">@drawable/fab_label_background</item>
-        <item name="android:textColor">@android:color/white</item>
+    <!--<style name="menu_labels_style">-->
+        <!--<item name="android:background">@drawable/fab_label_background</item>-->
+        <!--<item name="android:textColor">@android:color/white</item>-->
 
-    </style>
+    <!--</style>-->
 
 </resources>

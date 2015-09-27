@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.WindowManager;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -42,6 +44,7 @@ import liubaoyua.customtext.R;
 import liubaoyua.customtext.app.AppHelper;
 import liubaoyua.customtext.entity.AppInfo;
 import liubaoyua.customtext.entity.CustomText;
+import liubaoyua.customtext.ui.AppListActivity;
 
 /**
  * Created by liubaoyua on 2015/6/20 0020.
@@ -138,6 +141,7 @@ public abstract class Utils {
     }
 
     public static boolean isIdenticalTextList(ArrayList<CustomText> a, ArrayList<CustomText> b){
+        Log.d("text",a.toString() + b.toString());
         if(a.size() == b.size()){
             for(int i =0; i< a.size(); i++){
                 if(!(a.get(i).equals(b.get(i)))){
@@ -308,13 +312,29 @@ public abstract class Utils {
         }
     }
 
-    public static void configStatusBarColor(Activity activity, int color) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            activity.getWindow().setStatusBarColor(color);
+
+
+
+    public static void configStatusBarColor(Activity activity){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if(activity instanceof AppListActivity){
+                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                activity.getWindow().setStatusBarColor(Color.parseColor("#00000000"));
+            }else {
+                TypedValue typedValue = new TypedValue();
+                activity.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
+                int color = typedValue.data;
+                activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                activity.getWindow().setStatusBarColor(color);
+            }
+        }else if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT){
+            TypedValue typedValue = new TypedValue();
+            activity.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+            int color = typedValue.data;
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            SystemBarTintManager.setStatusBarTint(activity, color);
         }
     }
-
 
     public static void launchImagePiker(Activity activity, int requestCode) {
         Intent intent;

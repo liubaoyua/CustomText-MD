@@ -1,23 +1,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_select_all"
-        android:icon="@mipmap/ic_select_all"
+        android:icon="@mipmap/ic_select_all_white_24dp"
         android:title="@android:string/selectAll"
         app:showAsAction="always"/>
     <item
         android:id="@+id/menu_cut"
-        android:icon="@mipmap/ic_content_cut"
+        android:icon="@mipmap/ic_content_cut_white_24dp"
         android:title="@android:string/cut"
         app:showAsAction="always"/>
     <item
         android:id="@+id/menu_copy"
-        android:icon="@mipmap/ic_content_copy"
+        android:icon="@mipmap/ic_content_copy_white_24dp"
         android:title="@android:string/copy"
         app:showAsAction="always"/>
     <item
         android:id="@+id/menu_paste"
-        android:icon="@mipmap/ic_content_paste"
+        android:icon="@mipmap/ic_content_paste_white_24dp"
         android:title="@android:string/paste"
         app:showAsAction="always"/>
     <!--<item-->

@@ -23,7 +23,7 @@
             android:name=".ui.AppListActivity"
             android:label="@string/app_name"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/Theme.DesignDemo" >
+            android:theme="@style/AppTheme.Blue" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,32 +31,19 @@
             </intent-filter>
         </activity>
 
-        <!--<activity-->
-            <!--android:name=".AppDebugActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:configChanges="keyboardHidden|orientation|screenSize"-->
-            <!--android:label="@string/app_name"-->
-            <!--android:theme="@style/Theme.Blue" >-->
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
-
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
-
         <activity
             android:name=".ui.SetTextActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Blue" >
+            android:theme="@style/AppTheme.Blue" >
         </activity>
         <activity
             android:name=".ui.SettingActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_settings"
-            android:theme="@style/Theme.Blue" >
+            android:theme="@style/AppTheme.Blue" >
         </activity>
     </application>
 
