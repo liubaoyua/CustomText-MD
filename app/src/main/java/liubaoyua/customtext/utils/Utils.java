@@ -19,6 +19,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.WindowManager;
@@ -230,7 +231,10 @@ public abstract class Utils {
     public static void showMessage(Context context,String versionName){
         ScrollView scrollView = new ScrollView(context);
         TextView textView = new TextView(context);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setLinksClickable(true);
         textView.setText(context.getString(R.string.dialog_about) + versionName);
+
         scrollView.setPadding(64,64,64,64);
         scrollView.addView(textView);
         textView.setTextColor(context.getResources().getColor(android.R.color.black));
