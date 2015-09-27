@@ -96,6 +96,7 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
             mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
             isInActionMode = true;
             textRecyclerAdapter.multiSelectMode=true;
+            textRecyclerAdapter.notifyDataSetChanged();
             return true;
         }
 
