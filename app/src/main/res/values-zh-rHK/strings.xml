@@ -113,4 +113,22 @@
     <string name="global_replacement">全局替換</string>
     <string name="enabled_replacement">已啟用程式</string>
     <string name="menu_select_mode">編輯模式</string>
+
+    <string name="dialog_about">更新日誌：
+        \n   增加一个正则表达式的开关（这就是为何无法替换带有"+"等其他符号的原因。默认关闭了，有需要自行开启）
+        \n   可以為單個應用導入導出配置文件
+        \n   UI 調整
+        \n   修復一些 Bug..
+        \n   中秋節快樂 ^_^
+        \n
+        \n   另：
+        \n   本程式需要安裝Xposed 框架才能使用。代碼已在 Github 開源。
+        \n
+        \n   免責聲明：
+        \n   作者已經盡量測試，但仍然可能出現未知的問題，請使用者自行承擔風險，作者不對你的使用負責，也不承擔任何損失。如有不爽，家無水錶，不收快遞，請勿跨省，謝謝合作。
+        \n
+        \n   作者：liubaoyua
+        \n   目前版本：
+    </string>
+
 </resources>

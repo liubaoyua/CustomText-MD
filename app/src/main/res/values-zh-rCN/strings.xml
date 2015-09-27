@@ -18,11 +18,11 @@
     <string name="enabled_replacement">已启用应用</string>
     <string name="dialog_about_title">想说什么来着~</string>
     <string name="dialog_about">更新日志：
-        \n   新版功能：
         \n   增加一个正则表达式的开关（这就是为何无法替换带有"+"等其他符号的原因。默认关闭了，有需要自行开启）
         \n   可以为单个应用导入导出配置文件
         \n   UI 调整
         \n   修复一些 Bug..
+        \n   中秋节快乐 ^_^
         \n
         \n   另：
         \n   本应用需要安装 Xposed 框架才能使用。本项目已丢到 github，有需要去寻找吧。

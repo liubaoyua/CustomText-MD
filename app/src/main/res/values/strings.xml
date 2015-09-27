@@ -15,11 +15,12 @@
     <string name="switch_is_not_activated">Enable the switch？</string>
     <string name="dialog_about_title">Something To Say~</string>
     <string name="dialog_about">UPDATE LOG:
-        \n   add a regex expression switch(that is why you can replace text which contain "+" or other chars。
+        \n   Add a regex expression switch(that is why you can replace text which contain "+" or other chars。
                  if you want to use regex, you can enable it in setting)
-        \n   import/export pref for a single app
-        \n   some UI changes
-        \n   some bugs fix.
+        \n   Able to import/export pref for a single app
+        \n   Some UI changes
+        \n   Some bugs fix.
+        \n   Happy Mid-Autumn Festival ^_^
         \n
         \n   NOTE:
         \n   Xposed framework is required.
