@@ -15,15 +15,15 @@ public class AppHelper {
     public static final String EXTERNAL_DIR = Environment
             .getExternalStorageDirectory().getAbsolutePath() + "/Custom Text/";
 
-    public static MyApplication getApplication(){
+    public static MyApplication getApplication() {
         return MyApplication.getInstance();
     }
 
-    public static List<AppInfo> getAllList(){
+    public static List<AppInfo> getAllList() {
         return getApplication().getAllList();
     }
 
-    public static void setAllList(List<AppInfo> allList){
+    public static void setAllList(List<AppInfo> allList) {
         getApplication().setAllList(allList);
     }
 
@@ -31,7 +31,7 @@ public class AppHelper {
         return Utils.getRecentList(getAllList());
     }
 
-    public static void terminal(){
+    public static void terminal() {
         getApplication().onTerminate();
     }
 }

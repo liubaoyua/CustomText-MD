@@ -26,13 +26,132 @@ import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     private XSharedPreferences prefs;
-    private Html.ImageGetter imageGetter = new Html.ImageGetter(){
-        public Drawable getDrawable(String source){
-            Drawable d=Drawable.createFromPath(source);
-            d.setBounds(0,0,d.getIntrinsicWidth(),d.getIntrinsicHeight());
+    private Html.ImageGetter imageGetter = new Html.ImageGetter() {
+        public Drawable getDrawable(String source) {
+            Drawable d = Drawable.createFromPath(source);
+            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
             return d;
         }
     };
+
+    @Deprecated
+    public static String replaceAllFromList(List<CustomText> texts, String abc, boolean useRegex) {
+        for (int i = 0; i < texts.size(); i++) {
+            CustomText customText = texts.get(i);
+            if (useRegex) {
+                abc = abc.replaceAll(customText.oriText, customText.newText);
+            } else {
+                abc = abc.replace(customText.oriText, customText.newText);
+            }
+
+        }
+        return abc;
+    }
+
+    @Deprecated
+    public static ArrayList<CustomText> loadListFromPrefs(XSharedPreferences prefs, Boolean enabled) {
+        if (!enabled) {
+            return new ArrayList<>();
+        }
+        ArrayList<CustomText> list = new ArrayList<>();
+        final int num = (prefs.getInt(Common.MAX_PAGE_OLD, 0) + 1) * Common.DEFAULT_NUM;
+        for (int i = 0; i < num; i++) {
+            String oriString = prefs.getString(Common.ORI_TEXT_PREFIX + i, "");
+            String newString = prefs.getString(Common.NEW_TEXT_PREFIX + i, "");
+            CustomText customText = new CustomText(oriString, newString);
+            list.add(customText);
+        }
+        list = trimTextList(list);
+        return list;
+    }
+
+    // static method
+
+    public static Html.ImageGetter getImageGetter(final int picMagnification) {
+        return new Html.ImageGetter() {
+            public Drawable getDrawable(String source) {
+                Drawable d = Drawable.createFromPath(source);
+                d.setBounds(0, 0, d.getIntrinsicWidth() * picMagnification
+                        , d.getIntrinsicHeight() * picMagnification);
+                return d;
+            }
+        };
+    }
+
+    @Deprecated
+    public static ArrayList<CustomText> trimTextList(ArrayList<CustomText> list) {
+        for (int i = 0; i < list.size(); i++) {
+            CustomText text = list.get(i);
+            if (TextUtils.isEmpty(text.oriText)) {
+                list.remove(i);
+                i--;
+            }
+        }
+        return list;
+    }
+
+    public static PatternText[] getPatternsFromList(List<CustomText> list) {
+        PatternText[] patternTexts = new PatternText[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            CustomText text = list.get(i);
+            patternTexts[i] = new PatternText(Pattern.compile(text.oriText), text.newText);
+        }
+        return patternTexts;
+    }
+
+    public static String replaceAllFromArray(PatternText[] patternTexts, String abc) {
+        if (patternTexts == null) {
+            return abc;
+        }
+        for (PatternText patternText : patternTexts) {
+            abc = patternText.pattern.matcher(abc).replaceAll(patternText.newText);
+        }
+        return abc;
+    }
+
+    public static String replaceAllFromArray(CustomText[] customTexts, String abc) {
+        if (customTexts == null) {
+            return abc;
+        }
+        for (CustomText customText : customTexts) {
+            abc = abc.replace(customText.oriText, customText.newText);
+        }
+        return abc;
+    }
+
+    public static PatternText[] loadPatternTextArrayFromPrefs(XSharedPreferences prefs, Boolean enabled) {
+        if (!enabled) {
+            return null;
+        }
+        List<PatternText> list = new ArrayList<>();
+        final int num = (prefs.getInt(Common.MAX_PAGE_OLD, 0) + 1) * Common.DEFAULT_NUM;
+        for (int i = 0; i < num; i++) {
+            String oriString = prefs.getString(Common.ORI_TEXT_PREFIX + i, "");
+            String newString = prefs.getString(Common.NEW_TEXT_PREFIX + i, "");
+            if (!TextUtils.isEmpty(oriString)) {
+                PatternText patternText = new PatternText(Pattern.compile(oriString), newString);
+                list.add(patternText);
+            }
+        }
+        return list.toArray(new PatternText[1]);
+    }
+
+    public static CustomText[] loadCustomTextArrayFromPrefs(XSharedPreferences prefs, Boolean enabled) {
+        if (!enabled) {
+            return null;
+        }
+        List<CustomText> list = new ArrayList<>();
+        final int num = (prefs.getInt(Common.MAX_PAGE_OLD, 0) + 1) * Common.DEFAULT_NUM;
+        for (int i = 0; i < num; i++) {
+            String oriString = prefs.getString(Common.ORI_TEXT_PREFIX + i, "");
+            String newString = prefs.getString(Common.NEW_TEXT_PREFIX + i, "");
+            if (!TextUtils.isEmpty(oriString)) {
+                CustomText customText = new CustomText(oriString, newString);
+                list.add(customText);
+            }
+        }
+        return list.toArray(new CustomText[1]);
+    }
 
     @Override
     public void initZygote(StartupParam startupParam) throws Throwable {
@@ -54,20 +173,20 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
         XSharedPreferences sPrefs = new XSharedPreferences(Common.PACKAGE_NAME, Common.SHARING_SETTING_PACKAGE_NAME);
         sPrefs.makeWorldReadable();
 
-        boolean isInDebugMode = prefs.getBoolean(Common.SETTING_XPOSED_DEBUG_MODE,Common.XPOSED_DEBUG);
+        boolean isInDebugMode = prefs.getBoolean(Common.SETTING_XPOSED_DEBUG_MODE, Common.XPOSED_DEBUG);
 
         final boolean shouldHackMoreType;
-        if(mPrefs.contains(Common.SETTING_MORE_TYPE)){
-            shouldHackMoreType = mPrefs.getBoolean(Common.SETTING_MORE_TYPE,false);
-        }else {
-            shouldHackMoreType = prefs.getBoolean(Common.SETTING_MORE_TYPE,false);
+        if (mPrefs.contains(Common.SETTING_MORE_TYPE)) {
+            shouldHackMoreType = mPrefs.getBoolean(Common.SETTING_MORE_TYPE, false);
+        } else {
+            shouldHackMoreType = prefs.getBoolean(Common.SETTING_MORE_TYPE, false);
         }
 
         final boolean shouldUseRegex;
-        if(mPrefs.contains(Common.SETTING_MORE_TYPE)){
-            shouldUseRegex = mPrefs.getBoolean(Common.SETTING_USE_REGEX,false);
-        }else {
-            shouldUseRegex = prefs.getBoolean(Common.SETTING_USE_REGEX,false);
+        if (mPrefs.contains(Common.SETTING_MORE_TYPE)) {
+            shouldUseRegex = mPrefs.getBoolean(Common.SETTING_USE_REGEX, false);
+        } else {
+            shouldUseRegex = prefs.getBoolean(Common.SETTING_USE_REGEX, false);
         }
 
         final boolean isGlobalHackEnabled = prefs.getBoolean(Common.PREFS, false);
@@ -82,16 +201,16 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
             final String hackSucceedMessage;
             String temp = prefs.getString(Common.SETTING_HACK_SUCCEED_MESSAGE, Common.DEFAULT_MESSAGE);
 
-            if (temp.equals("")){
+            if (temp.equals("")) {
                 hackSucceedMessage = prefs.getString(Common.MESSAGE, Common.DEFAULT_MESSAGE);
-            }else{
+            } else {
                 hackSucceedMessage = temp;
             }
 
             textMethodHook = new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam methodHookParam) throws Throwable {
-                    if (methodHookParam.args[0] instanceof String){
+                    if (methodHookParam.args[0] instanceof String) {
                         String abc = (String) methodHookParam.args[0];
                         abc = abc.replaceAll(thisAppName, hackSucceedMessage);
                         methodHookParam.args[0] = abc;
@@ -103,15 +222,15 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                 return;
 
             if (isInDebugMode) {
-                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   isGlobalHackEnabled： "  + isGlobalHackEnabled);
-                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   isCurrentHackEnabled： "  + isCurrentHackEnabled);
-                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   isSharedHackEnabled： "  + isSharedHackEnabled);
-                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   shouldUseRegex： "  + shouldUseRegex);
-                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   shouldHackMoreType： "  + shouldHackMoreType);
+                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   isGlobalHackEnabled： " + isGlobalHackEnabled);
+                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   isCurrentHackEnabled： " + isCurrentHackEnabled);
+                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   isSharedHackEnabled： " + isSharedHackEnabled);
+                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   shouldUseRegex： " + shouldUseRegex);
+                XposedBridge.log(thisAppName + ": in " + lpparam.packageName + "   shouldHackMoreType： " + shouldHackMoreType);
             }
 
-            if(shouldUseRegex){
-                final PatternText[] current = loadPatternTextArrayFromPrefs(mPrefs,isCurrentHackEnabled);
+            if (shouldUseRegex) {
+                final PatternText[] current = loadPatternTextArrayFromPrefs(mPrefs, isCurrentHackEnabled);
                 final PatternText[] shared = loadPatternTextArrayFromPrefs(sPrefs, isSharedHackEnabled && isCurrentHackEnabled);
                 final PatternText[] global = loadPatternTextArrayFromPrefs(prefs, isGlobalHackEnabled);
 
@@ -125,26 +244,26 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                     @Override
                     protected void beforeHookedMethod(MethodHookParam methodHookParam) throws Throwable {
                         String abc;
-                        if(shouldHackMoreType &&  methodHookParam.args[0] != null ) {
+                        if (shouldHackMoreType && methodHookParam.args[0] != null) {
                             abc = methodHookParam.args[0].toString();
-                        }else if (!shouldHackMoreType && methodHookParam.args[0] instanceof String) {
-                            abc = (String)methodHookParam.args[0];
-                        }else {
+                        } else if (!shouldHackMoreType && methodHookParam.args[0] instanceof String) {
+                            abc = (String) methodHookParam.args[0];
+                        } else {
                             return;
                         }
                         if (isCurrentHackEnabled) {
                             abc = replaceAllFromArray(current, abc);
                         }
-                        if(isSharedHackEnabled && isCurrentHackEnabled){
+                        if (isSharedHackEnabled && isCurrentHackEnabled) {
                             abc = replaceAllFromArray(shared, abc);
                         }
                         if (isGlobalHackEnabled) {
                             abc = replaceAllFromArray(global, abc);
                         }
-                        setTextFromHtml(abc,methodHookParam,0);
+                        setTextFromHtml(abc, methodHookParam, 0);
                     }
                 };
-            }else {
+            } else {
                 final CustomText[] current = loadCustomTextArrayFromPrefs(mPrefs, isCurrentHackEnabled);
                 final CustomText[] shared = loadCustomTextArrayFromPrefs(sPrefs, isSharedHackEnabled && isCurrentHackEnabled);
                 final CustomText[] global = loadCustomTextArrayFromPrefs(prefs, isGlobalHackEnabled);
@@ -160,24 +279,24 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                     protected void beforeHookedMethod(MethodHookParam methodHookParam) throws Throwable {
 
                         String abc;
-                        if(shouldHackMoreType &&  methodHookParam.args[0] != null ) {
+                        if (shouldHackMoreType && methodHookParam.args[0] != null) {
                             abc = methodHookParam.args[0].toString();
-                        }else if (!shouldHackMoreType && methodHookParam.args[0] instanceof String) {
+                        } else if (!shouldHackMoreType && methodHookParam.args[0] instanceof String) {
                             abc = methodHookParam.args[0].toString();
-                        }else {
+                        } else {
                             return;
                         }
 
                         if (isCurrentHackEnabled) {
                             abc = replaceAllFromArray(current, abc);
                         }
-                        if(isSharedHackEnabled && isCurrentHackEnabled){
+                        if (isSharedHackEnabled && isCurrentHackEnabled) {
                             abc = replaceAllFromArray(shared, abc);
                         }
                         if (isGlobalHackEnabled) {
                             abc = replaceAllFromArray(global, abc);
                         }
-                        setTextFromHtml(abc,methodHookParam,0);
+                        setTextFromHtml(abc, methodHookParam, 0);
 
                     }
                 };
@@ -195,10 +314,8 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
         }
     }
 
-    // static method
-
-    private void setTextFromHtml(String html,XC_MethodHook.MethodHookParam param,int n) {
-        if (html.contains("<")  && html.contains(">")) {
+    private void setTextFromHtml(String html, XC_MethodHook.MethodHookParam param, int n) {
+        if (html.contains("<") && html.contains(">")) {
             CharSequence text = Html.fromHtml(html, imageGetter, null);
             if (param.thisObject instanceof TextView)
                 param.args[n] = text;
@@ -208,124 +325,7 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
             param.args[n] = html;
     }
 
-    @Deprecated
-    public static String replaceAllFromList(List<CustomText> texts, String abc,boolean useRegex){
-        for (int i = 0; i < texts.size(); i++) {
-            CustomText customText = texts.get(i);
-            if(useRegex){
-                abc = abc.replaceAll(customText.oriText, customText.newText);
-            }else {
-                abc = abc.replace(customText.oriText,customText.newText);
-            }
-
-        }
-        return abc;
-    }
-
-    @Deprecated
-    public static ArrayList<CustomText> loadListFromPrefs(XSharedPreferences prefs, Boolean enabled){
-        if (!enabled){
-            return new ArrayList<>();
-        }
-        ArrayList<CustomText> list = new ArrayList<>();
-        final int num = (prefs.getInt(Common.MAX_PAGE_OLD, 0) + 1) * Common.DEFAULT_NUM;
-        for (int i = 0; i < num; i++) {
-            String oriString = prefs.getString(Common.ORI_TEXT_PREFIX + i, "");
-            String newString = prefs.getString(Common.NEW_TEXT_PREFIX + i, "");
-            CustomText customText = new CustomText(oriString, newString);
-            list.add(customText);
-        }
-        list = trimTextList(list);
-        return list;
-    }
-
-    public static Html.ImageGetter getImageGetter(final int picMagnification){
-        return new Html.ImageGetter(){
-            public Drawable getDrawable(String source){
-                Drawable d=Drawable.createFromPath(source);
-                d.setBounds(0,0,d.getIntrinsicWidth() * picMagnification
-                        ,d.getIntrinsicHeight()* picMagnification);
-                return d;
-            }
-        };
-    }
-
-    @Deprecated
-    public static ArrayList<CustomText> trimTextList(ArrayList<CustomText> list){
-        for(int i = 0; i < list.size(); i++){
-            CustomText text = list.get(i);
-            if(TextUtils.isEmpty(text.oriText)){
-                list.remove(i);
-                i--;
-            }
-        }
-        return list;
-    }
-
-    public static PatternText[] getPatternsFromList(List<CustomText> list){
-        PatternText[] patternTexts = new PatternText[list.size()];
-        for(int i = 0 ; i < list.size(); i++){
-            CustomText text = list.get(i);
-            patternTexts[i] = new PatternText(Pattern.compile(text.oriText),text.newText);
-        }
-        return patternTexts;
-    }
-
-    public static String replaceAllFromArray(PatternText[] patternTexts, String abc){
-        if(patternTexts == null){
-            return abc;
-        }
-        for(PatternText patternText:patternTexts){
-            abc = patternText.pattern.matcher(abc).replaceAll(patternText.newText);
-        }
-        return abc;
-    }
-
-    public static String replaceAllFromArray(CustomText[] customTexts, String abc){
-        if(customTexts == null){
-            return abc;
-        }
-        for(CustomText customText:customTexts){
-            abc = abc.replace(customText.oriText, customText.newText);
-        }
-        return abc;
-    }
-
-    public static PatternText[] loadPatternTextArrayFromPrefs(XSharedPreferences prefs, Boolean enabled){
-        if (!enabled){
-            return null;
-        }
-        List<PatternText> list = new ArrayList<>();
-        final int num = (prefs.getInt(Common.MAX_PAGE_OLD, 0) + 1) * Common.DEFAULT_NUM;
-        for (int i = 0; i < num; i++) {
-            String oriString = prefs.getString(Common.ORI_TEXT_PREFIX + i, "");
-            String newString = prefs.getString(Common.NEW_TEXT_PREFIX + i, "");
-            if(!TextUtils.isEmpty(oriString)){
-                PatternText patternText = new PatternText(Pattern.compile(oriString), newString);
-                list.add(patternText);
-            }
-        }
-        return list.toArray(new PatternText[1]);
-    }
-
-    public static CustomText[] loadCustomTextArrayFromPrefs(XSharedPreferences prefs, Boolean enabled){
-        if (!enabled){
-            return null;
-        }
-        List<CustomText> list = new ArrayList<>();
-        final int num = (prefs.getInt(Common.MAX_PAGE_OLD, 0) + 1) * Common.DEFAULT_NUM;
-        for (int i = 0; i < num; i++) {
-            String oriString = prefs.getString(Common.ORI_TEXT_PREFIX + i, "");
-            String newString = prefs.getString(Common.NEW_TEXT_PREFIX + i, "");
-            if(!TextUtils.isEmpty(oriString)){
-                CustomText customText = new CustomText(oriString, newString);
-                list.add(customText);
-            }
-        }
-        return list.toArray(new CustomText[1]);
-    }
-
-    static class PatternText{
+    static class PatternText {
         public Pattern pattern;
         public String newText;
 

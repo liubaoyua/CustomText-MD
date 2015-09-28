@@ -35,9 +35,9 @@ import liubaoyua.customtext.utils.PicassoTools;
 public class MyApplication extends Application {
 
 
+    private static final String LOG_NAME = "crash_log_" + getCurrentDateString() + ".txt";
     public static File prefsDir = new File(Environment.getDataDirectory() + "/data/" + Common.PACKAGE_NAME + "/shared_prefs");
     public static File backupDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Common.BACKUP_DIR);
-    private static final String LOG_NAME = "crash_log_" + getCurrentDateString() + ".txt";
     private static MyApplication application;
     private ArrayList<Activity> list = new ArrayList<>();
 
@@ -76,8 +76,8 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if(Common.CRASH_LOG){
-           Thread.setDefaultUncaughtExceptionHandler(handler);
+        if (Common.CRASH_LOG) {
+            Thread.setDefaultUncaughtExceptionHandler(handler);
         } else {
             clearCrashLog();
         }
@@ -88,7 +88,6 @@ public class MyApplication extends Application {
 
     /**
      * 打印错误日志
-     *
      */
     protected void writeErrorLog(Throwable ex) {
         String info = null;
@@ -180,19 +179,19 @@ public class MyApplication extends Application {
         PicassoTools.clearCache();
     }
 
-    protected List<AppInfo> getAllList(){
+    protected List<AppInfo> getAllList() {
         return allList;
     }
 
-    protected void setAllList(List<AppInfo> allList){
+    protected void setAllList(List<AppInfo> allList) {
         this.allList = allList;
     }
 
 
-    private void clearCrashLog(){
+    private void clearCrashLog() {
         final String prefix = "crash_log";
         final File file = new File(AppHelper.EXTERNAL_DIR);
-        if(!file.exists() || !file.isDirectory()){
+        if (!file.exists() || !file.isDirectory()) {
             return;
         }
 
@@ -203,8 +202,8 @@ public class MyApplication extends Application {
             }
         });
 
-        for(String log:logList){
-            new File(file,log).delete();
+        for (String log : logList) {
+            new File(file, log).delete();
         }
     }
 

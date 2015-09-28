@@ -54,10 +54,10 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
         CustomText customText = data.get(position);
         holder.oriEditText.setText(customText.oriText);
         holder.newEditText.setText(customText.newText);
-        if(multiSelectMode){
+        if (multiSelectMode) {
             holder.checkBox.setVisibility(View.VISIBLE);
             holder.checkBox.setChecked(customText.isCheck);
-        }else {
+        } else {
             holder.checkBox.setVisibility(View.INVISIBLE);
         }
 
@@ -69,7 +69,7 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
 
     public void setData(ArrayList<CustomText> data) {
         this.data = new ArrayList<>();
-        for (int i = 0; i < data.size() ; i ++){
+        for (int i = 0; i < data.size(); i++) {
             this.data.add(new CustomText(data.get(i)));
         }
         notifyDataSetChanged();
@@ -77,14 +77,14 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
 
     @Override
     public int getItemCount() {
-        return data==null?0:data.size();
+        return data == null ? 0 : data.size();
 
     }
 
-    public ArrayList<CustomText> getSelectedItem(){
+    public ArrayList<CustomText> getSelectedItem() {
         ArrayList<CustomText> list = new ArrayList<>();
-        for(CustomText customText:data){
-            if(customText.isCheck){
+        for (CustomText customText : data) {
+            if (customText.isCheck) {
                 list.add(new CustomText(customText));
             }
         }
@@ -93,10 +93,10 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
         return list;
     }
 
-    public ArrayList<CustomText> cutSelectedItem(){
+    public ArrayList<CustomText> cutSelectedItem() {
         ArrayList<CustomText> list = new ArrayList<>();
-        for(int i = 0; i < data.size(); i++){
-            if(data.get(i).isCheck){
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).isCheck) {
                 list.add(new CustomText(data.get(i)));
                 data.remove(i);
                 i--;
@@ -109,16 +109,16 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
         return list;
     }
 
-    public void deselectAllItem(){
-        for(CustomText customText:data){
+    public void deselectAllItem() {
+        for (CustomText customText : data) {
             customText.isCheck = false;
         }
         notifyDataSetChanged();
     }
 
-    public void pasteClipBoard(ArrayList<CustomText> clipboard){
-        for(int i=0; i<clipboard.size();i++){
-            data.add(i,new CustomText(clipboard.get(i)));
+    public void pasteClipBoard(ArrayList<CustomText> clipboard) {
+        for (int i = 0; i < clipboard.size(); i++) {
+            data.add(i, new CustomText(clipboard.get(i)));
         }
         notifyItemRangeInserted(0, clipboard.size());
         recyclerView.scrollToPosition(0);
@@ -126,22 +126,22 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
                 mContext.getString(R.string.succeed), Snackbar.LENGTH_LONG).show();
     }
 
-    public void selectAll(){
-        if(!selectAll){
-            for(CustomText customText:data){
+    public void selectAll() {
+        if (!selectAll) {
+            for (CustomText customText : data) {
                 customText.isCheck = true;
             }
             selectAll = true;
             notifyDataSetChanged();
-        }else{
+        } else {
             selectAll = false;
             deselectAllItem();
         }
         notifyDataSetChanged();
     }
 
-    public void onClickView(View view,final ViewHolder viewHolder) {
-        if(view.getId()==R.id.button_serial){
+    public void onClickView(View view, final ViewHolder viewHolder) {
+        if (view.getId() == R.id.button_serial) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setIcon(R.mipmap.ic_launcher);
             builder.setTitle("(" + viewHolder.getAdapterPosition() + ") " + mContext.getString(R.string.dialog_title));
@@ -243,11 +243,11 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
 
             );
             builder.show();
-        }else if(view.getId() == R.id.button_clear){
+        } else if (view.getId() == R.id.button_clear) {
             final CustomText customText = data.get(viewHolder.getAdapterPosition());
             undo = new CustomText(customText);
-            customText.newText="";
-            customText.oriText="";
+            customText.newText = "";
+            customText.oriText = "";
             notifyItemChanged(viewHolder.getAdapterPosition());
             Snackbar.make(recyclerView, mContext.getString(R.string.clear) + " " +
                     mContext.getString(R.string.succeed), Snackbar.LENGTH_LONG)

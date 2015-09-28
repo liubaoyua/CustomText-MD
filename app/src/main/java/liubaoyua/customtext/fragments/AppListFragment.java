@@ -57,9 +57,9 @@ public class AppListFragment extends Fragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         List<AppInfo> appList = new ArrayList<>();
-        if(type.equals(Common.FRAG_TYPE_ALL_LIST)){
+        if (type.equals(Common.FRAG_TYPE_ALL_LIST)) {
             appList.addAll(AppHelper.getAllList());
-        }else if(type.equals(Common.FRAG_TYPE_RECENT_LIST)){
+        } else if (type.equals(Common.FRAG_TYPE_RECENT_LIST)) {
             appList.addAll(AppHelper.getRecentList());
         }
 
@@ -77,9 +77,9 @@ public class AppListFragment extends Fragment {
         });
     }
 
-    public void filter(String nameFilter){
-        if(appRecyclerAdapter != null)
-           appRecyclerAdapter.getFilter().filter(nameFilter);
+    public void filter(String nameFilter) {
+        if (appRecyclerAdapter != null)
+            appRecyclerAdapter.getFilter().filter(nameFilter);
     }
 
     public List<AppInfo> getAppList() {
@@ -90,10 +90,10 @@ public class AppListFragment extends Fragment {
         }
     }
 
-    public List<AppInfo> getShowingAppList(){
-        if(appRecyclerAdapter != null){
+    public List<AppInfo> getShowingAppList() {
+        if (appRecyclerAdapter != null) {
             return appRecyclerAdapter.getAppList();
-        }else{
+        } else {
             throw new IllegalStateException("appRecyclerAdapter is null");
         }
     }
@@ -125,14 +125,14 @@ public class AppListFragment extends Fragment {
     }
 
 
-    public void onEventMainThread(DataLoadedEvent event){
-        if (type.equals(Common.FRAG_TYPE_ALL_LIST)){
-            if(appRecyclerAdapter != null ){
+    public void onEventMainThread(DataLoadedEvent event) {
+        if (type.equals(Common.FRAG_TYPE_ALL_LIST)) {
+            if (appRecyclerAdapter != null) {
                 appRecyclerAdapter.getFilter().setAppList(AppHelper.getAllList());
                 appRecyclerAdapter.getFilter().reFilter();
             }
-        }else if(type.equals(Common.FRAG_TYPE_RECENT_LIST)){
-            if(appRecyclerAdapter != null){
+        } else if (type.equals(Common.FRAG_TYPE_RECENT_LIST)) {
+            if (appRecyclerAdapter != null) {
                 appRecyclerAdapter.getFilter().setAppList(AppHelper.getRecentList());
                 appRecyclerAdapter.getFilter().reFilter();
             }

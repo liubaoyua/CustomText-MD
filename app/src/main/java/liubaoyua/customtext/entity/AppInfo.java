@@ -22,19 +22,7 @@ public class AppInfo {
     public long lastUpdateTime = 0L;
     public int state = UNKNOWN;
 
-    @Override
-    public String toString() {
-        return "AppInfoItem{" +
-                "appName='" + appName + '\'' +
-                ", appNamePinYin='" + appNamePinYin + '\'' +
-                ", appNameHeadChar='" + appNameHeadChar + '\'' +
-                ", packageName='" + packageName + '\'' +
-                ", firstInstallTime=" + firstInstallTime +
-                ", lastUpdateTime=" + lastUpdateTime +
-                '}';
-    }
-
-    public AppInfo(PackageInfo packageInfo, String appName){
+    public AppInfo(PackageInfo packageInfo, String appName) {
         this.appName = appName;
         this.packageName = packageInfo.packageName;
         this.firstInstallTime = packageInfo.firstInstallTime;
@@ -43,7 +31,7 @@ public class AppInfo {
         this.appNameHeadChar = Utils.getPinYinHeadChar(appName.toLowerCase());
     }
 
-    public AppInfo(PackageInfo packageInfo, String appName, String packageName){
+    public AppInfo(PackageInfo packageInfo, String appName, String packageName) {
         this.appName = appName;
         this.packageName = packageName;
         this.firstInstallTime = packageInfo.firstInstallTime;
@@ -61,6 +49,18 @@ public class AppInfo {
         this.firstInstallTime = firstInstallTime;
         this.lastUpdateTime = lastUpdateTime;
         this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return "AppInfoItem{" +
+                "appName='" + appName + '\'' +
+                ", appNamePinYin='" + appNamePinYin + '\'' +
+                ", appNameHeadChar='" + appNameHeadChar + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", firstInstallTime=" + firstInstallTime +
+                ", lastUpdateTime=" + lastUpdateTime +
+                '}';
     }
 
 }

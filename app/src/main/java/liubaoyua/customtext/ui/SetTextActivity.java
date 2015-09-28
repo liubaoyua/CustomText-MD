@@ -72,19 +72,19 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
             switch (menuItem.getItemId()) {
-                case R.id.menu_copy:{
+                case R.id.menu_copy: {
                     clipboard = textRecyclerAdapter.getSelectedItem();
                     break;
                 }
-                case R.id.menu_cut:{
+                case R.id.menu_cut: {
                     clipboard = textRecyclerAdapter.cutSelectedItem();
                     break;
                 }
-                case R.id.menu_paste:{
+                case R.id.menu_paste: {
                     textRecyclerAdapter.pasteClipBoard(clipboard);
                     break;
                 }
-                case R.id.menu_select_all:{
+                case R.id.menu_select_all: {
                     textRecyclerAdapter.selectAll();
                 }
             }
@@ -95,7 +95,7 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
             isInActionMode = true;
-            textRecyclerAdapter.multiSelectMode=true;
+            textRecyclerAdapter.multiSelectMode = true;
             textRecyclerAdapter.notifyDataSetChanged();
             return true;
         }
@@ -105,7 +105,7 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
             actionMode = null;
             textRecyclerAdapter.deselectAllItem();
             isInActionMode = false;
-            textRecyclerAdapter.multiSelectMode=false;
+            textRecyclerAdapter.multiSelectMode = false;
         }
 
         @Override
@@ -145,7 +145,7 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
         mRecyclerView = b.recyclerView;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        textRecyclerAdapter = new TextRecyclerAdapter(SetTextActivity.this,data,mRecyclerView);
+        textRecyclerAdapter = new TextRecyclerAdapter(SetTextActivity.this, data, mRecyclerView);
         mRecyclerView.setAdapter(textRecyclerAdapter);
         mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
             float firstRawY, oldRawY, newRawY;
@@ -204,27 +204,27 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
 
     }
 
-    private void reloadData(){
+    private void reloadData() {
         packageName = getIntent().getStringExtra(Common.PACKAGE_NAME_ARG);
 //        position = intent.getIntExtra(Common.POSITION_ARG,-1);
         prefs = getSharedPreferences(Common.PREFS, MODE_WORLD_READABLE);
         mPrefs = getSharedPreferences(packageName, MODE_WORLD_READABLE);
 
-        if(Common.FAST_DEBUG){
+        if (Common.FAST_DEBUG) {
             packageName = Common.SYSTEM_UI_PACKAGE_NAME;
         }
 
-        if(packageName.equals(Common.GLOBAL_SETTING_PACKAGE_NAME)){
+        if (packageName.equals(Common.GLOBAL_SETTING_PACKAGE_NAME)) {
             appName = getString(R.string.global_replacement);
-        }else if(packageName.equals(Common.SHARING_SETTING_PACKAGE_NAME)) {
+        } else if (packageName.equals(Common.SHARING_SETTING_PACKAGE_NAME)) {
             appName = getString(R.string.enabled_replacement);
-        }else{
-            PackageInfo packageInfo = Utils.getPackageInfoByPackageName(this,packageName);
-            if(packageInfo == null){
+        } else {
+            PackageInfo packageInfo = Utils.getPackageInfoByPackageName(this, packageName);
+            if (packageInfo == null) {
                 Toast.makeText(this.getApplicationContext(), getString(R.string.error_found)
-                        + packageName ,Toast.LENGTH_SHORT).show();
+                        + packageName, Toast.LENGTH_SHORT).show();
                 this.finish();
-            }else {
+            } else {
                 appName = packageInfo.applicationInfo.loadLabel(getPackageManager()).toString();
             }
         }
@@ -234,12 +234,12 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
 
         maxPage = mPrefs.getInt(Common.MAX_PAGE_OLD, 0);
 
-        int count = (maxPage + 1) * Common.DEFAULT_NUM ;
+        int count = (maxPage + 1) * Common.DEFAULT_NUM;
 
-        for(int i = 0; i < count ; i++){
-            String oriText = mPrefs.getString(Common.ORI_TEXT_PREFIX + i,"");
-            String newText = mPrefs.getString(Common.NEW_TEXT_PREFIX + i,"");
-            CustomText customText = new CustomText(oriText,newText);
+        for (int i = 0; i < count; i++) {
+            String oriText = mPrefs.getString(Common.ORI_TEXT_PREFIX + i, "");
+            String newText = mPrefs.getString(Common.NEW_TEXT_PREFIX + i, "");
+            CustomText customText = new CustomText(oriText, newText);
             data.add(customText);
         }
 
@@ -247,21 +247,19 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
     }
 
 
-
-
     public boolean onCreateToolbarMenu(Menu menu) {
 
         // systemui 要特殊处理
-        if(!packageName.equals(Common.SYSTEM_UI_PACKAGE_NAME) ){
-            if(getPackageManager().getLaunchIntentForPackage(packageName) == null){
+        if (!packageName.equals(Common.SYSTEM_UI_PACKAGE_NAME)) {
+            if (getPackageManager().getLaunchIntentForPackage(packageName) == null) {
                 MenuItem relaunchMenuItem = menu.findItem(R.id.action_relaunch_app);
                 relaunchMenuItem.setEnabled(false);
             }
         }
 
         // 全局替换 和 共享替换有特殊处理
-        if(packageName.equals(Common.GLOBAL_SETTING_PACKAGE_NAME)
-                || packageName.equals(Common.SHARING_SETTING_PACKAGE_NAME)){
+        if (packageName.equals(Common.GLOBAL_SETTING_PACKAGE_NAME)
+                || packageName.equals(Common.SHARING_SETTING_PACKAGE_NAME)) {
             menu.findItem(R.id.action_market_link).setEnabled(false);
             menu.findItem(R.id.action_app_info).setEnabled(false);
             menu.findItem(R.id.action_relaunch_app).setEnabled(false);
@@ -270,9 +268,9 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
 
         MenuItem switchMenuItem = menu.findItem(R.id.action_switch).setVisible(true);
         switchCompat = (SwitchCompat) MenuItemCompat.getActionView(switchMenuItem);
-        if(prefs.getBoolean(packageName,false)){
+        if (prefs.getBoolean(packageName, false)) {
             switchCompat.setChecked(true);
-        }else{
+        } else {
             switchCompat.setChecked(false);
         }
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -295,24 +293,24 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
 //        <string name="menu_market_link">市场链接</string>
 //        <string name="menu_clear_all">清除所有</string>
 
-        if (id == android.R.id.home){
+        if (id == android.R.id.home) {
             onBackPressed();
 
-        }else if(id == R.id.action_add_item){
+        } else if (id == R.id.action_add_item) {
             int size = textRecyclerAdapter.getData().size();
-                for (int i = 0; i < 10; i++) {
-                    textRecyclerAdapter.getData().add(new CustomText());
-                    textRecyclerAdapter.notifyItemRangeInserted(size, size + 9);
-                    Snackbar.make(mRecyclerView
-                            , getString(R.string.menu_add_item) + " " + getString(R.string.succeed)
-                            , Snackbar.LENGTH_LONG).show();
-                }
+            for (int i = 0; i < 10; i++) {
+                textRecyclerAdapter.getData().add(new CustomText());
+                textRecyclerAdapter.notifyItemRangeInserted(size, size + 9);
+                Snackbar.make(mRecyclerView
+                        , getString(R.string.menu_add_item) + " " + getString(R.string.succeed)
+                        , Snackbar.LENGTH_LONG).show();
+            }
 
-        }else if(id == R.id.action_clear_empty){
+        } else if (id == R.id.action_clear_empty) {
             ArrayList<CustomText> list = textRecyclerAdapter.getData();
-            for (int i = 0; i < list.size() ; i++) {
+            for (int i = 0; i < list.size(); i++) {
                 CustomText customText = list.get(i);
-                if(customText.oriText.equals("")&&customText.newText.equals("")){
+                if (customText.oriText.equals("") && customText.newText.equals("")) {
                     list.remove(i);
                     i--;
                 }
@@ -322,46 +320,46 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
                     , getString(R.string.menu_clear_empty) + " " + getString(R.string.succeed)
                     , Snackbar.LENGTH_LONG).show();
 
-            int count = (maxPage + 1) * Common.DEFAULT_NUM ;
+            int count = (maxPage + 1) * Common.DEFAULT_NUM;
 
             SharedPreferences.Editor editor = mPrefs.edit();
-            for(int i = 0; i < count ; i++){
-                if(mPrefs.contains(Common.ORI_TEXT_PREFIX + i)){
-                    if(mPrefs.getString(Common.ORI_TEXT_PREFIX + i,"").equals(""))
+            for (int i = 0; i < count; i++) {
+                if (mPrefs.contains(Common.ORI_TEXT_PREFIX + i)) {
+                    if (mPrefs.getString(Common.ORI_TEXT_PREFIX + i, "").equals(""))
                         editor.remove(Common.ORI_TEXT_PREFIX + i);
                 }
-                if(mPrefs.contains(Common.NEW_TEXT_PREFIX + i)){
-                    if(mPrefs.getString(Common.NEW_TEXT_PREFIX + i,"").equals(""))
+                if (mPrefs.contains(Common.NEW_TEXT_PREFIX + i)) {
+                    if (mPrefs.getString(Common.NEW_TEXT_PREFIX + i, "").equals(""))
                         editor.remove(Common.NEW_TEXT_PREFIX + i);
                 }
             }
             editor.commit();
-        }else if(id == R.id.action_relaunch_app){
+        } else if (id == R.id.action_relaunch_app) {
             Utils.killPackage(packageName);
-            if(!packageName.equals(Common.SYSTEM_UI_PACKAGE_NAME)){
+            if (!packageName.equals(Common.SYSTEM_UI_PACKAGE_NAME)) {
                 Intent LaunchIntent = getPackageManager().getLaunchIntentForPackage(packageName);
                 startActivity(LaunchIntent);
             }
-        }else if(id == R.id.action_app_info){
+        } else if (id == R.id.action_app_info) {
             startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                     Uri.parse("package:" + packageName)));
 
-        }else if(id == R.id.action_market_link){
+        } else if (id == R.id.action_market_link) {
             Intent intent = new Intent("android.intent.action.VIEW",
-                    Uri.parse("market://details?id="+packageName));
+                    Uri.parse("market://details?id=" + packageName));
             startActivity(intent);
 
-        }else if(id == R.id.action_clear_all){
+        } else if (id == R.id.action_clear_all) {
             textRecyclerAdapter.notifyItemRangeRemoved(0, textRecyclerAdapter.getData().size());
             textRecyclerAdapter.setData(new ArrayList<CustomText>());
-            for (int i = 0; i < Common.DEFAULT_NUM ; i++) {
+            for (int i = 0; i < Common.DEFAULT_NUM; i++) {
                 textRecyclerAdapter.getData().add(new CustomText());
             }
             switchCompat.setChecked(false);
             prefs.edit().remove(packageName).commit();
             Snackbar.make(mRecyclerView
-                    , getString(R.string.menu_clear_all)+" "+getString(R.string.succeed)
-                    ,Snackbar.LENGTH_LONG )
+                    , getString(R.string.menu_clear_all) + " " + getString(R.string.succeed)
+                    , Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.undo), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -370,15 +368,15 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
                             textRecyclerAdapter.notifyDataSetChanged();
                         }
                     }).show();
-        }else if(id == R.id.action_select_mode){
-            if(actionMode != null) {
+        } else if (id == R.id.action_select_mode) {
+            if (actionMode != null) {
                 return false;
-            }else {
+            } else {
                 actionMode = toolbar.startActionMode(mCallback);
                 return true;
             }
 
-        }else if(id ==R.id.action_imp_exp_pref){
+        } else if (id == R.id.action_imp_exp_pref) {
             AlertDialog.Builder builder = new AlertDialog.Builder(SetTextActivity.this);
             builder.setTitle(R.string.menu_imp_exp_pref);
             builder.setMessage(R.string.dialog_imp_exp_message);
@@ -412,7 +410,7 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
             builder.create().show();
 
 
-        } else if(id == R.id.action_extra_setting){
+        } else if (id == R.id.action_extra_setting) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(SetTextActivity.this);
             builder.setTitle(R.string.dialog_override_global_setting);
 
@@ -421,16 +419,16 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
             texts[1] = getString(R.string.setting_use_regex);
 
             boolean[] check = new boolean[2];
-            if(mPrefs.contains(Common.SETTING_MORE_TYPE)){
-                check[0] = mPrefs.getBoolean(Common.SETTING_MORE_TYPE,false);
-            }else{
-                check[0] = prefs.getBoolean(Common.SETTING_MORE_TYPE,false);
+            if (mPrefs.contains(Common.SETTING_MORE_TYPE)) {
+                check[0] = mPrefs.getBoolean(Common.SETTING_MORE_TYPE, false);
+            } else {
+                check[0] = prefs.getBoolean(Common.SETTING_MORE_TYPE, false);
             }
 
-            if(mPrefs.contains(Common.SETTING_USE_REGEX)){
-                check[1] = mPrefs.getBoolean(Common.SETTING_USE_REGEX,false);
-            }else{
-                check[1] = prefs.getBoolean(Common.SETTING_USE_REGEX,false);
+            if (mPrefs.contains(Common.SETTING_USE_REGEX)) {
+                check[1] = mPrefs.getBoolean(Common.SETTING_USE_REGEX, false);
+            } else {
+                check[1] = prefs.getBoolean(Common.SETTING_USE_REGEX, false);
             }
 
 
@@ -441,7 +439,7 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
                     new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                            String key = which == 0 ? Common.SETTING_MORE_TYPE:Common.SETTING_USE_REGEX;
+                            String key = which == 0 ? Common.SETTING_MORE_TYPE : Common.SETTING_USE_REGEX;
                             mPrefs.edit().putBoolean(key, isChecked).commit();
                         }
                     });
@@ -472,7 +470,7 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
      */
     @Override
     public void onBackPressed() {
-        if(!Utils.isIdenticalTextList(data, textRecyclerAdapter.getData())){
+        if (!Utils.isIdenticalTextList(data, textRecyclerAdapter.getData())) {
             AlertDialog.Builder builder = new AlertDialog.Builder(SetTextActivity.this);
             builder.setIcon(R.mipmap.ic_launcher);
             builder.setTitle(getString(R.string.dialog_data_not_saved));
@@ -499,16 +497,16 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
                 }
             });
             builder.show();
-        }else{
+        } else {
             AppInfo info = Utils.getAppInfoByPackageName(packageName);
-            if(info != null){
-                if(prefs.contains(packageName)){
-                    if(prefs.getBoolean(packageName,false)){
+            if (info != null) {
+                if (prefs.contains(packageName)) {
+                    if (prefs.getBoolean(packageName, false)) {
                         info.state = AppInfo.ENABLED;
-                    }else {
+                    } else {
                         info.state = AppInfo.DISABLED;
                     }
-                }else {
+                } else {
                     info.state = AppInfo.UNKNOWN;
                 }
                 EventBus.getDefault().post(new DataLoadedEvent());
@@ -521,11 +519,11 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == Common.REQUEST_CODE_FOR_FILE && resultCode == RESULT_OK){
+        if (requestCode == Common.REQUEST_CODE_FOR_FILE && resultCode == RESULT_OK) {
             String file = data.getData().getSchemeSpecificPart();
             File srcFile = new File(file);
-            Utils.myLog("scrFile is "+ srcFile);
-            if(srcFile.exists() && file.endsWith(".xml")){
+            Utils.myLog("scrFile is " + srcFile);
+            if (srcFile.exists() && file.endsWith(".xml")) {
                 File destFile = new File(MyApplication.prefsDir, packageName + ".xml");
                 Utils.myLog("destFile is " + srcFile);
                 try {
@@ -533,7 +531,7 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
                     destFile.setReadable(true, false);
                     destFile.setWritable(true, true);
                     Toast.makeText(SetTextActivity.this,
-                            getString(R.string.toast_imp_succed) ,Toast.LENGTH_LONG).show();
+                            getString(R.string.toast_imp_succed), Toast.LENGTH_LONG).show();
 //                    recreate();
 //                    new Thread(){
 //                        @Override
@@ -553,61 +551,61 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
 ////                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 ////                    startActivity(intent);
 ////                    finishAndRemoveTask();
-                }catch (Exception e){
+                } catch (Exception e) {
                     Toast.makeText(SetTextActivity.this,
-                            getString(R.string.toast_imp_fail) + e.getMessage() ,Toast.LENGTH_LONG).show();
+                            getString(R.string.toast_imp_fail) + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             } else {
                 Toast.makeText(SetTextActivity.this,
-                        getString(R.string.toast_imp_fail_invaild_file),Toast.LENGTH_LONG).show();
+                        getString(R.string.toast_imp_fail_invaild_file), Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    private void saveData(){
+    private void saveData() {
         ArrayList<CustomText> newData = textRecyclerAdapter.getData();
         data.clear();
-        for ( int i = 0; i < newData.size(); i++) {
+        for (int i = 0; i < newData.size(); i++) {
             data.add(new CustomText(newData.get(i)));
         }
         SharedPreferences.Editor mEditor = mPrefs.edit();
 //        mEditor.clear();
 
-        int all = (maxPage + 1 ) * Common.DEFAULT_NUM;
+        int all = (maxPage + 1) * Common.DEFAULT_NUM;
 
         for (int i = 0; i < newData.size(); i++) {
             CustomText temp = newData.get(i);
-            if(!temp.oriText.isEmpty()) {
-                mEditor.putString(Common.ORI_TEXT_PREFIX + i,temp.oriText);
-            }else  {
-                mEditor.remove(Common.ORI_TEXT_PREFIX + i );
+            if (!temp.oriText.isEmpty()) {
+                mEditor.putString(Common.ORI_TEXT_PREFIX + i, temp.oriText);
+            } else {
+                mEditor.remove(Common.ORI_TEXT_PREFIX + i);
             }
 
-            if(!temp.newText.isEmpty()){
+            if (!temp.newText.isEmpty()) {
                 mEditor.putString(Common.NEW_TEXT_PREFIX + i, temp.newText);
-            }else  {
-                mEditor.remove(Common.NEW_TEXT_PREFIX + i );
+            } else {
+                mEditor.remove(Common.NEW_TEXT_PREFIX + i);
             }
         }
 
-        for (int i = newData.size(); i < all; i++){
-            mEditor.remove(Common.ORI_TEXT_PREFIX + i );
-            mEditor.remove(Common.NEW_TEXT_PREFIX + i );
+        for (int i = newData.size(); i < all; i++) {
+            mEditor.remove(Common.ORI_TEXT_PREFIX + i);
+            mEditor.remove(Common.NEW_TEXT_PREFIX + i);
         }
 
-        int delta = newData.size() - newData.size()/Common.DEFAULT_NUM * Common.DEFAULT_NUM ==0?0:1;
-        int pageNum = newData.size()/Common.DEFAULT_NUM + delta;
-        mEditor.putInt(Common.MAX_PAGE_OLD, pageNum - 1 );
+        int delta = newData.size() - newData.size() / Common.DEFAULT_NUM * Common.DEFAULT_NUM == 0 ? 0 : 1;
+        int pageNum = newData.size() / Common.DEFAULT_NUM + delta;
+        mEditor.putInt(Common.MAX_PAGE_OLD, pageNum - 1);
         mEditor.commit();
-        if(switchCompat.isChecked()){
+        if (switchCompat.isChecked()) {
             Snackbar.make(mRecyclerView
-                    , getString(R.string.dialog_save)+" "+getString(R.string.succeed)
-                    ,Snackbar.LENGTH_LONG ).show();
-        }else{
+                    , getString(R.string.dialog_save) + " " + getString(R.string.succeed)
+                    , Snackbar.LENGTH_LONG).show();
+        } else {
             Snackbar.make(mRecyclerView
-                    , getString(R.string.dialog_save)+" "+getString(R.string.succeed)
+                    , getString(R.string.dialog_save) + " " + getString(R.string.succeed)
                     + "," + getString(R.string.switch_is_not_activated)
-                    ,Snackbar.LENGTH_LONG )
+                    , Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.open), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

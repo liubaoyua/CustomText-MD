@@ -119,9 +119,9 @@ public class DBManager {
             int offset = cursor.getColumnIndex(DBHelper.Properties.packageName.columnName);
             appInfo = new AppInfo( //
                     cursor.getString(offset), // packageName
-                    cursor.isNull(offset + 1) ? "" :cursor.getString(offset + 1), // appName
-                    cursor.isNull(offset + 2) ? "":cursor.getString(offset + 2), // appNamePinYin
-                    cursor.isNull(offset + 3) ? "" :cursor.getString(offset + 3), // appNameHeadChar
+                    cursor.isNull(offset + 1) ? "" : cursor.getString(offset + 1), // appName
+                    cursor.isNull(offset + 2) ? "" : cursor.getString(offset + 2), // appNamePinYin
+                    cursor.isNull(offset + 3) ? "" : cursor.getString(offset + 3), // appNameHeadChar
                     cursor.isNull(offset + 4) ? 0 : cursor.getLong(offset + 4), // firstInstallTime
                     cursor.isNull(offset + 5) ? 0 : cursor.getLong(offset + 5), // lastUpdateTime
                     cursor.isNull(offset + 6) ? 0 : cursor.getInt(offset + 6) // state

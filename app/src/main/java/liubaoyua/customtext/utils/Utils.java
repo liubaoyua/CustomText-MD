@@ -55,7 +55,7 @@ public abstract class Utils {
 
     public static String getPinYin(String src) {
         String t4 = "";
-        try{
+        try {
             char[] t1 = null;
             t1 = src.toCharArray();
             String[] t2 = new String[t1.length];
@@ -82,7 +82,7 @@ public abstract class Utils {
                 e.printStackTrace();
             }
             return t4;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return t4;
         }
@@ -96,7 +96,7 @@ public abstract class Utils {
      */
     public static String getPinYinHeadChar(String str) {
         StringBuilder stringBuilder = new StringBuilder();
-        try{
+        try {
             for (int j = 0; j < str.length(); j++) {
                 char word = str.charAt(j);
                 // 提取汉字的首字母
@@ -107,50 +107,85 @@ public abstract class Utils {
                     stringBuilder.append(word);
                 }
             }
-            if(str.equals(stringBuilder.toString())){
+            if (str.equals(stringBuilder.toString())) {
                 String[] headChar = str.split(" ");
                 stringBuilder = new StringBuilder();
-                for(String a:headChar){
-                    if(a != null && a.length()>0)
+                for (String a : headChar) {
+                    if (a != null && a.length() > 0)
                         stringBuilder.append(a.charAt(0));
                 }
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return stringBuilder.toString();
     }
 
-    public static String getT9(String str){
-        String convert ="";
-        for(int j=0; j<str.length();j++){
-            char word =str.charAt(j);
-            switch (word){
-                case 'a' :case 'b':case 'c':            word='2'; break;
-                case 'd' :case 'e':case 'f':            word='3'; break;
-                case 'g' :case 'h':case 'i':            word='4'; break;
-                case 'j' :case 'k':case 'l':            word='5'; break;
-                case 'm' :case 'n':case 'o':            word='6'; break;
-                case 'p' :case 'q':case 'r': case 's':  word='7'; break;
-                case 't' :case 'u':case 'v':            word='8'; break;
-                case 'w' :case 'x':case 'y': case 'z':  word='9'; break;
-                default:break;
+    public static String getT9(String str) {
+        String convert = "";
+        for (int j = 0; j < str.length(); j++) {
+            char word = str.charAt(j);
+            switch (word) {
+                case 'a':
+                case 'b':
+                case 'c':
+                    word = '2';
+                    break;
+                case 'd':
+                case 'e':
+                case 'f':
+                    word = '3';
+                    break;
+                case 'g':
+                case 'h':
+                case 'i':
+                    word = '4';
+                    break;
+                case 'j':
+                case 'k':
+                case 'l':
+                    word = '5';
+                    break;
+                case 'm':
+                case 'n':
+                case 'o':
+                    word = '6';
+                    break;
+                case 'p':
+                case 'q':
+                case 'r':
+                case 's':
+                    word = '7';
+                    break;
+                case 't':
+                case 'u':
+                case 'v':
+                    word = '8';
+                    break;
+                case 'w':
+                case 'x':
+                case 'y':
+                case 'z':
+                    word = '9';
+                    break;
+                default:
+                    break;
             }
-            convert+=word;
+            convert += word;
         }
         return convert;
     }
 
-    public static boolean isIdenticalTextList(ArrayList<CustomText> a, ArrayList<CustomText> b){
-        Log.d("text",a.toString() + b.toString());
-        if(a.size() == b.size()){
-            for(int i =0; i< a.size(); i++){
-                if(!(a.get(i).equals(b.get(i)))){
+    public static boolean isIdenticalTextList(ArrayList<CustomText> a, ArrayList<CustomText> b) {
+        Log.d("text", a.toString() + b.toString());
+        if (a.size() == b.size()) {
+            for (int i = 0; i < a.size(); i++) {
+                if (!(a.get(i).equals(b.get(i)))) {
                     return false;
                 }
             }
             return true;
-        }else
+        } else
             return false;
     }
 
@@ -198,44 +233,45 @@ public abstract class Utils {
 
     /**
      * 检查两个list 是否相同
+     *
      * @param loaderAppList list1
-     * @param appList   list2
+     * @param appList       list2
      * @return result
      */
-    public static boolean checkList(List<AppInfo> loaderAppList, List<AppInfo> appList){
-        if(loaderAppList == null || appList == null){
+    public static boolean checkList(List<AppInfo> loaderAppList, List<AppInfo> appList) {
+        if (loaderAppList == null || appList == null) {
             return false;
         }
-        if(loaderAppList.size() == appList.size()){
-            for(int i=0; i<appList.size();i++){
-                if (!appList.get(i).equals(loaderAppList.get(i))){
+        if (loaderAppList.size() == appList.size()) {
+            for (int i = 0; i < appList.size(); i++) {
+                if (!appList.get(i).equals(loaderAppList.get(i))) {
                     return false;
                 }
             }
             return true;
-        }else
+        } else
             return false;
     }
 
-    public static List<AppInfo> getRecentList(List<AppInfo> appList){
+    public static List<AppInfo> getRecentList(List<AppInfo> appList) {
         List<AppInfo> temp = new ArrayList<>();
-        for(int i = 0; i < appList.size(); i++){
+        for (int i = 0; i < appList.size(); i++) {
             AppInfo info = appList.get(i);
-            if(info.state != AppInfo.UNKNOWN){
+            if (info.state != AppInfo.UNKNOWN) {
                 temp.add(info);
             }
         }
         return temp;
     }
 
-    public static void showMessage(Context context,String versionName){
+    public static void showMessage(Context context, String versionName) {
         ScrollView scrollView = new ScrollView(context);
         TextView textView = new TextView(context);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         textView.setLinksClickable(true);
         textView.setText(context.getString(R.string.dialog_about) + versionName);
 
-        scrollView.setPadding(64,64,64,64);
+        scrollView.setPadding(64, 64, 64, 64);
         scrollView.addView(textView);
         textView.setTextColor(context.getResources().getColor(android.R.color.black));
         textView.setTextSize(15);
@@ -249,11 +285,11 @@ public abstract class Utils {
         dlgBuilder.show();
     }
 
-    public static PackageInfo getPackageInfoByPackageName(Context context, String packageName){
+    public static PackageInfo getPackageInfoByPackageName(Context context, String packageName) {
         PackageInfo packageInfo = null;
-        try{
+        try {
             packageInfo = context.getPackageManager().getPackageInfo(packageName, PackageManager.GET_UNINSTALLED_PACKAGES);
-        }catch (PackageManager.NameNotFoundException e){
+        } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
         return packageInfo;
@@ -289,10 +325,10 @@ public abstract class Utils {
         }
     }
 
-    public static AppInfo getAppInfoByPackageName(String packageName){
+    public static AppInfo getAppInfoByPackageName(String packageName) {
         List<AppInfo> allList = AppHelper.getAllList();
-        for(AppInfo info: allList){
-            if(info.packageName.equals(packageName)){
+        for (AppInfo info : allList) {
+            if (info.packageName.equals(packageName)) {
                 return info;
             }
         }
@@ -317,21 +353,19 @@ public abstract class Utils {
     }
 
 
-
-
-    public static void configStatusBarColor(Activity activity){
+    public static void configStatusBarColor(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if(activity instanceof AppListActivity){
+            if (activity instanceof AppListActivity) {
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 activity.getWindow().setStatusBarColor(Color.parseColor("#00000000"));
-            }else {
+            } else {
                 TypedValue typedValue = new TypedValue();
                 activity.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
                 int color = typedValue.data;
                 activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 activity.getWindow().setStatusBarColor(color);
             }
-        }else if(Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT){
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
             TypedValue typedValue = new TypedValue();
             activity.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
             int color = typedValue.data;
@@ -345,8 +379,8 @@ public abstract class Utils {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 //            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 //        } else {
-            intent = new Intent();
-            intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
 //        }
         intent.setType("image/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -462,13 +496,13 @@ public abstract class Utils {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
-    public static void getFileFromContent(Activity activity, int requestCode){
+    public static void getFileFromContent(Activity activity, int requestCode) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("file/*");
-        try{
+        try {
 
             activity.startActivityForResult(intent, requestCode);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }

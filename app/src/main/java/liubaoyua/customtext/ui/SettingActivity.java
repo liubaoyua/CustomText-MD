@@ -41,7 +41,7 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
-    private void setupToolbar(){
+    private void setupToolbar() {
         toolbar.setTitle(R.string.title_activity_settings);
         toolbar.setNavigationIcon(R.mipmap.ic_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -59,7 +59,7 @@ public class SettingActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == android.R.id.home){
+        if (id == android.R.id.home) {
             onBackPressed();
         }
 
@@ -69,6 +69,7 @@ public class SettingActivity extends AppCompatActivity {
     public static class SettingsFragment extends PreferenceFragment {
 
         Preference version;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -81,7 +82,7 @@ public class SettingActivity extends AppCompatActivity {
         @Override
         public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
             super.onPreferenceTreeClick(preferenceScreen, preference);
-            if(preference==findPreference(Common.CHECK_UPDATE)) {
+            if (preference == findPreference(Common.CHECK_UPDATE)) {
                 try {
                     PackageInfo packageInfo = getActivity().getPackageManager().getPackageInfo("com.coolapk.market", 0);
                     if (packageInfo != null) {
@@ -93,7 +94,7 @@ public class SettingActivity extends AppCompatActivity {
                             startActivity(urlIntent);
                         } else {
                             intent.setComponent(new ComponentName("com.coolapk.market", "com.coolapk.market" + ".AppViewActivity"));
-                            intent.setData(Uri.parse("market://details?id="+Common.PACKAGE_NAME));
+                            intent.setData(Uri.parse("market://details?id=" + Common.PACKAGE_NAME));
                             startActivity(intent);
                         }
                     }
@@ -101,14 +102,14 @@ public class SettingActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }else if(preference == findPreference(Common.SETTING_ATTENTION)){
+            } else if (preference == findPreference(Common.SETTING_ATTENTION)) {
                 PackageInfo packageInfo = null;
-                try{
+                try {
                     packageInfo = getActivity().getPackageManager().getPackageInfo(Common.PACKAGE_NAME, PackageManager.GET_UNINSTALLED_PACKAGES);
-                }catch (PackageManager.NameNotFoundException e){
+                } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
-                if(packageInfo != null){
+                if (packageInfo != null) {
                     Utils.showMessage(getActivity(), packageInfo.versionName);
                 }
             }

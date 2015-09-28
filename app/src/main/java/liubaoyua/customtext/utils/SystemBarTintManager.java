@@ -38,16 +38,21 @@ import android.widget.FrameLayout.LayoutParams;
 import java.lang.reflect.Method;
 
 /**
- * Class to manage status and navigation bar tint effects when using KitKat  
- * translucent system UI modes. 
- *
+ * Class to manage status and navigation bar tint effects when using KitKat
+ * translucent system UI modes.
  */
 public class SystemBarTintManager {
 
+    /**
+     * The default system bar tint color value.
+     */
+    public static final int DEFAULT_TINT_COLOR = 0x99000000;
+    private static String sNavBarOverride;
+
     static {
-        // Android allows a system property to override the presence of the navigation bar.  
-        // Used by the emulator.  
-        // See https://github.com/android/platform_frameworks_base/blob/master/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java#L1076  
+        // Android allows a system property to override the presence of the navigation bar.
+        // Used by the emulator.
+        // See https://github.com/android/platform_frameworks_base/blob/master/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java#L1076
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             try {
                 Class c = Class.forName("android.os.SystemProperties");
@@ -58,6 +63,65 @@ public class SystemBarTintManager {
                 sNavBarOverride = null;
             }
         }
+    }
+
+    private final SystemBarConfig mConfig;
+    private boolean mStatusBarAvailable;
+    private boolean mNavBarAvailable;
+    private boolean mStatusBarTintEnabled;
+    private boolean mNavBarTintEnabled;
+    private View mStatusBarTintView;
+    private View mNavBarTintView;
+    /**
+     * Constructor. Call this in the host activity onCreate method after its
+     * content view has been set. You should always create new instances when
+     * the host activity is recreated.
+     *
+     * @param activity The host activity.
+     */
+    @TargetApi(19)
+    public SystemBarTintManager(Activity activity) {
+
+        Window win = activity.getWindow();
+        ViewGroup decorViewGroup = (ViewGroup) win.getDecorView();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // check theme attrs
+            int[] attrs = {android.R.attr.windowTranslucentStatus,
+                    android.R.attr.windowTranslucentNavigation};
+            TypedArray a = activity.obtainStyledAttributes(attrs);
+            try {
+                mStatusBarAvailable = a.getBoolean(0, false);
+                mNavBarAvailable = a.getBoolean(1, false);
+            } finally {
+                a.recycle();
+            }
+
+            // check window flags
+            WindowManager.LayoutParams winParams = win.getAttributes();
+            int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+            if ((winParams.flags & bits) != 0) {
+                mStatusBarAvailable = true;
+            }
+            bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+            if ((winParams.flags & bits) != 0) {
+                mNavBarAvailable = true;
+            }
+        }
+
+        mConfig = new SystemBarConfig(activity, mStatusBarAvailable, mNavBarAvailable);
+        // device might not have virtual navigation keys
+        if (!mConfig.hasNavigtionBar()) {
+            mNavBarAvailable = false;
+        }
+
+        if (mStatusBarAvailable) {
+            setupStatusBarView(activity, decorViewGroup);
+        }
+        if (mNavBarAvailable) {
+            setupNavBarView(activity, decorViewGroup);
+        }
+
     }
 
     public static void setStatusBarTint(Activity activity, int color) {
@@ -83,96 +147,13 @@ public class SystemBarTintManager {
     }
 
     /**
-     * The default system bar tint color value. 
-     */
-    public static final int DEFAULT_TINT_COLOR = 0x99000000;
-
-    private static String sNavBarOverride;
-
-    private final SystemBarConfig mConfig;
-    private boolean mStatusBarAvailable;
-    private boolean mNavBarAvailable;
-    private boolean mStatusBarTintEnabled;
-    private boolean mNavBarTintEnabled;
-    private View mStatusBarTintView;
-    private View mNavBarTintView;
-
-    /**
-     * Constructor. Call this in the host activity onCreate method after its 
-     * content view has been set. You should always create new instances when 
-     * the host activity is recreated. 
+     * Enable tinting of the system navigation bar.
+     * <p/>
+     * If the platform does not have soft navigation keys, is running Jelly Bean
+     * or earlier, or translucent system UI modes have not been enabled in either
+     * the theme or via window flags, then this method does nothing.
      *
-     * @param activity The host activity. 
-     */
-    @TargetApi(19)
-    public SystemBarTintManager(Activity activity) {
-
-        Window win = activity.getWindow();
-        ViewGroup decorViewGroup = (ViewGroup) win.getDecorView();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // check theme attrs  
-            int[] attrs = {android.R.attr.windowTranslucentStatus,
-                    android.R.attr.windowTranslucentNavigation};
-            TypedArray a = activity.obtainStyledAttributes(attrs);
-            try {
-                mStatusBarAvailable = a.getBoolean(0, false);
-                mNavBarAvailable = a.getBoolean(1, false);
-            } finally {
-                a.recycle();
-            }
-
-            // check window flags  
-            WindowManager.LayoutParams winParams = win.getAttributes();
-            int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-            if ((winParams.flags & bits) != 0) {
-                mStatusBarAvailable = true;
-            }
-            bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
-            if ((winParams.flags & bits) != 0) {
-                mNavBarAvailable = true;
-            }
-        }
-
-        mConfig = new SystemBarConfig(activity, mStatusBarAvailable, mNavBarAvailable);
-        // device might not have virtual navigation keys  
-        if (!mConfig.hasNavigtionBar()) {
-            mNavBarAvailable = false;
-        }
-
-        if (mStatusBarAvailable) {
-            setupStatusBarView(activity, decorViewGroup);
-        }
-        if (mNavBarAvailable) {
-            setupNavBarView(activity, decorViewGroup);
-        }
-
-    }
-
-    /**
-     * Enable tinting of the system status bar. 
-     *
-     * If the platform is running Jelly Bean or earlier, or translucent system 
-     * UI modes have not been enabled in either the theme or via window flags, 
-     * then this method does nothing. 
-     *
-     * @param enabled True to enable tinting, false to disable it (default). 
-     */
-    public void setStatusBarTintEnabled(boolean enabled) {
-        mStatusBarTintEnabled = enabled;
-        if (mStatusBarAvailable) {
-            mStatusBarTintView.setVisibility(enabled ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    /**
-     * Enable tinting of the system navigation bar. 
-     *
-     * If the platform does not have soft navigation keys, is running Jelly Bean 
-     * or earlier, or translucent system UI modes have not been enabled in either 
-     * the theme or via window flags, then this method does nothing. 
-     *
-     * @param enabled True to enable tinting, false to disable it (default). 
+     * @param enabled True to enable tinting, false to disable it (default).
      */
     public void setNavigationBarTintEnabled(boolean enabled) {
         mNavBarTintEnabled = enabled;
@@ -182,9 +163,9 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Apply the specified color tint to all system UI bars. 
+     * Apply the specified color tint to all system UI bars.
      *
-     * @param color The color of the background tint. 
+     * @param color The color of the background tint.
      */
     public void setTintColor(int color) {
         setStatusBarTintColor(color);
@@ -192,9 +173,9 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Apply the specified drawable or color resource to all system UI bars. 
+     * Apply the specified drawable or color resource to all system UI bars.
      *
-     * @param res The identifier of the resource. 
+     * @param res The identifier of the resource.
      */
     public void setTintResource(int res) {
         setStatusBarTintResource(res);
@@ -202,9 +183,9 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Apply the specified drawable to all system UI bars. 
+     * Apply the specified drawable to all system UI bars.
      *
-     * @param drawable The drawable to use as the background, or null to remove it. 
+     * @param drawable The drawable to use as the background, or null to remove it.
      */
     public void setTintDrawable(Drawable drawable) {
         setStatusBarTintDrawable(drawable);
@@ -212,9 +193,9 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Apply the specified alpha to all system UI bars. 
+     * Apply the specified alpha to all system UI bars.
      *
-     * @param alpha The alpha to use 
+     * @param alpha The alpha to use
      */
     public void setTintAlpha(float alpha) {
         setStatusBarAlpha(alpha);
@@ -222,9 +203,9 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Apply the specified color tint to the system status bar. 
+     * Apply the specified color tint to the system status bar.
      *
-     * @param color The color of the background tint. 
+     * @param color The color of the background tint.
      */
     public void setStatusBarTintColor(int color) {
         if (mStatusBarAvailable) {
@@ -233,9 +214,9 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Apply the specified drawable or color resource to the system status bar. 
+     * Apply the specified drawable or color resource to the system status bar.
      *
-     * @param res The identifier of the resource. 
+     * @param res The identifier of the resource.
      */
     public void setStatusBarTintResource(int res) {
         if (mStatusBarAvailable) {
@@ -244,9 +225,9 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Apply the specified drawable to the system status bar. 
+     * Apply the specified drawable to the system status bar.
      *
-     * @param drawable The drawable to use as the background, or null to remove it. 
+     * @param drawable The drawable to use as the background, or null to remove it.
      */
     @SuppressWarnings("deprecation")
     public void setStatusBarTintDrawable(Drawable drawable) {
@@ -256,9 +237,9 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Apply the specified alpha to the system status bar. 
+     * Apply the specified alpha to the system status bar.
      *
-     * @param alpha The alpha to use 
+     * @param alpha The alpha to use
      */
     @TargetApi(11)
     public void setStatusBarAlpha(float alpha) {
@@ -268,9 +249,9 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Apply the specified color tint to the system navigation bar. 
+     * Apply the specified color tint to the system navigation bar.
      *
-     * @param color The color of the background tint. 
+     * @param color The color of the background tint.
      */
     public void setNavigationBarTintColor(int color) {
         if (mNavBarAvailable) {
@@ -279,9 +260,9 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Apply the specified drawable or color resource to the system navigation bar. 
+     * Apply the specified drawable or color resource to the system navigation bar.
      *
-     * @param res The identifier of the resource. 
+     * @param res The identifier of the resource.
      */
     public void setNavigationBarTintResource(int res) {
         if (mNavBarAvailable) {
@@ -290,9 +271,9 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Apply the specified drawable to the system navigation bar. 
+     * Apply the specified drawable to the system navigation bar.
      *
-     * @param drawable The drawable to use as the background, or null to remove it. 
+     * @param drawable The drawable to use as the background, or null to remove it.
      */
     @SuppressWarnings("deprecation")
     public void setNavigationBarTintDrawable(Drawable drawable) {
@@ -302,9 +283,9 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Apply the specified alpha to the system navigation bar. 
+     * Apply the specified alpha to the system navigation bar.
      *
-     * @param alpha The alpha to use 
+     * @param alpha The alpha to use
      */
     @TargetApi(11)
     public void setNavigationBarAlpha(float alpha) {
@@ -314,27 +295,43 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Get the system bar configuration. 
+     * Get the system bar configuration.
      *
-     * @return The system bar configuration for the current device configuration. 
+     * @return The system bar configuration for the current device configuration.
      */
     public SystemBarConfig getConfig() {
         return mConfig;
     }
 
     /**
-     * Is tinting enabled for the system status bar? 
+     * Is tinting enabled for the system status bar?
      *
-     * @return True if enabled, False otherwise. 
+     * @return True if enabled, False otherwise.
      */
     public boolean isStatusBarTintEnabled() {
         return mStatusBarTintEnabled;
     }
 
     /**
-     * Is tinting enabled for the system navigation bar? 
+     * Enable tinting of the system status bar.
+     * <p/>
+     * If the platform is running Jelly Bean or earlier, or translucent system
+     * UI modes have not been enabled in either the theme or via window flags,
+     * then this method does nothing.
      *
-     * @return True if enabled, False otherwise. 
+     * @param enabled True to enable tinting, false to disable it (default).
+     */
+    public void setStatusBarTintEnabled(boolean enabled) {
+        mStatusBarTintEnabled = enabled;
+        if (mStatusBarAvailable) {
+            mStatusBarTintView.setVisibility(enabled ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    /**
+     * Is tinting enabled for the system navigation bar?
+     *
+     * @return True if enabled, False otherwise.
      */
     public boolean isNavBarTintEnabled() {
         return mNavBarTintEnabled;
@@ -370,9 +367,8 @@ public class SystemBarTintManager {
     }
 
     /**
-     * Class which describes system bar sizing and other characteristics for the current 
-     * device configuration. 
-     *
+     * Class which describes system bar sizing and other characteristics for the current
+     * device configuration.
      */
     public static class SystemBarConfig {
 
@@ -488,77 +484,77 @@ public class SystemBarTintManager {
         }
 
         /**
-         * Should a navigation bar appear at the bottom of the screen in the current 
-         * device configuration? A navigation bar may appear on the right side of 
-         * the screen in certain configurations. 
+         * Should a navigation bar appear at the bottom of the screen in the current
+         * device configuration? A navigation bar may appear on the right side of
+         * the screen in certain configurations.
          *
-         * @return True if navigation should appear at the bottom of the screen, False otherwise. 
+         * @return True if navigation should appear at the bottom of the screen, False otherwise.
          */
         public boolean isNavigationAtBottom() {
             return (mSmallestWidthDp >= 600 || mInPortrait);
         }
 
         /**
-         * Get the height of the system status bar. 
+         * Get the height of the system status bar.
          *
-         * @return The height of the status bar (in pixels). 
+         * @return The height of the status bar (in pixels).
          */
         public int getStatusBarHeight() {
             return mStatusBarHeight;
         }
 
         /**
-         * Get the height of the action bar. 
+         * Get the height of the action bar.
          *
-         * @return The height of the action bar (in pixels). 
+         * @return The height of the action bar (in pixels).
          */
         public int getActionBarHeight() {
             return mActionBarHeight;
         }
 
         /**
-         * Does this device have a system navigation bar? 
+         * Does this device have a system navigation bar?
          *
-         * @return True if this device uses soft key navigation, False otherwise. 
+         * @return True if this device uses soft key navigation, False otherwise.
          */
         public boolean hasNavigtionBar() {
             return mHasNavigationBar;
         }
 
         /**
-         * Get the height of the system navigation bar. 
+         * Get the height of the system navigation bar.
          *
-         * @return The height of the navigation bar (in pixels). If the device does not have 
-         * soft navigation keys, this will always return 0. 
+         * @return The height of the navigation bar (in pixels). If the device does not have
+         * soft navigation keys, this will always return 0.
          */
         public int getNavigationBarHeight() {
             return mNavigationBarHeight;
         }
 
         /**
-         * Get the width of the system navigation bar when it is placed vertically on the screen. 
+         * Get the width of the system navigation bar when it is placed vertically on the screen.
          *
-         * @return The width of the navigation bar (in pixels). If the device does not have 
-         * soft navigation keys, this will always return 0. 
+         * @return The width of the navigation bar (in pixels). If the device does not have
+         * soft navigation keys, this will always return 0.
          */
         public int getNavigationBarWidth() {
             return mNavigationBarWidth;
         }
 
         /**
-         * Get the layout inset for any system UI that appears at the top of the screen. 
+         * Get the layout inset for any system UI that appears at the top of the screen.
          *
-         * @param withActionBar True to include the height of the action bar, False otherwise. 
-         * @return The layout inset (in pixels). 
+         * @param withActionBar True to include the height of the action bar, False otherwise.
+         * @return The layout inset (in pixels).
          */
         public int getPixelInsetTop(boolean withActionBar) {
             return (mTranslucentStatusBar ? mStatusBarHeight : 0) + (withActionBar ? mActionBarHeight : 0);
         }
 
         /**
-         * Get the layout inset for any system UI that appears at the bottom of the screen. 
+         * Get the layout inset for any system UI that appears at the bottom of the screen.
          *
-         * @return The layout inset (in pixels). 
+         * @return The layout inset (in pixels).
          */
         public int getPixelInsetBottom() {
             if (mTranslucentNavBar && isNavigationAtBottom()) {
@@ -569,9 +565,9 @@ public class SystemBarTintManager {
         }
 
         /**
-         * Get the layout inset for any system UI that appears at the right of the screen. 
+         * Get the layout inset for any system UI that appears at the right of the screen.
          *
-         * @return The layout inset (in pixels). 
+         * @return The layout inset (in pixels).
          */
         public int getPixelInsetRight() {
             if (mTranslucentNavBar && !isNavigationAtBottom()) {

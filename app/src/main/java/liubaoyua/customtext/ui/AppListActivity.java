@@ -81,7 +81,7 @@ public class AppListActivity extends AppCompatActivity {
     private FragmentAdapter fragmentAdapter;
     private Context context;
     private List<AppListFragment> fragmentList = new ArrayList<>();
-    private List<String> titles =null;
+    private List<String> titles = null;
     private String nameFilter;
     private SharedPreferences prefs;
     private boolean hasDataBase = false;
@@ -116,20 +116,20 @@ public class AppListActivity extends AppCompatActivity {
         context = getApplicationContext();
 
         prefs = getSharedPreferences(Common.PREFS, MODE_WORLD_READABLE);
-        hasDataBase = prefs.getBoolean(Common.PREFS_HAS_DATABASE,false);
+        hasDataBase = prefs.getBoolean(Common.PREFS_HAS_DATABASE, false);
 
         prefs.edit().putString(Common.PACKAGE_NAME_ARG, "^" + getString(R.string.app_name) + "$");
         prefs.edit().putString(Common.MESSAGE, getString(R.string.setting_default_message)).commit();
 
-        int version = prefs.getInt(Common.PACKAGE_VERSION_CODE,0);
+        int version = prefs.getInt(Common.PACKAGE_VERSION_CODE, 0);
 
-        try{
+        try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(Common.PACKAGE_NAME, 0);
-            if(packageInfo.versionCode > version){
-                Utils.showMessage(this,packageInfo.versionName);
+            if (packageInfo.versionCode > version) {
+                Utils.showMessage(this, packageInfo.versionName);
             }
             prefs.edit().putInt(Common.PACKAGE_VERSION_CODE, packageInfo.versionCode).commit();
-        }catch (PackageManager.NameNotFoundException e){
+        } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -139,7 +139,7 @@ public class AppListActivity extends AppCompatActivity {
             AppHelper.setAllList(DBManager.getInstance(context).query());
         }
 
-        if(AppHelper.getAllList() == null || AppHelper.getAllList().size() == 0){
+        if (AppHelper.getAllList() == null || AppHelper.getAllList().size() == 0) {
             new LoadAppsTask(true).execute();
         } else {
             new LoadAppsTask(false).execute();
@@ -156,7 +156,7 @@ public class AppListActivity extends AppCompatActivity {
         }
 //        findViewById(R.id.head_frame)
 //            headerView
-        findViewById(R.id.another_frame)  .setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.another_frame).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(AppListActivity.this);
@@ -215,7 +215,7 @@ public class AppListActivity extends AppCompatActivity {
 
 
     @Override
-    public boolean onKeyUp(int keyCode,@NonNull KeyEvent event) {
+    public boolean onKeyUp(int keyCode, @NonNull KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_SEARCH && (event.getFlags() & KeyEvent.FLAG_CANCELED) == 0) {
             if (mSearchView.isShown()) {
                 mSearchView.setIconified(false);
@@ -262,6 +262,7 @@ public class AppListActivity extends AppCompatActivity {
 
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             boolean reTab = true;
+
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
@@ -275,7 +276,7 @@ public class AppListActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if(reTab){
+                if (reTab) {
                     fragmentList.get(tab.getPosition()).scrollToTopOrBottom();
                 }
                 reTab = true;
@@ -284,7 +285,7 @@ public class AppListActivity extends AppCompatActivity {
 
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
 
-}
+    }
 
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
@@ -366,8 +367,8 @@ public class AppListActivity extends AppCompatActivity {
     }
 
     private void doExport() {
-        final String[] name =new String[1];
-        final EditText editText =new EditText(this);
+        final String[] name = new String[1];
+        final EditText editText = new EditText(this);
         editText.setHint(R.string.imp_exp_backup_hint);
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -403,25 +404,24 @@ public class AppListActivity extends AppCompatActivity {
         final List<File> backupList = new ArrayList<>();
         File root = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                 + Common.BACKUP_DIR);
-        if (root.exists())
-        {
-            File[] temp  = root.listFiles(new FileFilter() {
+        if (root.exists()) {
+            File[] temp = root.listFiles(new FileFilter() {
                 @Override
                 public boolean accept(File file) {
                     return file.isDirectory();
                 }
             });
-            Collections.addAll(backupList,temp);
-            Collections.sort(backupList,new Comparator<File>() {
+            Collections.addAll(backupList, temp);
+            Collections.sort(backupList, new Comparator<File>() {
                 @Override
                 public int compare(File file1, File file2) {
                     return file1.getName().toLowerCase().compareTo(file2.getName().toLowerCase());
                 }
             });
         }
-        if(backupList.size() == 0){
+        if (backupList.size() == 0) {
             Toast.makeText(context,
-                    getString(R.string.imp_exp_no_backup_found),Toast.LENGTH_SHORT).show();
+                    getString(R.string.imp_exp_no_backup_found), Toast.LENGTH_SHORT).show();
             return;
         }
         LinearLayout layout = new LinearLayout(this);
@@ -459,15 +459,15 @@ public class AppListActivity extends AppCompatActivity {
             }
         });
         layout.addView(listView);
-        ArrayAdapter<File> adapter = new ArrayAdapter<File>(this,R.layout.list_item_restore,backupList){
+        ArrayAdapter<File> adapter = new ArrayAdapter<File>(this, R.layout.list_item_restore, backupList) {
             @Override
             public View getView(final int position, View convertView, ViewGroup parent) {
-                if(convertView==null){
-                    convertView=View.inflate(context, R.layout.list_item_restore, null);
+                if (convertView == null) {
+                    convertView = View.inflate(context, R.layout.list_item_restore, null);
                 }
-                TextView textView = (TextView)convertView.findViewById(R.id.text_file);
+                TextView textView = (TextView) convertView.findViewById(R.id.text_file);
                 textView.setText(backupList.get(position).getName());
-                final Button button=(Button)convertView.findViewById(R.id.button_delete);
+                final Button button = (Button) convertView.findViewById(R.id.button_delete);
                 button.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -495,7 +495,7 @@ public class AppListActivity extends AppCompatActivity {
     }
 
     public void refreshList() {
-         new LoadAppsTask(true).execute();
+        new LoadAppsTask(true).execute();
     }
 
     @Override
@@ -504,14 +504,15 @@ public class AppListActivity extends AppCompatActivity {
 //        EventBus.getDefault().unregister(this);
     }
 
-    private class LoadAppsTask extends AsyncTask<Void,String,Void> {
+    private class LoadAppsTask extends AsyncTask<Void, String, Void> {
         private ProgressDialog dialog = null;
         private Boolean showDialog = false;
         private List<AppInfo> appList;
 
-        public LoadAppsTask(Boolean showDialog){
+        public LoadAppsTask(Boolean showDialog) {
             this.showDialog = showDialog;
         }
+
         @Override
         protected void onPreExecute() {
             if (showDialog) {

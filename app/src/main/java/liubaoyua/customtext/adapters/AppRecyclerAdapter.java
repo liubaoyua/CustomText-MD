@@ -1,8 +1,5 @@
 package liubaoyua.customtext.adapters;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -18,11 +15,11 @@ import com.squareup.picasso.Target;
 
 import java.util.List;
 
+import liubaoyua.customtext.R;
+import liubaoyua.customtext.entity.AppInfo;
+import liubaoyua.customtext.utils.AppListFilter;
 import liubaoyua.customtext.utils.Common;
 import liubaoyua.customtext.utils.IconLoader;
-import liubaoyua.customtext.entity.AppInfo;
-import liubaoyua.customtext.R;
-import liubaoyua.customtext.utils.AppListFilter;
 import liubaoyua.customtext.utils.PicassoTools;
 
 /**
@@ -38,22 +35,22 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
     private Drawable errorIcon;
 
 
-    public AppListFilter getFilter() {
-        return filter;
-    }
-
     public AppRecyclerAdapter(Context mContext, List<AppInfo> appList) {
         this.mContext = mContext;
         this.appList = appList;
-        filter = new AppListFilter(this,appList);
+        filter = new AppListFilter(this, appList);
         icon = mContext.getResources().getDrawable(R.mipmap.ic_default);
         errorIcon = mContext.getResources().getDrawable(R.mipmap.ic_launcher);
+    }
+
+    public AppListFilter getFilter() {
+        return filter;
     }
 
     @Override
     public AppRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_card_app, parent, false);
-        return new ViewHolder(view,listener);
+        return new ViewHolder(view, listener);
     }
 
 
@@ -62,10 +59,10 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
         final AppInfo temp = appList.get(position);
         holder.appNameView.setText(temp.appName);
         holder.packageNameView.setText(temp.packageName);
-        if(temp.state == AppInfo.ENABLED){
+        if (temp.state == AppInfo.ENABLED) {
             holder.appNameView.setTextColor(mContext.getResources().getColor(android.R.color.holo_red_light));
             holder.packageNameView.setTextColor(mContext.getResources().getColor(android.R.color.holo_red_light));
-        }else{
+        } else {
             holder.appNameView.setTextColor(mContext.getResources().getColor(android.R.color.black));
             holder.packageNameView.setTextColor(mContext.getResources().getColor(android.R.color.black));
         }
@@ -77,7 +74,7 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
 
     @Override
     public int getItemCount() {
-        return appList == null?0:appList.size();
+        return appList == null ? 0 : appList.size();
     }
 
     public List<AppInfo> getAppList() {
@@ -89,13 +86,6 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
     }
 
     /**
-     * 内部接口回调方法
-     */
-    public interface OnItemClickListener {
-        void onItemClick(int position, String packageName);
-    }
-
-    /**
      * 设置监听方法
      *
      * @param listener
@@ -104,6 +94,12 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
         this.listener = listener;
     }
 
+    /**
+     * 内部接口回调方法
+     */
+    public interface OnItemClickListener {
+        void onItemClick(int position, String packageName);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements Target {
         public final View mView;
@@ -114,14 +110,14 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
         public ViewHolder(final View view, final OnItemClickListener listener) {
             super(view);
             mView = view;
-            appNameView = (TextView)mView.findViewById(R.id.app_name);
-            packageNameView = (TextView)mView.findViewById(R.id.package_name);
-            iconView = (ImageView)mView.findViewById(R.id.image_icon);
+            appNameView = (TextView) mView.findViewById(R.id.app_name);
+            packageNameView = (TextView) mView.findViewById(R.id.package_name);
+            iconView = (ImageView) mView.findViewById(R.id.image_icon);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(listener != null)
+                    if (listener != null)
                         listener.onItemClick(getAdapterPosition(), appList.get(getAdapterPosition()).packageName);
                 }
             });
@@ -129,9 +125,9 @@ public class AppRecyclerAdapter extends RecyclerView.Adapter<AppRecyclerAdapter.
 
         @Override
         public void onPrepareLoad(Drawable placeHolderDrawable) {
-            if(!packageNameView.getText().toString().startsWith(Common.PACKAGE_NAME)){
+            if (!packageNameView.getText().toString().startsWith(Common.PACKAGE_NAME)) {
                 iconView.setImageDrawable(icon);
-            }else {
+            } else {
                 iconView.setImageDrawable(errorIcon);
             }
 

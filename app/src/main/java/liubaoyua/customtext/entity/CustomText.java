@@ -19,16 +19,17 @@ public class CustomText {
     public boolean isCheck = false;
 
 
-    public CustomText(){}
-
-    public CustomText(String oriText, String newText){
-        this.oriText=oriText;
-        this.newText=newText;
+    public CustomText() {
     }
 
-    public CustomText(CustomText text){
-        this.oriText=text.oriText;
-        this.newText=text.newText;
+    public CustomText(String oriText, String newText) {
+        this.oriText = oriText;
+        this.newText = newText;
+    }
+
+    public CustomText(CustomText text) {
+        this.oriText = text.oriText;
+        this.newText = text.newText;
     }
 
 
@@ -59,9 +60,9 @@ public class CustomText {
                 '}';
     }
 
-    public boolean isEmpty(){
-        if(this.newText==null || this.newText.equals("")){
-            if(this.oriText==null || this.oriText.equals("")){
+    public boolean isEmpty() {
+        if (this.newText == null || this.newText.equals("")) {
+            if (this.oriText == null || this.oriText.equals("")) {
                 return true;
             }
         }
