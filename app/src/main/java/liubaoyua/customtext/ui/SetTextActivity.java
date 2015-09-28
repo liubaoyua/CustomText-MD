@@ -567,25 +567,37 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
     private void saveData(){
         ArrayList<CustomText> newData = textRecyclerAdapter.getData();
         data.clear();
-        data.addAll(newData);
+        for ( int i = 0; i < newData.size(); i++) {
+            data.add(new CustomText(newData.get(i)));
+        }
         SharedPreferences.Editor mEditor = mPrefs.edit();
 //        mEditor.clear();
+
+        int all = (maxPage + 1 ) * Common.DEFAULT_NUM;
+
         for (int i = 0; i < newData.size(); i++) {
             CustomText temp = newData.get(i);
-            if(!temp.oriText.isEmpty())
-                 mEditor.putString(Common.ORI_TEXT_PREFIX+i,temp.oriText);
-            if(!temp.newText.isEmpty())
+            if(!temp.oriText.isEmpty()) {
+                mEditor.putString(Common.ORI_TEXT_PREFIX + i,temp.oriText);
+            }else  {
+                mEditor.remove(Common.ORI_TEXT_PREFIX + i );
+            }
+
+            if(!temp.newText.isEmpty()){
                 mEditor.putString(Common.NEW_TEXT_PREFIX + i, temp.newText);
-        }
-        int pageNum = newData.size()/Common.DEFAULT_NUM;
-        if(pageNum < maxPage){
-            int rest = (maxPage - pageNum) *Common.DEFAULT_NUM;
-            for (int i = 0; i < rest; i++) {
-                mEditor.remove(Common.ORI_TEXT_PREFIX + i);
-                mEditor.remove(Common.NEW_TEXT_PREFIX + i);
+            }else  {
+                mEditor.remove(Common.NEW_TEXT_PREFIX + i );
             }
         }
-        mEditor.putInt(Common.MAX_PAGE_OLD, pageNum);
+
+        for (int i = newData.size(); i < all; i++){
+            mEditor.remove(Common.ORI_TEXT_PREFIX + i );
+            mEditor.remove(Common.NEW_TEXT_PREFIX + i );
+        }
+
+        int delta = newData.size() - newData.size()/Common.DEFAULT_NUM * Common.DEFAULT_NUM ==0?0:1;
+        int pageNum = newData.size()/Common.DEFAULT_NUM + delta;
+        mEditor.putInt(Common.MAX_PAGE_OLD, pageNum - 1 );
         mEditor.commit();
         if(switchCompat.isChecked()){
             Snackbar.make(mRecyclerView

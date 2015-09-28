@@ -9,8 +9,8 @@ android {
         applicationId "liubaoyua.customtext"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 201509270
-        versionName "2.1 MD"
+        versionCode 201509280
+        versionName "2.1.2 MD"
         resConfigs "nodpi", "hdpi","xxhdpi"
     }
     buildTypes {
