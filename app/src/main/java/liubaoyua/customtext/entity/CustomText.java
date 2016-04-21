@@ -1,5 +1,7 @@
 package liubaoyua.customtext.entity;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by liubaoyua on 2015/6/19 0019.
  * this class is for customtext.
@@ -7,6 +9,7 @@ package liubaoyua.customtext.entity;
 public class CustomText {
     public String oriText = "";
     public String newText = "";
+    public Pattern oriPattern;
 //    public boolean isRegex = false;
 //    public int textColor = 0 ;
 //    public boolean underLine = false;
@@ -30,8 +33,23 @@ public class CustomText {
     public CustomText(CustomText text) {
         this.oriText = text.oriText;
         this.newText = text.newText;
+        this.oriPattern = text.oriPattern;
     }
 
+    public Pattern getPattern() {
+        if (oriPattern == null) {
+            oriPattern = Pattern.compile(oriText);
+        }
+        return oriPattern;
+    }
+
+    public String getOriText() {
+        return oriText;
+    }
+
+    public String getNewText() {
+        return newText;
+    }
 
     @Override
     public boolean equals(Object o) {

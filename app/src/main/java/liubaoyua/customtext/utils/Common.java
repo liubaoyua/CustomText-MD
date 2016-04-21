@@ -30,6 +30,7 @@ public class Common {
 
     public final static String SETTING_MORE_TYPE = "ImageText";
     public final static String SETTING_USE_REGEX = "UseRegex";
+    public final static String SETTING_USE_HTML = "UseHtml";
 
     public final static String SETTING_VERSION_INFO = "version";
     public final static String SETTING_HACK_SUCCEED_MESSAGE = "hackSucceedMessage";

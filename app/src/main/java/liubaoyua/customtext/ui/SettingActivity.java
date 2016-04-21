@@ -105,7 +105,7 @@ public class SettingActivity extends AppCompatActivity {
             } else if (preference == findPreference(Common.SETTING_ATTENTION)) {
                 PackageInfo packageInfo = null;
                 try {
-                    packageInfo = getActivity().getPackageManager().getPackageInfo(Common.PACKAGE_NAME, PackageManager.GET_UNINSTALLED_PACKAGES);
+                    packageInfo = getActivity().getPackageManager().getPackageInfo(Common.PACKAGE_NAME, 0);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }

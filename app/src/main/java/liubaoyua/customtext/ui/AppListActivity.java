@@ -76,6 +76,7 @@ public class AppListActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private ViewPager mViewPager;
     private Toolbar mToolbar;
+    private NavigationView navigationView;
 
     private SearchView mSearchView;
     private FragmentAdapter fragmentAdapter;
@@ -110,7 +111,7 @@ public class AppListActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.dl_main_drawer);
         setupDrawerLayout();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nv_main_navigation);
+        navigationView = (NavigationView) findViewById(R.id.nv_main_navigation);
         setupDrawerContent(navigationView);
 
         context = getApplicationContext();
@@ -145,44 +146,50 @@ public class AppListActivity extends AppCompatActivity {
             new LoadAppsTask(false).execute();
         }
 
-        headerView = (ImageView) findViewById(R.id.nav_bg);
-        String filePatch = prefs.getString(Common.PREF_HEAD_VIEW, null);
-        if (filePatch != null && new File(filePatch).exists()) {
-            headerView.setImageBitmap(BitmapFactory.decodeFile(filePatch));
-            prefs.edit().putString(Common.PREF_HEAD_VIEW, filePatch).apply();
-        } else {
-            headerView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_user_background));
-            prefs.edit().putString(Common.PREF_HEAD_VIEW, null).apply();
-        }
-//        findViewById(R.id.head_frame)
-//            headerView
-        findViewById(R.id.another_frame).setOnClickListener(new View.OnClickListener() {
+
+        navigationView.post(new Runnable() {
             @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(AppListActivity.this);
-                builder.setCustomTitle(null);
-                builder.setItems(R.array.change_picture, new DialogInterface.OnClickListener() {
+            public void run() {
+                headerView = (ImageView) findViewById(R.id.nav_bg);
+                String filePatch = prefs.getString(Common.PREF_HEAD_VIEW, null);
+                if (filePatch != null && new File(filePatch).exists()) {
+                    headerView.setImageBitmap(BitmapFactory.decodeFile(filePatch));
+                    prefs.edit().putString(Common.PREF_HEAD_VIEW, filePatch).apply();
+                } else {
+                    headerView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_user_background));
+                    prefs.edit().putString(Common.PREF_HEAD_VIEW, null).apply();
+                }
+
+                navigationView.getHeaderView(0).findViewById(R.id.another_frame).setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                Utils.launchImagePiker(AppListActivity.this, Common.REQUEST_CODE_FOR_IMAGE);
-                                break;
-                            case 1:
-                            default:
-                                headerView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_user_background));
-                        }
+                    public void onClick(View v) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(AppListActivity.this);
+                        builder.setCustomTitle(null);
+                        builder.setItems(R.array.change_picture, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case 0:
+                                        Utils.launchImagePiker(AppListActivity.this, Common.REQUEST_CODE_FOR_IMAGE);
+                                        break;
+                                    case 1:
+                                    default:
+                                        headerView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_user_background));
+                                }
+                            }
+                        });
+
+                        Dialog dialog = builder.create();
+                        dialog.show();
+                        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+                        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+                        lp.width = displayMetrics.widthPixels * 3 / 4;
+                        dialog.getWindow().setAttributes(lp);
                     }
                 });
-
-                Dialog dialog = builder.create();
-                dialog.show();
-                DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-                WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-                lp.width = displayMetrics.widthPixels * 3 / 4;
-                dialog.getWindow().setAttributes(lp);
             }
         });
+
     }
 
     @Override
@@ -535,7 +542,7 @@ public class AppListActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             appList = new ArrayList<>();
             PackageManager pm = getPackageManager();
-            List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+            List<PackageInfo> packages = pm.getInstalledPackages(0);
             if (showDialog)
                 dialog.setMax(packages.size());
             int i = 1;
