@@ -15,7 +15,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
@@ -28,9 +27,12 @@ import liubaoyua.customtext.utils.XposedUtil;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
 
-public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit {
+public class HookMethod implements IXposedHookLoadPackage {
 
     private XSharedPreferences prefs;
+    private CustomText[] current;
+    private CustomText[] shared;
+    private CustomText[] global;
     private Html.ImageGetter imageGetter = new Html.ImageGetter() {
         public Drawable getDrawable(String source) {
             Drawable d = Drawable.createFromPath(source);
@@ -40,17 +42,11 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
     };
 
     @Override
-    public void initZygote(StartupParam startupParam) throws Throwable {
-        prefs = new XSharedPreferences(Common.PACKAGE_NAME);
-        prefs.makeWorldReadable();
-    }
-
-    @Override
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
 
         XposedBridge.log("Custom Text: in package:" + lpparam.packageName);
-
-        prefs.reload();
+        prefs = new XSharedPreferences(Common.PACKAGE_NAME);
+        prefs.makeWorldReadable();
         if (!prefs.getBoolean(Common.SETTING_MODULE_SWITCH, true)) {
             return;
         }
@@ -61,13 +57,6 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
         sPrefs.makeWorldReadable();
 
         final boolean isInDebugMode = prefs.getBoolean(Common.SETTING_XPOSED_DEBUG_MODE, Common.XPOSED_DEBUG);
-
-        final boolean shouldUseHtml;
-        if (mPrefs.contains(Common.SETTING_MORE_TYPE)) {
-            shouldUseHtml = mPrefs.getBoolean(Common.SETTING_USE_HTML, false);
-        } else {
-            shouldUseHtml = prefs.getBoolean(Common.SETTING_USE_HTML, false);
-        }
 
         final boolean shouldHackMoreType;
         if (mPrefs.contains(Common.SETTING_MORE_TYPE)) {
@@ -98,8 +87,7 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
                     .put("isCurrentHackEnabled", isCurrentHackEnabled)
                     .put("isSharedHackEnabled", isSharedHackEnabled)
                     .put("shouldUseRegex", shouldUseRegex)
-                    .put("shouldHackMoreType", shouldHackMoreType)
-                    .put("shouldUseHtml", shouldUseHtml);
+                    .put("shouldHackMoreType", shouldHackMoreType);
             try {
                 XposedBridge.log(object.toString(4));
             } catch (Throwable e) {
@@ -133,9 +121,9 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
             if (!isGlobalHackEnabled && !isCurrentHackEnabled)
                 return;
 
-            final CustomText[] current = loadCustomTextArrayFromPrefs(mPrefs, isCurrentHackEnabled);
-            final CustomText[] shared = loadCustomTextArrayFromPrefs(sPrefs, isSharedHackEnabled && isCurrentHackEnabled);
-            final CustomText[] global = loadCustomTextArrayFromPrefs(prefs, isGlobalHackEnabled);
+            current = loadCustomTextArrayFromPrefs(mPrefs, isCurrentHackEnabled);
+            shared = loadCustomTextArrayFromPrefs(sPrefs, isSharedHackEnabled && isCurrentHackEnabled);
+            global = loadCustomTextArrayFromPrefs(prefs, isGlobalHackEnabled);
 
             textMethodHook = new XC_MethodHook() {
                 @Override
@@ -162,11 +150,7 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
 
                     if (result.isChange()) {
                         // changed... so we reset the arg[0]...
-                        if (shouldUseHtml) {
-                            setTextFromHtml(result.getText(), methodHookParam, 0);
-                        } else {
-                            methodHookParam.args[0] = result.getText();
-                        }
+                        setTextFromHtml(result.getText(), methodHookParam, 0);
                         if (isInDebugMode) {
                             try {
                                 JSONObject o = new JSONObject();
@@ -245,6 +229,7 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
         Matcher matcher = target.matcher(text);
         StringBuffer buffer = null;
         boolean change = false;
+        matcher.reset();
         while (matcher.find()) {
             if (buffer == null) {
                 buffer = new StringBuffer(text.length());
@@ -258,51 +243,13 @@ public class HookMethod implements IXposedHookLoadPackage, IXposedHookZygoteInit
         return origin;
     }
 
+    @SuppressWarnings("all")
     public static Result normalReplace(Result origin, CharSequence target, CharSequence replacement) {
         String text = origin.getText();
-
-        String targetString = target.toString();
-        int matchStart = text.indexOf(targetString, 0);
-        if (matchStart == -1) {
-            // If there's nothing to replace, return the original string untouched.
-            return origin;
+        String result = text.replace(target, replacement);
+        if (text != result) {
+            origin.setText(result);
         }
-
-        String replacementString = replacement.toString();
-
-        // The empty target matches at the start and end and between each char.
-        int targetLength = targetString.length();
-        if (targetLength == 0) {
-            int resultLength = text.length() + (text.length() + 1) * replacementString.length();
-            StringBuilder result = new StringBuilder(resultLength);
-            result.append(replacementString);
-            for (int i = 0; i != text.length(); ++i) {
-                result.append(text.charAt(i));
-                result.append(replacementString);
-            }
-            origin.setText(result.toString());
-            return origin;
-        }
-
-        StringBuilder result = new StringBuilder(text);
-        int searchStart = 0;
-        do {
-            // Copy characters before the match...
-            // TODO: Perform this faster than one char at a time?
-            for (int i = searchStart; i < matchStart; ++i) {
-                result.append(text.charAt(i));
-            }
-            // Insert the replacement...
-            result.append(replacementString);
-            // And skip over the match...
-            searchStart = matchStart + targetLength;
-        } while ((matchStart = text.indexOf(targetString, searchStart)) != -1);
-        // Copy any trailing chars...
-        // TODO: Perform this faster than one char at a time?
-        for (int i = searchStart; i < text.length(); ++i) {
-            result.append(text.charAt(i));
-        }
-        origin.setText(result.toString());
         return origin;
     }
 }
