@@ -19,6 +19,7 @@
                 style="@style/Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="@mipmap/ic_back_white_24dp"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:id="@+id/toolbar" />
 
@@ -27,14 +28,23 @@
         <LinearLayout
             android:id="@+id/setting_content"
             android:orientation="vertical"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textColor="?android:textColorPrimary"
+                android:text="如果喜欢这个应用，请支持我" />
 
             <Button
                 android:id="@+id/button_wechat"
                 android:layout_width="128dp"
                 android:text="@string/donate_wechat"
+                android:textAllCaps="false"
                 android:textColor="#FFF"
                 android:layout_height="64dp" />
 
@@ -42,16 +52,18 @@
                 android:layout_marginTop="8dp"
                 android:id="@+id/button_alipay"
                 android:text="@string/donate_alipay"
+                android:textAllCaps="false"
                 android:textColor="#FFF"
-                android:layout_width="168dp"
+                android:layout_width="128dp"
                 android:layout_height="64dp" />
 
             <Button
                 android:layout_marginTop="8dp"
                 android:id="@+id/button_paypal"
                 android:text="@string/donate_paypal"
+                android:textAllCaps="false"
                 android:textColor="#FFF"
-                android:layout_width="168dp"
+                android:layout_width="128dp"
                 android:layout_height="64dp" />
 
         </LinearLayout>

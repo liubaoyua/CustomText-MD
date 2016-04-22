@@ -45,6 +45,13 @@
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.Blue" >
         </activity>
+
+        <activity
+            android:name=".ui.DonateActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/menu_donate"
+            android:theme="@style/AppTheme.Blue"></activity>
     </application>
 
 </manifest>
