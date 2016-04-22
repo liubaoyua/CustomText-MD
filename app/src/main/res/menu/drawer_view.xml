@@ -17,6 +17,10 @@
             android:icon="@mipmap/ic_settings"
             android:title="@string/menu_settings"/>
         <item
+            android:id="@+id/nav_donate"
+            android:icon="@mipmap/ic_favorite_white_24dp"
+            android:title="@string/menu_settings" />
+        <item
             android:id="@+id/nav_backup"
             android:icon="@mipmap/ic_backup"
             android:title="@string/menu_backup"/>

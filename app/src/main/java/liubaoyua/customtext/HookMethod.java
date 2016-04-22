@@ -247,6 +247,8 @@ public class HookMethod implements IXposedHookLoadPackage {
     public static Result normalReplace(Result origin, CharSequence target, CharSequence replacement) {
         String text = origin.getText();
         String result = text.replace(target, replacement);
+        // if text not change, the method "String.replace(target, replacement)" will return text itself.
+        // so just check text != result is ok...
         if (text != result) {
             origin.setText(result);
         }

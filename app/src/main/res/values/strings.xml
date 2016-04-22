@@ -153,4 +153,7 @@
         <item>Select a pic</item>
         <item>Default pic</item>
     </string-array>
+    <string name="donate_alipay" translatable="false">支付宝</string>
+    <string name="donate_paypal" translatable="false">Paypal</string>
+    <string name="donate_wechat" translatable="false">微信</string>
 </resources>

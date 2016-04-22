@@ -316,6 +316,10 @@ public class AppListActivity extends AppCompatActivity {
                                 break;
                             case R.id.nav_restore:
                                 doImport();
+                                break;
+                            case R.id.nav_donate:
+                                startActivity(new Intent(context, DonateActivity.class));
+                                break;
                         }
                         mDrawerLayout.closeDrawers();
                         return true;
