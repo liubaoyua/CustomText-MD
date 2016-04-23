@@ -44,7 +44,6 @@ public class HookMethod implements IXposedHookLoadPackage {
     @Override
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
 
-        XposedBridge.log("Custom Text: in package:" + lpparam.packageName);
         prefs = new XSharedPreferences(Common.PACKAGE_NAME);
         prefs.makeWorldReadable();
         if (!prefs.getBoolean(Common.SETTING_MODULE_SWITCH, true)) {
