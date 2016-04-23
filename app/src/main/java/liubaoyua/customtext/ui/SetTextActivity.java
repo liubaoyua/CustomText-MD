@@ -3,8 +3,9 @@ package liubaoyua.customtext.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,26 +18,37 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 import liubaoyua.customtext.R;
 import liubaoyua.customtext.adapters.TextRecyclerAdapter;
+import liubaoyua.customtext.app.AppHelper;
 import liubaoyua.customtext.app.MyApplication;
 import liubaoyua.customtext.databinding.ActivitySetTextBinding;
 import liubaoyua.customtext.entity.AppInfo;
@@ -377,37 +389,32 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
             }
 
         } else if (id == R.id.action_imp_exp_pref) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(SetTextActivity.this);
-            builder.setTitle(R.string.menu_imp_exp_pref);
-            builder.setMessage(R.string.dialog_imp_exp_message);
-            builder.setNegativeButton(R.string.dialog_neg_imp, new DialogInterface.OnClickListener() {
+           AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCustomTitle(null);
+            CharSequence[] sequences = new CharSequence[2];
+            sequences[0] = getString(R.string.array_through_file);
+            sequences[1] = getString(R.string.array_through_json);
+
+            builder.setItems(sequences, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Utils.getFileFromContent(SetTextActivity.this, Common.REQUEST_CODE_FOR_FILE);
-                    dialog.dismiss();
-                }
-            });
-            builder.setPositiveButton(R.string.dialog_pos_exp, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    File srcFile = new File(MyApplication.prefsDir, packageName + ".xml");
-                    Utils.myLog("srcFile is " + srcFile);
-                    File destFile = new File(MyApplication.backupDir, appName + "_" + packageName + ".xml");
-                    try {
-                        Utils.CopyFile(srcFile, destFile);
-                        destFile.setReadable(true, false);
-                        destFile.setWritable(true, true);
-                        Toast.makeText(SetTextActivity.this,
-                                getString(R.string.dialog_pos_exp) + getString(R.string.succeed) + "  "
-                                        + destFile.toString(), Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        Toast.makeText(SetTextActivity.this,
-                                getString(R.string.dialog_pos_exp) + getString(R.string.fail) + "  "
-                                        + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    switch (which) {
+                        case 0:
+                            impExpWithFile();
+                            break;
+                        case 1:
+                        default:
+                            impExpWithJson();
                     }
                 }
             });
-            builder.create().show();
+
+            Dialog dialog = builder.create();
+            dialog.show();
+            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+            WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+            lp.width = displayMetrics.widthPixels * 3 / 4;
+            dialog.getWindow().setAttributes(lp);
 
 
         } else if (id == R.id.action_extra_setting) {
@@ -464,10 +471,93 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Take care of popping the fragment back stack or finishing the activity
-     * as appropriate.
-     */
+    private void impExpWithJson() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SetTextActivity.this);
+        builder.setTitle(R.string.menu_imp_exp_pref);
+        builder.setMessage(getString(R.string.str_input_with_string));
+        builder.setNegativeButton(R.string.dialog_neg_imp, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showJsonInputDialog();
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(R.string.dialog_pos_exp, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    String json = generateJson().toString();
+                    ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE))
+                            .setPrimaryClip(ClipData.newPlainText("text", json));
+                    Toast.makeText(SetTextActivity.this, R.string.str_copy_to_clipboard, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(SetTextActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.create().show();
+    }
+
+    private void showJsonInputDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.str_set_text_input_string));
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_json_input, null);
+        final EditText edittext = (EditText) view.findViewById(R.id.json_text);
+        edittext.setHint(R.string.str_set_text_json_hint);
+        builder.setView(view);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    parseJson(edittext.getText().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(SetTextActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.create().show();
+    }
+
+
+    private void impExpWithFile() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SetTextActivity.this);
+        builder.setTitle(R.string.menu_imp_exp_pref);
+        builder.setMessage(R.string.dialog_imp_exp_message);
+        builder.setNegativeButton(R.string.dialog_neg_imp, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Utils.getFileFromContent(SetTextActivity.this, Common.REQUEST_CODE_FOR_FILE);
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(R.string.dialog_pos_exp, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                File srcFile = new File(MyApplication.prefsDir, packageName + ".xml");
+                Utils.myLog("srcFile is " + srcFile);
+                File destFile = new File(MyApplication.backupDir, appName + "_" + packageName + ".xml");
+                try {
+                    Utils.CopyFile(srcFile, destFile);
+                    destFile.setReadable(true, false);
+                    destFile.setWritable(true, false);
+                    Toast.makeText(SetTextActivity.this,
+                            getString(R.string.dialog_pos_exp) + getString(R.string.succeed) + "  "
+                                    + destFile.toString(), Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(SetTextActivity.this,
+                            getString(R.string.dialog_pos_exp) + getString(R.string.fail) + "  "
+                                    + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.create().show();
+    }
+
+
+
     @Override
     public void onBackPressed() {
         if (!Utils.isIdenticalTextList(data, textRecyclerAdapter.getData())) {
@@ -529,7 +619,8 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
                 try {
                     Utils.CopyFile(srcFile, destFile);
                     destFile.setReadable(true, false);
-                    destFile.setWritable(true, true);
+                    destFile.setWritable(true, false);
+                    switchCompat.setChecked(true);
                     Toast.makeText(SetTextActivity.this,
                             getString(R.string.toast_imp_succed), Toast.LENGTH_LONG).show();
 //                    recreate();
@@ -538,19 +629,15 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
                         public void run() {
                             super.run();
                             try{
-                                Thread.sleep(1000);
+                                Thread.sleep(3000);
                             }catch (Exception e){
 
                             }
+                            AppHelper.terminal();
                         }
                     }.run();
-////                    Intent intent = new Intent(SetTextActivity.this, SetTextActivity.class);
-////                    intent.putExtra(Common.POSITION_ARG, position);
-////                    intent.putExtra(Common.PACKAGE_NAME_ARG, packageName);
-////                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-////                    startActivity(intent);
-////                    finishAndRemoveTask();
                 } catch (Exception e) {
+                    e.printStackTrace();
                     Toast.makeText(SetTextActivity.this,
                             getString(R.string.toast_imp_fail) + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -611,6 +698,69 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
                             switchCompat.setChecked(true);
                         }
                     }).show();
+        }
+    }
+
+    public JSONObject generateJson() throws JSONException {
+        List<CustomText> texts = new ArrayList<>();
+        texts.addAll(textRecyclerAdapter.getData());
+
+        for (int i = 0; i < texts.size(); i++) {
+            if (texts.get(i).isEmpty()) {
+                texts.remove(i);
+                i--;
+            }
+        }
+
+        boolean[] check = new boolean[2];
+        if (mPrefs.contains(Common.SETTING_MORE_TYPE)) {
+            check[0] = mPrefs.getBoolean(Common.SETTING_MORE_TYPE, false);
+        } else {
+            check[0] = prefs.getBoolean(Common.SETTING_MORE_TYPE, false);
+        }
+
+        if (mPrefs.contains(Common.SETTING_USE_REGEX)) {
+            check[1] = mPrefs.getBoolean(Common.SETTING_USE_REGEX, false);
+        } else {
+            check[1] = prefs.getBoolean(Common.SETTING_USE_REGEX, false);
+        }
+
+        JSONArray array = new JSONArray();
+        for (CustomText text : texts) {
+            array.put(text.toJson());
+        }
+
+        JSONObject result = new JSONObject();
+        result.put("packageName", packageName);
+        result.put("hackMoreType", check[0]);
+        result.put("useRegex", check[1]);
+        result.put("data", array);
+        Utils.myLog(result.toString(4));
+        return result;
+    }
+
+    public void parseJson(String json) throws JSONException {
+        int start = json.indexOf("{");
+        int end = json.lastIndexOf("}") + 1;
+
+        if (start < 0 || end < 0) {
+            Toast.makeText(SetTextActivity.this, "不是标准的 Json 文本", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JSONObject o = new JSONObject(json.substring(start, end));
+        JSONArray array = o.optJSONArray("data");
+        if (array != null) {
+            ArrayList<CustomText> texts = new ArrayList<>();
+            for (int i = 0; i < array.length(); i++) {
+                texts.add(CustomText.fromJsonObject(array.getJSONObject(i)));
+            }
+            mPrefs.edit().putBoolean(Common.SETTING_USE_REGEX, o.optBoolean("useRegex"))
+                    .putBoolean(Common.SETTING_MORE_TYPE, o.optBoolean("hackMoreType"))
+                    .apply();
+            textRecyclerAdapter.setData(texts);
+            saveData();
+            Toast.makeText(this, "读取成功", Toast.LENGTH_SHORT).show();
         }
     }
 

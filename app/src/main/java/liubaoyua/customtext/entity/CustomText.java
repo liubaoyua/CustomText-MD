@@ -1,5 +1,8 @@
 package liubaoyua.customtext.entity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.regex.Pattern;
 
 /**
@@ -10,14 +13,6 @@ public class CustomText {
     public String oriText = "";
     public String newText = "";
     public Pattern oriPattern;
-//    public boolean isRegex = false;
-//    public int textColor = 0 ;
-//    public boolean underLine = false;
-//    public boolean isAvailable = true;
-//
-//    public boolean isWorkInEditText = false;
-//    public boolean isReplacedToAPic = false;
-//    public int picMagnification = 1;
 
     public boolean isCheck = false;
 
@@ -85,6 +80,19 @@ public class CustomText {
             }
         }
         return false;
+    }
+
+    public JSONObject toJson() throws JSONException {
+        JSONObject o = new JSONObject();
+        o.put("ori", oriText).put("new", newText);
+        return o;
+    }
+
+    public static CustomText fromJsonObject(JSONObject o) {
+        CustomText text = new CustomText();
+        text.oriText = o.optString("ori");
+        text.newText = o.optString("new");
+        return text;
     }
 
 

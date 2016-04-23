@@ -153,10 +153,16 @@
         <item>Select a pic</item>
         <item>Default pic</item>
     </string-array>
-    <string name="donate_alipay" translatable="false">支付宝</string>
-    <string name="donate_paypal" translatable="false">Paypal</string>
-    <string name="donate_wechat" translatable="false">微信</string>
+    <string name="donate_paypal">Paypal</string>
+    <string name="donate_wechat">Wechat</string>
     <string name="menu_donate">DONATE</string>
+    <string name="str_input_with_string">Convert current preferences to json string as to share with others, or import the exported json string to override current preference.</string>
+    <string name="array_through_file">Through file</string>
+    <string name="array_through_json">Through json</string>
+    <string name="donate_alipay">Alipay</string>
+    <string name="str_set_text_input_string">Import with json</string>
+    <string name="str_set_text_json_hint">Will override current preference.</string>
+    <string name="str_copy_to_clipboard">Copied to clip board.</string>
     <string name="str_wechat_choose_qr_code">Please choose the qrcode from albums.</string>
     <!--<string name="str_about_donate">如果你喜欢这个应用，请支持我</string>-->
 </resources>

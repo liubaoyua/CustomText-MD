@@ -141,6 +141,15 @@
     <string name="toast_imp_fail">导入失败 : </string>
     <string name="toast_imp_fail_invaild_file">导入失败 : 文件不存在或无法读取或非 xml 配置文件 </string>
     <string name="dialog_override_global_setting">以下选项设置会覆盖全局设置</string>
+    <string name="array_through_file">通过文件分享</string>
+    <string name="array_through_json">通过Json分享</string>
+    <string name="donate_alipay">支付宝</string>
+    <string name="donate_paypal">贝宝</string>
+    <string name="donate_wechat">微信</string>
+    <string name="str_input_with_string">将当前的配置内容导出 Json 字符串进行分享，或导入别人的导出的 Json 字符串进行配置覆盖</string>
+    <string name="str_set_text_input_string">导入 Json 数据</string>
+    <string name="str_set_text_json_hint">将会覆盖当前的配置</string>
+    <string name="str_copy_to_clipboard">已经复制到剪贴板</string>
     <string name="str_wechat_choose_qr_code">请从相册选取二维码</string>
 
 </resources>
