@@ -141,5 +141,6 @@
     <string name="toast_imp_fail">导入失败 : </string>
     <string name="toast_imp_fail_invaild_file">导入失败 : 文件不存在或无法读取或非 xml 配置文件 </string>
     <string name="dialog_override_global_setting">以下选项设置会覆盖全局设置</string>
+    <string name="str_wechat_choose_qr_code">请从相册选取二维码</string>
 
 </resources>

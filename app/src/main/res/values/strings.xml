@@ -157,4 +157,6 @@
     <string name="donate_paypal" translatable="false">Paypal</string>
     <string name="donate_wechat" translatable="false">微信</string>
     <string name="menu_donate">DONATE</string>
+    <string name="str_wechat_choose_qr_code">Please choose the qrcode from albums.</string>
+    <!--<string name="str_about_donate">如果你喜欢这个应用，请支持我</string>-->
 </resources>

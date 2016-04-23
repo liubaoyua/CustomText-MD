@@ -533,18 +533,17 @@ public class SetTextActivity extends AppCompatActivity implements Toolbar.OnMenu
                     Toast.makeText(SetTextActivity.this,
                             getString(R.string.toast_imp_succed), Toast.LENGTH_LONG).show();
 //                    recreate();
-//                    new Thread(){
-//                        @Override
-//                        public void run() {
-//                            super.run();
-//                            try{
-//                                Thread.sleep(1000);
-//                            }catch (Exception e){
-//
-//                            }
-//                            System.exit(0);
-//                        }
-//                    }.run();
+                    new Thread(){
+                        @Override
+                        public void run() {
+                            super.run();
+                            try{
+                                Thread.sleep(1000);
+                            }catch (Exception e){
+
+                            }
+                        }
+                    }.run();
 ////                    Intent intent = new Intent(SetTextActivity.this, SetTextActivity.class);
 ////                    intent.putExtra(Common.POSITION_ARG, position);
 ////                    intent.putExtra(Common.PACKAGE_NAME_ARG, packageName);
