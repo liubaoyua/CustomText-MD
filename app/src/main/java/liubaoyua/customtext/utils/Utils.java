@@ -265,6 +265,9 @@ public abstract class Utils {
     }
 
     public static void showMessage(Context context, String versionName) {
+        if (true) { // don't show dialog
+            return;
+        }
         ScrollView scrollView = new ScrollView(context);
         TextView textView = new TextView(context);
         textView.setMovementMethod(LinkMovementMethod.getInstance());
@@ -288,7 +291,7 @@ public abstract class Utils {
     public static PackageInfo getPackageInfoByPackageName(Context context, String packageName) {
         PackageInfo packageInfo = null;
         try {
-            packageInfo = context.getPackageManager().getPackageInfo(packageName, PackageManager.GET_UNINSTALLED_PACKAGES);
+            packageInfo = context.getPackageManager().getPackageInfo(packageName, 0);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -387,6 +390,7 @@ public abstract class Utils {
         activity.startActivityForResult(Intent.createChooser(intent, activity.getString(R.string.select_picture)), requestCode);
     }
 
+    @TargetApi(19)
     public static String parsePicturePath(Context context, Uri uri) {
 
         if (null == context || uri == null)

@@ -80,6 +80,7 @@ public class SystemBarTintManager {
      * @param activity The host activity.
      */
     @TargetApi(19)
+    @SuppressWarnings("all")
     public SystemBarTintManager(Activity activity) {
 
         Window win = activity.getWindow();
