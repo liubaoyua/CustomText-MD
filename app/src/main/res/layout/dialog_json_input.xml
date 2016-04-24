@@ -11,7 +11,7 @@
         android:padding="16dp"
         android:text=""/>-->
 
-    <com.rengwuxian.materialedittext.MaterialEditText
+    <android.support.v7.widget.AppCompatEditText
         android:id="@+id/json_text"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
