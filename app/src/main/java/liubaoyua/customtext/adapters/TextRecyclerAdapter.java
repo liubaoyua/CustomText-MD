@@ -68,6 +68,9 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
     }
 
     public void setData(ArrayList<CustomText> data) {
+        if (data == null) {
+            return;
+        }
         this.data = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             this.data.add(new CustomText(data.get(i)));
@@ -75,6 +78,29 @@ public class TextRecyclerAdapter extends RecyclerView.Adapter<TextRecyclerAdapte
         notifyDataSetChanged();
     }
 
+    public void addData(ArrayList<CustomText> texts) {
+        if (texts == null) {
+            return;
+        }
+        removeEmptyData();
+        int start = data.size();
+        for (int i = 0; i < texts.size(); i++) {
+            data.add(new CustomText(texts.get(i)));
+        }
+        notifyItemRangeInserted(start, texts.size());
+    }
+
+
+    public void removeEmptyData() {
+        for (int i = 0; i < data.size(); i++) {
+            CustomText customText = data.get(i);
+            if (customText.oriText.equals("") && customText.newText.equals("")) {
+                data.remove(i);
+                i--;
+            }
+        }
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemCount() {
         return data == null ? 0 : data.size();
