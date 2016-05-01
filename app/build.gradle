@@ -7,8 +7,8 @@ android {
         applicationId "liubaoyua.customtext"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 201604230
-        versionName "2.3"
+        versionCode 201605011
+        versionName "2.3.1 ԅ(¯﹃¯ԅ)"
 //        resConfigs "nodpi", "hdpi","xxhdpi"
     }
     buildTypes {

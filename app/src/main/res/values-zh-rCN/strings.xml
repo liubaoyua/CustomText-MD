@@ -134,5 +134,6 @@
     <string name="str_set_text_json_hint">将会覆盖当前的配置</string>
     <string name="str_copy_to_clipboard">已经复制到剪贴板</string>
     <string name="str_wechat_choose_qr_code">请从相册选取二维码</string>
+    <string name="str_donate_about">如果喜欢这个作品，请支持我</string>
 
 </resources>

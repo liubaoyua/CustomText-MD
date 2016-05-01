@@ -33,13 +33,13 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:padding="16dp"-->
-                <!--android:gravity="center"-->
-                <!--android:textColor="?android:textColorPrimary"-->
-                <!--android:text="@string/str_about_donate" />-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:gravity="center"
+                android:textColor="?android:textColorPrimary"
+                android:text="@string/str_donate_about" />
 
             <Button
                 android:id="@+id/button_wechat"

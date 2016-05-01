@@ -146,5 +146,6 @@
     <string name="str_set_text_json_hint">Will override current preference.</string>
     <string name="str_copy_to_clipboard">Copied to clip board.</string>
     <string name="str_wechat_choose_qr_code">Please choose the qrcode from albums.</string>
+    <string name="str_donate_about">If you like this module, please support me.</string>
     <!--<string name="str_about_donate">如果你喜欢这个应用，请支持我</string>-->
 </resources>
