@@ -34,6 +34,8 @@
 -keep public class * extends android.view.View {*;}
 -keep public class * extends android.widget.BaseAdapter {*;}
 -keep public class liubaoyua.customtext.HookMethod{*;}
+-keep public class liubaoyua.customtext.entity.CustomText{*;}
+-keep public class liubaoyua.customtext.HookMethod{*;}
 
 -keepattributes *Annotation*
 -keepattributes Signature

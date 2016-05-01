@@ -16,23 +16,6 @@
     <string name="switch_is_not_activated">是否启用开关？</string>
     <string name="global_replacement">全局替换</string>
     <string name="enabled_replacement">已启用应用</string>
-    <string name="dialog_about_title">想说什么来着~</string>
-    <string name="dialog_about">更新日志：
-        \n   增加一个正则表达式的开关（这就是为何无法替换带有"+"等其他符号的原因。默认关闭了，有需要自行开启）
-        \n   可以为单个应用导入导出配置文件
-        \n   UI 调整
-        \n   修复一些 Bug..
-        \n   中秋节快乐 ^_^
-        \n
-        \n   另：
-        \n   本应用需要安装 Xposed 框架才能使用。本项目已丢到<a href="https://github.com/liubaoyua/CustomText-MD"> github </a>，有需要去寻找吧。
-        \n
-        \n   免责声明：
-        \n   作者已经尽量测试，但仍然可能出现未知的问题，请使用者自行承担风险，作者不对你的使用负责，也不承担任何损失。如有不爽，家无水表，不收快递，请勿跨省，谢谢合作。
-        \n
-        \n   作者：liubaoyua
-        \n   当前版本：
-    </string>
 
     <string name="dialog_title">来包辣条？</string>
     <string name="dialog_data_not_saved">修改尚未保存</string>
@@ -112,7 +95,7 @@
     <string name="setting_module_name">文本自定义</string>
     <string name="setting_author_summary">作者: liubaoyua. 我只能说，作者是个死宅(笑),写个代码都能拖那么久，微博点这里。</string>
     <string name="setting_module_function">模块功能</string>
-    <string name="setting_module_function_summary">本模块可以帮助您修改应用中显示的文本，比如：应用名字、运营商标签 等手机上显示的文字。使用前确保安装了 Xposed 框架。更多使用方法请戳这里。</string>
+    <string name="setting_module_function_summary">本模块可以帮助您修改应用中显示的文本，比如：应用名字、运营商标签 等手机上显示的文字。使用前确保安装了 Xposed 框架。</string>
     <string name="setting_attention">使用注意</string>
     <string name="setting_attention_summary">本应用是无聊之作，作者不对你的使用负责，也不承担任何损失和风险。如有不爽，家无水表，不收快递，请勿跨省，谢谢合作。</string>
 

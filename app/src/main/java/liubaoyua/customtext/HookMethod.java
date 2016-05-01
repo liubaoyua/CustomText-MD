@@ -7,6 +7,8 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -120,9 +122,23 @@ public class HookMethod implements IXposedHookLoadPackage {
             if (!isGlobalHackEnabled && !isCurrentHackEnabled)
                 return;
 
-            current = loadCustomTextArrayFromPrefs(mPrefs, isCurrentHackEnabled);
-            shared = loadCustomTextArrayFromPrefs(sPrefs, isSharedHackEnabled && isCurrentHackEnabled);
-            global = loadCustomTextArrayFromPrefs(prefs, isGlobalHackEnabled);
+            current = loadCustomTextArrayFromPrefs(mPrefs, isCurrentHackEnabled, shouldUseRegex);
+            shared = loadCustomTextArrayFromPrefs(sPrefs, isSharedHackEnabled && isCurrentHackEnabled, shouldUseRegex);
+            global = loadCustomTextArrayFromPrefs(prefs, isGlobalHackEnabled, shouldUseRegex);
+
+            if (isInDebugMode) {
+                try {
+                    JSONObject object = new JSONObject();
+                    XposedBridge.log("Custom Text pending replacement...");
+                    object.put("packageName", lpparam.packageName)
+                            .put("current", toJSonArray(current))
+                            .put("shared", toJSonArray(shared))
+                            .put("global", toJSonArray(global));
+
+                    XposedBridge.log(object.toString(4));
+                } catch (Throwable e) {
+                }
+            }
 
             textMethodHook = new XC_MethodHook() {
                 @Override
@@ -205,7 +221,18 @@ public class HookMethod implements IXposedHookLoadPackage {
         }
     }
 
-    public static CustomText[] loadCustomTextArrayFromPrefs(XSharedPreferences prefs, Boolean enabled) {
+    public static JSONArray toJSonArray(CustomText[] texts) throws JSONException {
+        if (texts == null || texts.length == 0) {
+            return null;
+        }
+        JSONArray array = new JSONArray();
+        for (CustomText text : texts) {
+            array.put(text.toJson());
+        }
+        return array;
+    }
+
+    public static CustomText[] loadCustomTextArrayFromPrefs(XSharedPreferences prefs, Boolean enabled, boolean shouldUseRegex) {
         if (!enabled) {
             return null;
         }
@@ -216,7 +243,11 @@ public class HookMethod implements IXposedHookLoadPackage {
             String newString = prefs.getString(Common.NEW_TEXT_PREFIX + i, "");
             if (!TextUtils.isEmpty(oriString)) {
                 CustomText customText = new CustomText(oriString, newString);
-                list.add(customText);
+                if (!shouldUseRegex) {
+                    list.add(customText);
+                } else if (customText.createOriginPattern() != null) {
+                    list.add(customText);
+                }
             }
         }
         return list.toArray(new CustomText[list.size()]);

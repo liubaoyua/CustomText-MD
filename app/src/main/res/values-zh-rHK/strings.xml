@@ -12,7 +12,6 @@
     <string name="search_hint">程式名(或首字母)、包名等等</string>
     <string name="clipboard_is_empty">剪貼簿為空</string>
     <string name="switch_is_not_activated">是否啟用開關？ </string>
-    <string name="dialog_about_title">想說什麼來著~</string>
 
     <string name="dialog_title">來包辣條？ </string>
     <string name="dialog_data_not_saved">修改尚未儲存</string>

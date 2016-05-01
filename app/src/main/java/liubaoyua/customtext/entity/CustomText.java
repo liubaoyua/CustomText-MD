@@ -31,9 +31,18 @@ public class CustomText {
         this.oriPattern = text.oriPattern;
     }
 
+    public Pattern createOriginPattern() {
+        try {
+            oriPattern = Pattern.compile(oriText);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return oriPattern;
+    }
+
     public Pattern getPattern() {
         if (oriPattern == null) {
-            oriPattern = Pattern.compile(oriText);
+            createOriginPattern();
         }
         return oriPattern;
     }

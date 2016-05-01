@@ -13,25 +13,7 @@
     <string name="search_hint">App Name(Head Char),package Name,etc</string>
     <string name="clipboard_is_empty">ClickBoard is empty</string>
     <string name="switch_is_not_activated">Enable the switch？</string>
-    <string name="dialog_about_title">Something To Say~</string>
-    <string name="dialog_about">UPDATE LOG:
-        \n   Add a regex expression switch(that is why you can replace text which contain "+" or other chars。
-                 if you want to use regex, you can enable it in setting)
-        \n   Able to import/export pref for a single app
-        \n   Some UI changes
-        \n   Some bugs fix.
-        \n   Happy Mid-Autumn Festival ^_^
-        \n
-        \n   NOTE:
-        \n   Xposed framework is required.
-        \n   CustomText is an openSource project, you can find it in <a href="https://github.com/liubaoyua/CustomText-MD"> Github </a>.
-        \n
-        \n   DISCLAIMER:
-        \n   It is made just for fun. I have tested it for many times, however, some unknown problem may occur. So, use it at your own risk. I am not responsible for what you do with it.
-        \n
-        \n   AUTHOR:liubaoyua
-        \n   CURRENT VERSION:
-    </string>
+
 
     <string name="dialog_title">What to do?</string>
     <string name="dialog_data_not_saved">Modify hasn\'t been saved</string>

@@ -10,7 +10,6 @@
     <string name="close">Закрыть</string>
     <string name="describe">Модуль предоставляет возможность изменять тексты на любые, по Вашему желанию. Разработано liubaoyua.</string>
 
-    <string name="dialog_about_title">Информация~</string>
     <string name="dialog_data_not_saved">Изменения ещё не сохранены</string>
     <string name="dialog_input_backup_name">Введите название бэкапа</string>
     <string name="dialog_loading">Загрузка</string>

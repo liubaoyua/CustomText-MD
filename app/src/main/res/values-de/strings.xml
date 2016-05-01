@@ -13,7 +13,6 @@
     <string name="search_hint">Appname, Packagename, etc</string>
     <string name="clipboard_is_empty">Zwischenablage ist leer</string>
     <string name="switch_is_not_activated">Schalter aktivieren？</string>
-    <string name="dialog_about_title">Something To Say~</string>
 
     <string name="dialog_title">Was tun?</string>
     <string name="dialog_data_not_saved">Änderungen nicht gespeichert</string>

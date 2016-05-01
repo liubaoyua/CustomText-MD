@@ -265,27 +265,25 @@ public abstract class Utils {
     }
 
     public static void showMessage(Context context, String versionName) {
-        if (true) { // don't show dialog
-            return;
-        }
-        ScrollView scrollView = new ScrollView(context);
-        TextView textView = new TextView(context);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setLinksClickable(true);
-        textView.setText(context.getString(R.string.dialog_about) + versionName);
-
-        scrollView.setPadding(64, 64, 64, 64);
-        scrollView.addView(textView);
-        textView.setTextColor(context.getResources().getColor(android.R.color.black));
-        textView.setTextSize(15);
-
-        AlertDialog.Builder dlgBuilder = new AlertDialog.Builder(context);
-        dlgBuilder.setTitle(R.string.dialog_about_title);
-        dlgBuilder.setCancelable(true);
-        dlgBuilder.setIcon(R.mipmap.ic_launcher);
-        dlgBuilder.setPositiveButton(android.R.string.ok, null);
-        dlgBuilder.setView(scrollView);
-        dlgBuilder.show();
+        // do nothings.
+//        ScrollView scrollView = new ScrollView(context);
+//        TextView textView = new TextView(context);
+//        textView.setMovementMethod(LinkMovementMethod.getInstance());
+//        textView.setLinksClickable(true);
+//        textView.setText(context.getString(R.string.dialog_about) + versionName);
+//
+//        scrollView.setPadding(64, 64, 64, 64);
+//        scrollView.addView(textView);
+//        textView.setTextColor(context.getResources().getColor(android.R.color.black));
+//        textView.setTextSize(15);
+//
+//        AlertDialog.Builder dlgBuilder = new AlertDialog.Builder(context);
+//        dlgBuilder.setTitle(R.string.dialog_about_title);
+//        dlgBuilder.setCancelable(true);
+//        dlgBuilder.setIcon(R.mipmap.ic_launcher);
+//        dlgBuilder.setPositiveButton(android.R.string.ok, null);
+//        dlgBuilder.setView(scrollView);
+//        dlgBuilder.show();
     }
 
     public static PackageInfo getPackageInfoByPackageName(Context context, String packageName) {

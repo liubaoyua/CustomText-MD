@@ -13,7 +13,6 @@
     <string name="search_hint">Nama aplikasi(Head Char),Nama paket,dll</string>
     <string name="clipboard_is_empty">Papan klip Kosong</string>
     <string name="switch_is_not_activated">Aktifkan switch？</string>
-    <string name="dialog_about_title">Katakanlah Sesuatu~</string>
 
     <string name="dialog_title">Apa yang harus dilakukan?</string>
     <string name="dialog_data_not_saved">Modifikasi belum disimpan</string>
