@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--code resource -->
     <string name="app_name">文字自定義</string>
     <string name="open">打開</string>
     <string name="close">關閉</string>
     <string name="all_apps">所有程式</string>
     <string name="recent_apps">最近程式</string>
-    <string name="error_found">​​發現錯誤，即將退出。錯誤資訊： </string>
+    <string name="error_found">​​發現錯誤，即將退出。錯誤資訊：</string>
     <string name="succeed">成功</string>
+    <string name="fail">失敗</string>
     <string name="undo">撤銷</string>
     <string name="clear">清空</string>
     <string name="search_hint">程式名(或首字母)、包名等等</string>
     <string name="clipboard_is_empty">剪貼簿為空</string>
-    <string name="switch_is_not_activated">是否啟用開關？ </string>
-
-    <string name="dialog_title">來包辣條？ </string>
+    <string name="switch_is_not_activated">是否啟用開關？</string>
+    <string name="global_replacement">全局替換</string>
+    <string name="enabled_replacement">已啟用程式</string>
+  
+    <string name="dialog_title">來包辣條？</string>
     <string name="dialog_data_not_saved">修改尚未儲存</string>
-    <string name="dialog_save_now">是否現在儲存？ </string>
+    <string name="dialog_save_now">是否現在儲存？</string>
     <string name="dialog_not_to_save">不儲存</string>
     <string name="dialog_save">儲存</string>
     <string name="dialog_input_backup_name">輸入備份名</string>
@@ -28,8 +32,8 @@
         <item>剪下本樓</item>
         <item>貼上本樓</item>
         <item>後排加一樓</item>
-    </string-array>
-
+     </string-array>
+  
     <string name="imp_exp_file_does_not_exist">資料夾不存在: %s</string>
     <string name="imp_exp_confirm">是否刪除原來的設定並導入選擇的備份?</string>
     <string name="imp_exp_exported">設定檔案已經備份到資料夾: %s</string>
@@ -38,26 +42,31 @@
     <string name="imp_exp_imported">還原成功，重啟程式吧~</string>
     <string name="imp_exp_no_backup_found">​​沒有找到備份</string>
     <string name="imp_exp_backup_hint">隨意輸入</string>
-
-
+  
+  
+    <!--menu resource-->
     <string name="menu_search">搜尋</string>
-
+  
     <string name="menu_home">首頁</string>
+    <string name="menu_refresh">更新</string>
     <string name="menu_info">關於</string>
     <string name="menu_restore">還原</string>
     <string name="menu_backup">備份</string>
     <string name="menu_settings">設定</string>
+    <string name="menu_donate">捐贈</string>
     <string name="menu_exit">退出</string>
     <string name="menu_switch">開關</string>
-
+  
+    <string name="menu_more">更多</string>
     <string name="menu_add_item">增加十樓</string>
     <string name="menu_clear_empty">清除空行</string>
     <string name="menu_relaunch_app">重啟程式</string>
     <string name="menu_app_info">程式資訊</string>
     <string name="menu_market_link">市場連結</string>
     <string name="menu_clear_all">清除所有</string>
-
-
+  
+  
+    <!--layout resource-->
     <string name="button_operate">操作</string>
     <string name="button_clear">清空</string>
     <string name="ori_text_hint">原文字</string>
@@ -65,27 +74,31 @@
     <string name="describe">介是一個可以自定義替換文字的模組by liubaoyua from Xposed框架吧</string>
     <string name="title_activity_settings">設定</string>
     <string name="button_delete">刪除</string>
-
-
+  
+  
+    <!--setting resource-->
     <string name="setting_global_setting">全局設定</string>
     <string name="setting_module_switch">模組開關</string>
     <string name="setting_module_enabled">模組已啟用</string>
     <string name="setting_module_disabled">模組已禁用</string>
     <string name="setting_more_type">深度替換</string>
     <string name="setting_more_type_summary">將替換更多類型的字符（如果導致圖片不正確，請取消這個選項）</string>
+    <string name="setting_use_regex">正規表示式</string>
+    <string name="setting_debug">調適模式</string>
+    <string name="setting_use_regex_summary">替換預設支援正規表示式（如果出現）</string>
     <string name="setting_custom_message">自定義資訊</string>
     <string name="setting_default_message">模組可用</string>
     <string name="setting_custom_message_summary">修改模組可用時在主界面上顯示的資訊</string>
     <string name="setting_check_update">手動檢查更新</string>
-
+  
     <string name="setting_about_module">關於模組</string>
     <string name="setting_module_name">文字自定義</string>
-    <string name="setting_author_summary">作者: liubaoyua. 我只能說，作者是個死宅(笑),寫個代碼都能拖那麼久，微博點這裡。 </string>
+    <string name="setting_author_summary">作者: liubaoyua. 我只能說，作者是個死宅(笑),寫個代碼都能拖那麼久，微博點這裡。</string>
     <string name="setting_module_function">模組功能</string>
-    <string name="setting_module_function_summary">本模組可以幫助您修改程式中顯示的文字，比如：程式名字、運營商標籤等手機上顯示的文字。使用前確保安裝了 Xposed 框架。更多使用方法請戳這裡。 </string>
+    <string name="setting_module_function_summary">本模組可以幫助您修改程式中顯示的文字，比如：程式名字、運營商標籤等手機上顯示的文字。使用前確保安裝了 Xposed 框架。</string>
     <string name="setting_attention">使用注意</string>
-    <string name="setting_attention_summary">本程式是無聊之作，作者不對你的使用負責，也不承擔任何損失和風險。如有不爽，家無水錶，不收快遞，請勿跨省，謝謝合作。 </string>
-
+    <string name="setting_attention_summary">本程式是無聊之作，作者不對你的使用負責，也不承擔任何損失和風險。如有不爽，家無水錶，不收快遞，請勿跨省，謝謝合作。</string>
+  
     <string name="setting_like">喜歡本程式?</string>
     <string name="setting_like_summary">如果覺得本程式不錯的話，歡迎到程式商店給個好評哈</string>
     <string name="setting_feedback">建議回饋</string>
@@ -95,38 +108,32 @@
         \n\n酷市場評論區:本人常駐酷安，歡迎在評論區
          評論、回饋、或調戲 @liubaoyua</string>
     <string name="setting_contributor">感謝幫助</string>
-    <string name="setting_contributor_summary">
-        \n tommy990607/提供 Html 代碼支援
-        \n XXXXL/icon
-        \n
-        \n david082321/繁體中文(臺灣)
-        \n Nicolas Woelker/Deutsch-Übersetzung
-        \n dvaleron/русский перевод
-        \n Ravhi Rizaldi/Bahasa Indonesia
-        \n
-        \n mitchtech/XposedGroot
-        \n GermainZ/Hodor
-        \n rovo89/xposed &amp; Appsettings
-        \n drakeet/material-design-settings
-    </string>
-    <string name="global_replacement">全局替換</string>
-    <string name="enabled_replacement">已啟用程式</string>
     <string name="menu_select_mode">編輯模式</string>
-
-    <string name="dialog_about">更新日誌：
-        \n   增加一个正则表达式的开关（这就是为何无法替换带有"+"等其他符号的原因。默认关闭了，有需要自行开启）
-        \n   可以為單個應用導入導出配置文件
-        \n   UI 調整
-        \n   修復一些 Bug..
-        \n   中秋節快樂 ^_^
-        \n
-        \n   另：
-        \n   本程式需要安裝Xposed 框架才能使用。代碼已在 <a href="https://github.com/liubaoyua/CustomText-MD"> github </a> 開源。
-        \n
-        \n   免責聲明：
-        \n   作者已經盡量測試，但仍然可能出現未知的問題，請使用者自行承擔風險，作者不對你的使用負責，也不承擔任何損失。如有不爽，家無水錶，不收快遞，請勿跨省，謝謝合作。
-        \n
-        \n   作者：liubaoyua
-        \n   目前版本：
-    </string>
+    <string name="select_picture">選擇圖片</string>
+    <string-array name="change_picture">
+    <item>選擇圖片</item>
+    <item>預設圖片</item>
+    </string-array>
+ 
+    <string name="menu_imp_exp_pref">匯入匯出</string>
+    <string name="menu_extra_setting">更多設定</string>
+    <string name="dialog_imp_exp_message">可以將目前的配置文件匯出分享給別人，也可以匯入別人分享的配置文件。</string>
+    <string name="dialog_pos_exp">匯出</string>
+    <string name="dialog_neg_imp">匯入</string>
+    <string name="toast_imp_succed">匯入成功，請重啟程式</string>
+    <string name="toast_imp_fail">匯入失敗 :</string>
+    <string name="toast_imp_fail_invaild_file">匯入失敗: 文件不存在或無法讀取或非 xml 配置文件</string>
+    <string name="dialog_override_global_setting">以下選項設定會覆蓋全局設定</string>
+    <string name="array_through_file">透過文件分享</string>
+    <string name="array_through_json">透過Json分享</string>
+    <string name="donate_alipay">支付寶</string>
+    <string name="donate_paypal">PayPal</string>
+    <string name="donate_wechat">微信</string>
+    <string name="str_input_with_string">將目前的配置內容匯出 Json 字符串進行分享，或匯入別人的匯出的 Json 字符串進行配置覆蓋</string>
+    <string name="str_set_text_input_string">匯入 Json 數據</string>
+    <string name="str_set_text_json_hint">將會覆蓋目前的配置</string>
+    <string name="str_copy_to_clipboard">已經複製到剪貼簿</string>
+    <string name="str_wechat_choose_qr_code">請從相冊選取二維碼</string>
+    <string name="str_donate_about">如果喜歡這個作品，請支持我</string>
+  
 </resources>
